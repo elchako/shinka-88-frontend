@@ -1,0 +1,152 @@
+@import '../../common.scss';
+
+
+// Desktop Header
+.mainWrapper {
+    max-width: $maxWidth;
+    padding: 50px 10px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+}
+
+.logoImg img {
+    width: 86px;
+}
+
+.title {
+    align-self: center;
+    color: rgba(0, 0, 0, 0.76);
+    font-family: $font1;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 61px;
+    letter-spacing: 0%;
+    margin-left: 20px;
+}
+
+.data {
+    display: flex;
+    justify-content: flex-end;
+    gap: 40px;
+}
+
+.phone {
+    display: flex;
+}
+
+.phone a {
+    color: $orangeTextColor;
+    font-family: $font1;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 29px;
+    letter-spacing: 0%;
+    text-decoration: none;
+    align-self: center;
+}
+
+.cart {
+    display: flex;
+    gap: 15px;
+}
+
+.cartImg {
+    display: flex;
+}
+
+.cartImg img {
+    width: 56px;
+    cursor: pointer;
+    align-self: center;
+}
+
+.priceAmount {
+    color: rgb(0, 0, 0);
+    font-family: $font1;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 29px;
+    letter-spacing: 0%;
+    align-self: center;
+}
+
+// Mobile Header
+
+.mobileMainWrapper {
+    display: none;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.mobilePhone {
+    display: flex;
+}
+
+.mobilePhone img {
+    width: 25px;
+    align-self: center;
+}
+
+.logoImgMobile {
+    display: flex;
+}
+
+.logoImgMobile img {
+    width: 40px;
+    align-self: center;
+}
+
+.titleMobile {
+    align-self: center;
+    color: rgba(0, 0, 0, 0.8);
+    font-family: $font1;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0%;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.mobileCart {
+    display: flex;
+    position: relative;
+}
+
+.mobileCart img {
+    width: 30px;
+    align-self: center;
+}
+
+.productsCounter {
+    position: absolute;
+    font-size: 10px;
+    min-width: 20px;
+    height: 20px;
+    top: -7px;
+    left: 22px;
+    background-color: rgb(232, 237, 255);
+    border-radius: 100px;
+    padding: 5px;
+    text-align: center;
+    font-weight: 700;
+}
+
+
+
+
+
+@media screen and (max-width: 880px) {
+    .mainWrapper {
+        display: none;
+    }
+
+    .mobileMainWrapper {
+        display: flex;
+    }
+}

@@ -1,0 +1,25 @@
+.mainWrapper {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.banner img:first-child {
+    width: 100%;
+}
+
+.banner img:last-child {
+    width: 315px;
+    margin: 0 auto;
+    display: none;
+    height: 137px;
+}
+
+@media screen and (max-width: 880px) {
+    .banner img:first-child {
+        display: none;
+    }
+    
+    .banner img:last-child {
+        display: block;
+    }
+}

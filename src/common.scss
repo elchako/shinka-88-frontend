@@ -1,0 +1,39 @@
+$maxWidth: 1200px;
+$maxWidth2: 1600px;
+$font1: Montserrat Alternates;
+$orangeTextColor: rgb(241, 116, 0);
+
+
+// стилизация чекбоксов
+.checkboxesInput {
+    cursor: pointer;
+    width: 25px !important;
+    height: 25px !important;
+}
+
+.checkboxesImg {
+    width: 24px !important;
+    height: 26px !important;
+    margin-left: 0 !important;
+    cursor: pointer;
+}
+
+.checkboxesLabel {
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0%;
+}
+
+
+@media screen and (max-width: 515px) {
+    .checkboxesInput {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .checkboxesLabel {
+        font-size: 15px;
+    }
+}

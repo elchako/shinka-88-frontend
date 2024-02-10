@@ -1,0 +1,168 @@
+@import '../../../../../common.scss';
+
+.mainWrapper {
+    max-width: $maxWidth;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+
+.header {
+    background-color: rgb(232, 237, 255);
+    display: flex;
+    justify-content: space-between;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.tab {
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0%;
+    padding: 28px 50px;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.tab.selectedTab {
+    background-color: rgb(247, 249, 255);
+    border-bottom: 2px solid rgb(249, 199, 153);
+    transition: background-color 0.5s;
+}
+
+.tab:first-child.selectedTab {
+    border-top-left-radius: 20px;
+}
+
+.tab:nth-child(7).selectedTab {
+    border-top-right-radius: 20px;
+}
+
+.arrow {
+    display: none;
+    transform: rotate(90deg);
+    width: 30px;
+    height: 30px;
+}
+
+.arrow.arrowUp {
+    transform: rotate(-90deg);
+}
+
+.content {
+    background-color: rgba(247, 249, 255, 0.8);
+    padding: 21px 34px;
+}
+
+.content {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.mobileContent {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+    height: 0vh;
+    overflow: hidden;
+    background-color: rgb(232, 237, 255);
+    padding: 7px;
+    margin-top: -10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    transition: all 0.5s;
+}
+
+.mobileContent.selectedmobileContent {
+    visibility: visible;
+    opacity: 1;
+    height: 100%;
+    overflow: auto;
+    transition: all 0.5s;
+    padding: 12px;
+}
+
+
+.sendButton {
+    border-radius: 15px;
+    background-color: rgb(239, 129, 0);
+    padding: 30px 50px;
+    color: rgb(255, 252, 252);
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0%;
+    transition: background-color 0.3s;
+}
+
+.sendButton.below {
+    margin-top: 85px;
+}
+
+.sendButton:hover {
+    background-color: rgb(236, 162, 78);
+    transition: background-color 0.3s;
+}
+
+@media screen and (max-width: 1070px) {
+    .mainWrapper {
+        padding: 20px;
+    }
+
+    .header {
+        flex-direction: column;
+        background-color: #fff;
+    }
+
+    .content {
+        display: none;
+    }
+
+    .mobileContent {
+        display: block;
+    }
+
+    .tab {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 12px;
+        background-color: rgb(232, 237, 255);
+        border-radius: 10px;
+    }
+
+    .tab.selectedTab {
+        background-color: rgb(232, 237, 255);
+        border: 0;
+    }
+
+    .arrow {
+        display: inline-block;
+    }
+}
+
+@media screen and (max-width: 1025px) {
+    .sendButton {
+        max-width: 350px;
+    }
+
+    .sendButton.below {
+        margin-top: 0px;
+    }
+}
+
+@media screen and (max-width: 708px) {
+    .sendButton {
+        margin: 0 auto;
+    }
+}
+
+
+@media screen and (max-width: 515px) {
+    .sendButton {
+        border-radius: 10px;
+        padding: 15px 25px;
+        font-size: 18px;
+        transition: background-color 0.3s;
+    }
+}

@@ -1,0 +1,212 @@
+@import '../../../common.scss';
+
+.mainWrapper {
+    max-width: $maxWidth;
+    margin: 0 auto;
+    margin-top: 70px;
+    padding: 0px 10px;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    gap: 50px;
+}
+
+.leftBlock {
+    max-width: 70%;
+    flex: 1;
+}
+
+.actionForAll {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 15px;
+    background-color: rgb(250, 251, 255);
+    padding: 30px 40px;
+}
+
+.checkboxCN {
+    cursor: pointer;
+}
+
+.checkboxLCN {
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    margin-left: 25px !important;
+}
+
+.icon {
+    background: rgb(177, 193, 251);
+    width: 100%;
+    height: 100%;
+    border-radius: 100px;
+}
+
+.clearCart {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    cursor: pointer;
+}
+
+.cards {
+    margin-top: 40px;
+    max-width: 900px;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Скрываем scrollbar для Chrome, Safari и Opera */
+.cards::-webkit-scrollbar {
+    display: none;
+}
+
+/* Скрываем scrollbar для IE, Edge и Firefox */
+.cards {
+    -ms-overflow-style: none;
+    /* IE и Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+
+.rightBlock {
+    padding: 30px 35px;
+    max-width: 370px;
+    flex: 1;
+    border-radius: 15px;
+    background: rgb(250, 251, 255);
+    max-height: 360px;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 39px;
+}
+
+.info {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.infoItem {
+    display: flex;
+    justify-content: space-between;
+}
+
+.infoItem p {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+}
+
+.infoPrice {
+    color: rgba(0, 0, 0, 0.52);
+}
+
+.price {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 39px;
+    color: $orangeTextColor;
+    text-align: center;
+}
+
+
+@media screen and (max-width: 1090px) {
+    .content {
+        gap: 25px;
+    }
+}
+
+@media screen and (max-width: 890px) {
+    .cards {
+        margin-top: 20px;
+    }
+
+    .content {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .leftBlock {
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        max-width: 100%;
+    }
+
+    .actionForAll {
+        display: flex;
+        justify-content: space-between;
+        border-radius: 15px;
+        background-color: rgb(250, 251, 255);
+        padding: 10px 20px;
+    }
+
+    .clearCart {
+        font-size: 13px;
+    }
+
+    .checkboxLCN {
+        font-size: 13px;
+        margin-left: 5px !important;
+    }
+
+    .rightBlock {
+        margin: 0 auto;
+        padding: 10px 15px;
+        max-width: 370px;
+        flex: 1;
+        border-radius: 15px;
+        background: rgb(250, 251, 255);
+        max-height: 360px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .info {
+        margin-top: 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
+    }
+
+    .infoItem {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .infoItem p {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 22px;
+    }
+
+    .infoPrice {
+        color: rgba(0, 0, 0, 0.52);
+    }
+
+    .price {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 39px;
+        color: $orangeTextColor;
+        text-align: center;
+    }
+}

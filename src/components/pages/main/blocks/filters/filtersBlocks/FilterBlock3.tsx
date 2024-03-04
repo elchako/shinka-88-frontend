@@ -1,6 +1,6 @@
 import type React from "react"
 import FilterBlocksStyles from "./FilterBlocks.module.scss"
-import { selectsNames3, tabs } from '../../../../../../consts'
+import { selectsNames3, tabsButtons } from '../../../../../../consts'
 import { MainFiltersButton } from "../MainFiltersButton"
 
 export const FilterBlock3: React.FC = () => {
@@ -27,7 +27,7 @@ export const FilterBlock3: React.FC = () => {
                 })}
             </div>
             <div className={FilterBlocksStyles.bottomBlock + ' ' + FilterBlocksStyles.bottomBlockJustButton}>
-                <MainFiltersButton title={tabs[2]} />
+                <MainFiltersButton title={tabsButtons[2]} />
             </div>
         </div>
     )

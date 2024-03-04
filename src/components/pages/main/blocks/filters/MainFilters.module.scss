@@ -9,7 +9,7 @@
 .header {
     background-color: rgb(232, 237, 255);
     display: flex;
-    justify-content: space-between;
+    width: 100%;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
@@ -23,12 +23,17 @@
     padding: 28px 50px;
     cursor: pointer;
     transition: all 0.5s;
+    width: 100%;
 }
 
 .tab.selectedTab {
     background-color: rgb(247, 249, 255);
     border-bottom: 2px solid rgb(249, 199, 153);
     transition: background-color 0.5s;
+}
+
+.tab p {
+    text-align: center;
 }
 
 .tab:first-child.selectedTab {

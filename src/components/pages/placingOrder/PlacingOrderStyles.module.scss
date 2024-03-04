@@ -1,0 +1,158 @@
+@import '../../../common.scss';
+
+.mainWrapper {
+    max-width: $maxWidth;
+    margin: 0 auto;
+    margin-top: 70px;
+    padding: 0px 10px;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    gap: 50px;
+}
+
+.leftBlock {
+    display: flex;
+    flex-direction: column;
+    max-width: 70%;
+    flex: 1
+}
+
+.formTitle {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 39px;
+    margin-bottom: 25px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.field {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    flex: none;
+}
+
+.fieldTitle {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    width: 100px;
+}
+
+.fieldInput {
+    border-radius: 10px;
+    background: rgb(250, 251, 255);
+    padding: 8px 20px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 24px;
+    width: 340px;
+}
+
+.fieldHelpText {
+    color: rgba(0, 0, 0, 0.25);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    max-width: 335px;
+}
+
+.formText {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+.contacts {
+    margin-top: 60px;
+}
+
+.contactsInfo {
+    display: flex;
+    gap: 30px;
+}
+
+.contactsMap {
+    display: flex;
+    flex-direction: column;
+}
+
+.map {
+    width: 370px;
+    height: 214px;
+    background: url('../../../imgs/tempMap.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+
+.mapHelpText {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    color: $orangeTextColor;
+    margin-top: 25px;
+}
+
+.contactsText {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+@media screen and (max-width: 1000px) {
+    .content {
+        flex-direction: column;
+    }
+
+    .leftBlock {
+        margin: 0 auto;
+    }
+
+    .field {
+        flex-direction: column;
+    }
+
+    .fieldInput {
+        width: 100%;
+    }
+
+    .field>div {
+        width: 100%;
+    }
+
+    .contactsInfo {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .map {
+        width: 570px;
+        height: 414px;
+    }
+
+    .contactsText {
+        gap: 15px;
+        font-size: 16px;
+    }
+
+    .formText {
+        font-size: 15px;
+    }
+
+    .formTitle {
+        font-size: 25px;
+    }
+}

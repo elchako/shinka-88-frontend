@@ -7,6 +7,7 @@ import arrow from '../../../../../imgs/hiddenMenuArrow.png'
 import { FilterBlock2 } from "./filtersBlocks/FilterBlock2"
 import { FilterBlock3 } from "./filtersBlocks/FilterBlock3"
 import { FilterBlock4 } from "./filtersBlocks/FilterBlock4"
+import { FilterBlock5 } from "./filtersBlocks/FilterBlock5"
 
 export interface ITabsProps {
     isModalOpen: boolean
@@ -32,7 +33,7 @@ export const MainFilters: React.FC = () => {
     // контент табов
     const tabsContent = [<FilterBlock1 isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />,
     <FilterBlock2 isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />, <FilterBlock3 />,
-    <FilterBlock4 />,]
+    <FilterBlock4 />, <FilterBlock5 />]
     return (
         <div className={MainFiltersStyles.mainWrapper}>
             <div className={MainFiltersStyles.header}>
@@ -57,7 +58,7 @@ export const MainFilters: React.FC = () => {
                     let content = null
                     mobileSelectedTab === null ? content = '' : content = tabsContent[mobileSelectedTab]
                     return <>
-                        <div className={tabStyle} id={item} key={index} onClick={() => toggleTabs(index)}>
+                        <div className={tabStyle} id={item} key={`${index} - ${item}`} onClick={() => toggleTabs(index)}>
                             <p>{item}</p>
                             <img className={arrowStyles} src={arrow} alt="arrow" />
                         </div>

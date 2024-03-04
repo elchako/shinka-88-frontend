@@ -1,0 +1,49 @@
+@import '../../../../common.scss';
+
+.mainWrapper {
+    padding: 30px 35px;
+    max-width: 370px;
+    flex: 1;
+    border-radius: 15px;
+    background: rgb(250, 251, 255);
+    max-height: 360px;
+    margin: 0 auto;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 39px;
+}
+
+.info {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.infoItem {
+    display: flex;
+    justify-content: space-between;
+}
+
+.infoItem p {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+}
+
+.infoPrice {
+    color: rgba(0, 0, 0, 0.52);
+}
+
+.price {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 39px;
+    color: $orangeTextColor;
+    text-align: center;
+}

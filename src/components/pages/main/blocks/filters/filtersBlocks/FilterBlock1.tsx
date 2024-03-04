@@ -1,8 +1,17 @@
 import type React from "react"
 import FilterBlocksStyles from "./FilterBlocks.module.scss"
-import { seasonsSelectSelecor, seasonsSelect } from "./filterBlock1Slice"
+import {
+    seasonsSelectSelector, seasonsSelectOne, typesSelectSelector,
+    typesSelect, selectSelector, selectsSelect,
+    checkboxesSelectSelector,
+    checkboxesSelect,
+    tiresAPISelector,
+} from "./filterBlock1Slice"
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks"
-import { selectsNames1, filterButtons, tabs } from '../../../../../../consts'
+import {
+    selectsNames1, selectsNames1_2, filterButtons,
+    tabsButtons, checkboxesNames, typeSelectsValues, typeSelectsText
+} from '../../../../../../consts'
 import explanation from '../../../../../../imgs/explanation.png'
 import { MainFiltersButton } from "../MainFiltersButton"
 import { ExplanationModal } from "./ExplanationModal"
@@ -12,62 +21,96 @@ import Checkbox from "react-custom-checkbox";
 import checkedIcon from '../../../../../../imgs/checked.png'
 
 export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen }) => {
-    // эти данные будут поступать с апи
-    const select1 = [150, 155, 160, 165]
-    const select2 = [45, 50, 55, 60]
-    const select3 = [17, 18, 19, 20]
-    const select4 = ['производитель 1', 'производитель 2', 'производитель 3', 'производитель 4',]
-    const selects = [select1, select2, select3, select4]
 
-    // выбор кнопок сезона
-    const season = useAppSelector(seasonsSelectSelecor)
+    //выбор типа параметров
+    const tires = useAppSelector(tiresAPISelector)
+    const typeParametrsSelects = useAppSelector(typesSelectSelector)
+    const selectsSelects = useAppSelector(selectSelector)
+    const checkboxesSelects = useAppSelector(checkboxesSelectSelector)
+    const season = useAppSelector(seasonsSelectSelector)
+    let parametrsArr = null
+    if (typeParametrsSelects === typeSelectsValues[0]) {
+        parametrsArr = selectsNames1
+    } else {
+        parametrsArr = selectsNames1_2
+    }
+
     const dispatch = useAppDispatch()
-
+    //дефолтные значения для селектов
+    
     return (
         <div className={FilterBlocksStyles.mainWrapper}>
+            <select defaultValue={typeSelectsValues[0]} onChange={e => dispatch(typesSelect(e.target.value))} className={FilterBlocksStyles.parametrs}>
+                <option value={typeSelectsValues[0]}>{typeSelectsText[0]}</option>
+                <option value={typeSelectsValues[1]}>{typeSelectsText[1]}</option>
+            </select>
             <div className={FilterBlocksStyles.selects}>
-                {selectsNames1.map((item, index) => {
-                    return <div className={FilterBlocksStyles.select} key={index}>
+                {parametrsArr.map((item, index) => {
+                    return <div className={FilterBlocksStyles.select} key={`${index} - ${item}`}>
                         <p>{item}</p>
-                        <select>
-                            {selects[index].map(item => {
-                                return <option value={item}>{item}</option>
-                            })}
-                        </select>
+                        {tires[index] !== undefined
+                            ? <select defaultValue={selectsSelects[index].value === ''
+                                ? '-'
+                                : selectsSelects[index].value} key={`${index} - ${item}`}
+                                onChange={e => dispatch(selectsSelect({
+                                    selectName: item,
+                                    value: e.currentTarget.value,
+                                    isMainPage: true
+                                }))}>
+                                <option value='-' disabled>-</option>
+                                {tires[index].map(item => {
+                                    if (selectsSelects[index].value === String(item.value)) {
+                                        return <option value={item.value} >{item.name}</option>
+                                    }
+                                    return <option value={item.value}>{item.name}</option>
+                                })}
+                            </select>
+                            : <input type="text" onChange={e => dispatch(selectsSelect({
+                                selectName: item,
+                                value: e.currentTarget.value,
+                                isMainPage: true
+                            }))} />
+                        }
                     </div>
                 })}
             </div>
             <div className={FilterBlocksStyles.filterButtons}>
-                {filterButtons.map(item =>
-                    <button className={season === item ? FilterBlocksStyles.selectedButton : ''}
-                        onClick={() => dispatch(seasonsSelect(item))}>{item}</button>)}
+                {filterButtons.map((item, index) =>
+                    <button key={`${index} - ${item}`} className={season[0] === item ? FilterBlocksStyles.selectedButton : ''}
+                        onClick={() => dispatch(seasonsSelectOne(item))}>{item}</button>)}
             </div>
             <div className={FilterBlocksStyles.bottomBlock}>
                 <div className={FilterBlocksStyles.checkboxes}>
                     <Checkbox
                         icon={<img src={checkedIcon} alt="checked" className="checkboxesImg" />}
-                        label="RunFlat"
+                        label={checkboxesNames[0]}
                         className='checkboxesInput'
                         labelClassName='checkboxesLabel'
+                        checked={checkboxesSelects[0].value}
+                        onChange={() => dispatch(checkboxesSelect(checkboxesNames[0]))}
                     />
                     <Checkbox
                         icon={<img src={checkedIcon} alt="checked" className="checkboxesImg" />}
-                        label="Усиленные"
+                        label={checkboxesNames[1]}
                         className='checkboxesInput'
                         labelClassName='checkboxesLabel'
+                        checked={checkboxesSelects[1].value}
+                        onChange={() => dispatch(checkboxesSelect(checkboxesNames[1]))}
                     />
                     <div>
                         <Checkbox
                             icon={<img src={checkedIcon} alt="checked" className="checkboxesImg" />}
-                            label="Бесплатный шиномонтаж"
+                            label={checkboxesNames[2]}
                             className='checkboxesInput'
                             labelClassName='checkboxesLabel'
+                            checked={checkboxesSelects[2].value}
+                            onChange={() => dispatch(checkboxesSelect(checkboxesNames[2]))}
                         />
                         <img src={explanation} alt="explanation" onClick={() => setIsModalOpen(true)} />
                         <ExplanationModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
                     </div>
                 </div>
-                <MainFiltersButton title={tabs[0]} />
+                <MainFiltersButton title={tabsButtons[0]} />
             </div>
         </div>
     )

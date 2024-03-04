@@ -1,6 +1,6 @@
 import type React from "react"
 import FilterBlocksStyles from "./FilterBlocks.module.scss"
-import { selectsNames3, tabs } from '../../../../../../consts'
+import { selectsNames4, tabsButtons } from '../../../../../../consts'
 import { MainFiltersButton } from "../MainFiltersButton"
 
 export const FilterBlock4: React.FC = () => {
@@ -15,7 +15,7 @@ export const FilterBlock4: React.FC = () => {
     return (
         <div className={FilterBlocksStyles.mainWrapper}>
             <div className={FilterBlocksStyles.selects}>
-                {selectsNames3.map((item, index) => {
+                {selectsNames4.map((item, index) => {
                     return <div className={FilterBlocksStyles.select} key={index}>
                         <p>{item}</p>
                         <select>
@@ -27,7 +27,7 @@ export const FilterBlock4: React.FC = () => {
                 })}
             </div>
             <div className={FilterBlocksStyles.bottomBlock + ' ' + FilterBlocksStyles.bottomBlockJustButton}>
-                <MainFiltersButton title={tabs[3]} />
+                <MainFiltersButton title={tabsButtons[3]} />
             </div>
         </div>
     )

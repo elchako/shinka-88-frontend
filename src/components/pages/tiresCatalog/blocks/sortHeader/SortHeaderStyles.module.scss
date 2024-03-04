@@ -1,0 +1,67 @@
+.mainWrapper {
+    display: flex;
+    background-color: rgb(249, 250, 255);
+    margin-top: 50px;
+    border-radius: 10px;
+}
+
+.mainWrapper div {
+    width: 100%;
+    text-align: center;
+    padding: 20px 10px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    background-color: rgb(232, 237, 255);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.sortBy {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    cursor: pointer;
+}
+
+.sortBy.selected {
+    border-bottom: 3px solid rgb(249, 199, 153);
+}
+
+//Мобильная версия
+
+.mainWrapperMobile {
+    display: flex;
+    border-radius: 5px;
+    background: rgb(232, 237, 255);
+    padding: 10px;
+    overflow: hidden;
+    height: 35px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.mainWrapperMobile.sortsOpen {
+    height: auto;
+}
+
+.sortImg {
+    width: 10px;
+    height: 13px;
+    transform: rotate(90deg);
+}
+
+.sorts {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+@media screen and (max-width:970px) {
+    .mainWrapper {
+        display: none;
+    }
+}

@@ -1,6 +1,6 @@
 import type React from "react"
 import FilterBlocksStyles from "./FilterBlocks.module.scss"
-import { selectsNames2, tabs } from '../../../../../../consts'
+import { selectsNames2, tabsButtons } from '../../../../../../consts'
 import explanation from '../../../../../../imgs/explanation.png'
 import { MainFiltersButton } from "../MainFiltersButton"
 import { ExplanationModal } from "./ExplanationModal"
@@ -44,7 +44,7 @@ export const FilterBlock2: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                         <ExplanationModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
                     </div>
                 </div>
-                <MainFiltersButton title={tabs[1]} />
+                <MainFiltersButton title={tabsButtons[1]} />
             </div>
         </div>
     )

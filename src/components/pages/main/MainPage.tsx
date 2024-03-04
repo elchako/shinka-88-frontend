@@ -3,6 +3,8 @@ import MainPageStyles from "./MainPageStyles.module.scss"
 import banner from '../../../imgs/mainBanner.png'
 import smallBanner from '../../../imgs/smallMainBanner.png'
 import { MainFilters } from "./blocks/filters/MainFilters"
+import { Contacts } from "./blocks/contacts/Contacts"
+import { Footer } from "../../footer/Footer"
 
 
 export const MainPage: React.FC = () => {
@@ -13,6 +15,8 @@ export const MainPage: React.FC = () => {
                 <img src={smallBanner} alt="small banner" />
             </div>
             <MainFilters />
+            <Contacts />
+            <Footer />
         </div>
     )
 }

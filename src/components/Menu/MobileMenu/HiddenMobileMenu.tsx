@@ -4,16 +4,15 @@ import { links } from '../../../consts'
 import { NavLink } from "react-router-dom";
 import close from '../../../imgs/closeHiddenMenu.png'
 import menuArrow from '../../../imgs/hiddenMenuArrow.png'
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { mobileMenuReducer, mobileMenuSelector } from "../../common/slices/smallActions";
 
-interface IProps {
-    mobileMenuState: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
-}
-
-export const HiddenMobileMenu: React.FC<IProps> = ({ mobileMenuState }) => {
+export const HiddenMobileMenu: React.FC = () => {
     // открытие/закрытие меню
-    const [hiddenMenu, setHiddenMenu] = mobileMenuState
+    const mobileMenuState = useAppSelector(mobileMenuSelector) // закрытие/открытие мобильного меню
+    const dispatch = useAppDispatch()
     let menuStyles = MobileMenuStyles.mainHiddenMenuWrapper
-    hiddenMenu ? menuStyles = MobileMenuStyles.mainHiddenMenuWrapper  + ' ' + MobileMenuStyles.closedHiddenMenu
+    mobileMenuState ? menuStyles = MobileMenuStyles.mainHiddenMenuWrapper  + ' ' + MobileMenuStyles.closedHiddenMenu
     : menuStyles = MobileMenuStyles.mainHiddenMenuWrapper
     
     // ссылки меню
@@ -22,14 +21,14 @@ export const HiddenMobileMenu: React.FC<IProps> = ({ mobileMenuState }) => {
     return <div className={menuStyles}>
         <div className={MobileMenuStyles.hiddenMenuHeader}>
             <p>Меню</p>
-            <button onClick={() => setHiddenMenu(true)}>
+            <button onClick={() => dispatch(mobileMenuReducer())}>
                 <img src={close} alt="close menu" />
             </button>
         </div>
         <div className={MobileMenuStyles.hiddenMenuContent}>
             {menuLinks.map((item, index) => {
                 return <NavLink key={index} to={item.link} className={MobileMenuStyles.hiddenMenuItem}
-                onClick={() => setHiddenMenu(true)}>
+                onClick={() => dispatch(mobileMenuReducer())}>
                     <p>{item.title}</p>
                     <img src={menuArrow} alt="menu arrow" />
                 </NavLink>

@@ -1,0 +1,88 @@
+@import '../../../../../common.scss';
+
+.mainWrapper {
+    max-width: $maxWidth;
+    margin: 0 auto;
+    margin-top: 80px;
+    display: flex;
+    gap: 34px;
+    justify-content: center;
+    padding: 0px 20px;
+}
+
+.contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contactsBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.title {
+    color: $orangeTextColor;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+.text {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+.map {
+    background: url('../../../../../imgs/tempMap.png');
+    background-repeat:  no-repeat;
+    background-position: center center;
+    background-size: cover;
+    width: 682px;
+    height: 422px;
+}
+
+@media screen and (max-width: 881px) {
+    .mainWrapper {
+        flex-direction: column-reverse;
+    }
+}
+
+@media screen and (max-width: 722px) {
+    .mainWrapper {
+        flex-direction: column-reverse;
+    }
+    .map {
+        width: 560px;
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .mainWrapper {
+        flex-direction: column-reverse;
+    }
+    .map {
+        width: 400px;
+        height: 240px;
+    }
+}
+
+
+@media screen and (max-width: 455px) {
+    .mainWrapper {
+        flex-direction: column-reverse;
+    }
+    .map {
+        width: 330px;
+        height: 170px;
+    }
+    .title {
+        font-size: 16px;
+    }
+    .text {
+        font-size: 16px;
+    }
+}

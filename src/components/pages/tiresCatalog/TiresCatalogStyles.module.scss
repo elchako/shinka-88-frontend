@@ -1,0 +1,117 @@
+@import '../../../common.scss';
+
+.mainWrapper {
+    max-width: $maxWidth;
+    margin: 0 auto;
+    margin-top: 70px;
+    padding: 0px 10px;
+    position: relative;
+}
+
+.content {
+    display: flex;
+    gap: 60px;
+}
+
+.cards {
+    margin-top: 40px;
+    overflow-y: scroll;
+    min-height: 1085px;
+    height: 100vh;
+    max-width: 900px;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Скрываем scrollbar для Chrome, Safari и Opera */
+.cards::-webkit-scrollbar {
+    display: none;
+}
+
+/* Скрываем scrollbar для IE, Edge и Firefox */
+.cards {
+    -ms-overflow-style: none;
+    /* IE и Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+// Мобильная версия
+
+
+.contentMobile {
+    display: none;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.cardsMobile {
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 70px;
+    height: 100vh;
+    overflow-x: scroll;
+}
+
+/* Скрываем scrollbar для Chrome, Safari и Opera */
+.cardsMobile::-webkit-scrollbar {
+    display: none;
+}
+
+/* Скрываем scrollbar для IE, Edge и Firefox */
+.cardsMobile {
+    -ms-overflow-style: none;
+    /* IE и Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.sortFilter {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    top: 55px;
+    width: 400px;
+    position: absolute;
+    z-index: 1;
+}
+
+@media screen and (max-width:1218px) {
+    .content {
+        gap: 30px;
+    }
+}
+
+@media screen and (max-width:1080px) {
+    .content {
+        gap: 10px;
+    }
+}
+
+@media screen and (max-width:970px) {
+    .content {
+        display: none;
+    }
+
+    .contentMobile {
+        display: block;
+    }
+}
+
+@media screen and (max-width:430px) {
+    .sortFilter {
+        width: 350px;
+        left: 50%;
+        transform: translate(-50%);
+    }
+}
+
+@media screen and (max-width:370px) {
+    .sortFilter {
+        width: 300px;
+    }
+}

@@ -1,0 +1,347 @@
+@import '../../../../../common.scss';
+
+// Desktop
+
+.mainWrapper {
+    width: 240px;
+    flex: none;
+    margin-top: 40px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    background-color: rgb(232, 237, 255);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 21px 50px;
+}
+
+.filters {
+    background-color: rgb(249, 250, 255);
+}
+
+.filterTitle {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+}
+
+.select {
+    margin-top: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+    width: 170px;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 17px;
+}
+
+
+.size,
+.season,
+.additionally,
+.price {
+    padding-top: 20px;
+    padding-left: 26px;
+}
+
+.manufacturer {
+    padding-top: 20px;
+    padding-left: 0px;
+}
+
+.manufacturer p {
+    padding-left: 26px;
+}
+
+
+.season p {
+    margin-bottom: 12px;
+}
+
+.additionally p {
+    margin-bottom: 12px;
+}
+
+.seasonBlock {
+    width: 170px;
+    height: min-content;
+    padding: 6px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.inputLabel {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 17px;
+}
+
+.manContent {
+    margin-top: 12px;
+    overflow-y: scroll;
+    height: 200px;
+    width: 225px;
+    padding: 10px;
+    padding-top: 0px;
+}
+
+.priceContent {
+    display: flex;
+    justify-content: center;
+    width: 170px;
+    margin-top: 12px;
+}
+
+.priceFrom input,
+.priceTo input {
+    width: 75px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+    padding: 5px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 17px;
+    border: 1px solid rgb(217, 217, 217);
+    border-radius: 7px;
+}
+
+.priceLine {
+    width: 100%;
+    background-color: rgb(217, 217, 217);
+    height: 1px;
+    align-self: center;
+}
+
+.clearFilters {
+    margin: 0 auto;
+    margin-top: 25px;
+    width: 190px;
+}
+
+.clearButton {
+    padding: 10px;
+    margin-bottom: 25px;
+    border-radius: 7px;
+}
+
+
+// Мобильная версия
+
+.mainWrapperMobile {
+    display: flex;
+    padding: 10px;
+    background: rgb(232, 237, 255);
+    border-radius: 5px;
+    height: 35px;
+    width: 100%;
+    cursor: pointer;
+    position: relative;
+}
+
+.mobileFilterImg {
+    background: url('../../../../../imgs/tiresCard/filtersMobile.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 15px;
+    align-self: center;
+}
+
+.mobileTitle {
+    margin-left: 5px;
+}
+
+.mobileFiltersCounter {
+    position: absolute;
+    right: 42%;
+    top: 7%;
+    color: $orangeTextColor;
+    font-weight: bold;
+}
+
+.mainWrapperMobileModal {
+    background-color: #fff;
+    width: 100%;
+    height: 100vh;
+}
+
+.mainWrapperMobileModal {
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1999;
+    overflow-y: scroll;
+}
+
+.modalMobile {
+    width: 300px;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%);
+    border-radius: 15px;
+    background: rgb(249, 250, 255);
+    padding: 15px;
+}
+
+.closeFilters {
+    background: url('../../../../../imgs/closeHiddenMenu.png');
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.modalMobileTop {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modalMobileTop>p {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 15px;
+    align-self: center;
+}
+
+.modalMobilesButtons {
+    display: flex;
+    gap: 20px;
+    align-self: center;
+}
+
+.modalMobilesButtons>p {
+    align-self: center;
+    color: rgb(239, 129, 0);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 15px;
+    cursor: pointer;
+}
+
+.selectMobile {
+    margin-top: 20px;
+}
+
+.selectMobile p {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 15px;
+    margin-bottom: 10px;
+}
+
+.selectMobile select {
+    border: 1px solid rgb(217, 217, 217);
+    border-radius: 7px;
+    width: 100%;
+    padding: 13px 18px;
+}
+
+.modalMobileFilterButtons {
+    margin-top: 40px;
+    display: flex;
+}
+
+.modalMobileFilterButtons button {
+    border: 1px solid rgb(217, 217, 217);
+    border-radius: 0px;
+    background-color: rgb(255, 255, 255);
+    padding: 10px;
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0%;
+}
+
+.modalMobileFilterButtons button:hover {
+    background-color: #FAC799;
+}
+
+.modalMobileFilterButtons button.modalMobileSelectedButton {
+    background-color: #FAC799;
+}
+
+.modalMobileFilterButtons button:first-child {
+    border-radius: 10px 0px 0px 10px;
+}
+
+.modalMobileFilterButtons button:last-child {
+    border-radius: 0px 10px 10px 0px;
+}
+
+.checkboxesMobile {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 30px;
+}
+
+.checkboxesMobile div {
+    display: flex;
+}
+
+.checkboxesMobile img {
+    width: 20px;
+    height: 20px;
+    margin-left: 3px;
+}
+
+.priceContentMobile {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.priceFromMobile input, .priceToMobile input {
+    width: 120px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+    padding: 5px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 17px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.priceLineMobile {
+    width: 100%;
+    background-color: rgb(217, 217, 217);
+    height: 1px;
+    align-self: center;
+}
+
+.modalMobileBottom {
+    margin-top: 30px;
+}
+
+
+
+
+
+
+
+
+@media screen and (max-width:430px) {
+    .mobileFiltersCounter {
+        right: 34%;
+    }
+}
+
+@media screen and (max-width:370px) {
+    .mobileFiltersCounter {
+        right: 22%;
+    }
+}

@@ -1,0 +1,62 @@
+@import '../../../common.scss';
+
+.mainWrapper {
+    max-width: $maxWidth;
+    margin: 0 auto;
+    margin-top: 70px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    margin-top: 40px;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 150%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 0px 10px;
+    flex: 1 1 auto;
+}
+
+.paragraph {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 39px;
+}
+
+.text {
+    white-space: pre-line;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 150%;
+}
+
+@media screen and (max-width: 550px) {
+    .paragraph {
+        gap: 15px;
+    }
+    .title {
+        font-size: 25px;
+    }
+    .text {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .title {
+        font-size: 20px;
+    }
+    .text {
+        font-size: 14px;
+    }
+}

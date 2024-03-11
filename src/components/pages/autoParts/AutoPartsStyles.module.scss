@@ -1,0 +1,142 @@
+@import '../../../common.scss';
+
+.mainWrapper {
+    max-width: $maxWidth;
+    margin: 0 auto;
+    margin-top: 70px;
+    padding: 0px 10px;
+}
+
+.content {
+    margin-top: 40px;
+    display: flex;
+    gap: 65px;
+}
+
+.searchBlock {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 25px;
+}
+
+.searchTop {
+    display: flex;
+    justify-content: space-between;
+}
+
+.searchTop input {
+    width: 100%;
+    max-width: 700px;
+    border: 1px solid rgb(217, 217, 217);
+    border-radius: 15px;
+    background: rgb(249, 250, 255);
+    padding: 21px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+.searchTop button {
+    background: rgb(232, 237, 255);
+    padding: 21px 100px;
+    border-radius: 15px;
+}
+
+.searchTop button>p {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.searchTop button>img {
+    width: 26px;
+    height: 26px;
+    display: none;
+}
+
+.searchBlock p {
+    max-width: 700px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.cards {
+    margin-top: 40px;
+    overflow-y: scroll;
+    height: 100vh;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Скрываем scrollbar для Chrome, Safari и Opera */
+.cards::-webkit-scrollbar {
+    display: none;
+}
+
+/* Скрываем scrollbar для IE, Edge и Firefox */
+.cards {
+    -ms-overflow-style: none;
+    /* IE и Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+@media screen and (max-width:1080px) {
+    .searchTop {
+        gap: 20px;
+    }
+
+    .searchTop button>p {
+        display: none;
+    }
+    
+    .searchTop button>img {
+        display: block;
+    }
+
+    .searchTop input {
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .searchTop button {
+        padding: 12px 50px;
+    }
+
+    .searchTop button>img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .searchBlock p {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width:540px) {
+    .searchTop {
+        gap: 10px;
+    }
+
+    .searchTop input {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .searchTop button {
+        padding: 10px 30px;
+    }
+
+    .searchTop button>img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .searchBlock p {
+        font-size: 14px;
+    }
+}

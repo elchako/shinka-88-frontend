@@ -37,6 +37,15 @@ export const links: Array<{ title: string, link: string }> = [
     {
         title: 'Оформление заказа',
         link: 'placing_order'
+    },{
+        title: 'Оплата',
+        link: 'payment'
+    },{
+        title: 'О нас',
+        link: 'aboutUs'
+    },{
+        title: 'Гарантии',
+        link: 'guarantees'
     },
 ]
 

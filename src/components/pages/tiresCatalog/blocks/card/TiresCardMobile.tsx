@@ -54,25 +54,6 @@ export const TiresCardMobile: React.FC = () => {
                     </div>
                 </div>
             </div>
-            {/* <div className={TiresCardMobileStyles.productInfoAmount}>
-                <div className={TiresCardMobileStyles.productInfoAmountItem}>
-                    <p>Цена:</p>
-                    <p>3875</p>
-                </div>
-                <div className={TiresCardMobileStyles.productInfoAmountItem}>
-                    <p>Количество:</p>
-                    <div>
-                        <button>&#9668;</button>
-                        <p>50</p>
-                        <button>&#9658;</button>
-                    </div>
-                </div>
-                <div className={TiresCardMobileStyles.productInfoAmountItem}>
-                    <p>Итого:</p>
-                    <p>105 505</p>
-                </div>
-                <OffenButton />
-            </div> */}
         </div>
     )
 }

@@ -17,7 +17,7 @@ export const TiresCatalog: React.FC = () => {
             <div className={TiresCatalogStyles.content}>
                 <DesktopTiresFilters />
                 <div className={TiresCatalogStyles.cards}>
-                    {[...Array(4)].map(item => {
+                    {[...Array(10)].map(item => {
                         return <TiresCardDesktop />
                     })}
                 </div>

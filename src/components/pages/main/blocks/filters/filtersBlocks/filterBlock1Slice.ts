@@ -1,6 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../../../../../app/createAppSlice"
-import { selectsNames1, checkboxesNames, typeSelectsValues } from "../../../../../../consts"
+import { selectsNames1, checkboxesNames, typeSelectsValues, sorts } from "../../../../../../consts"
 
 export interface IinitialState {
     tiresAPI: Array<Array<{ name: string, value: string }>>
@@ -50,7 +50,7 @@ const initialState: IinitialState = {
     selectedManufacturers: [],
     season: [],
     checkboxes: checkboxes,
-    sortType: 'По популярности'
+    sortType: sorts[0],
 }
 
 export const filterBlock1Slice = createAppSlice({

@@ -40,10 +40,12 @@ export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
     
     return (
         <div className={FilterBlocksStyles.mainWrapper}>
-            <select defaultValue={typeSelectsValues[0]} onChange={e => dispatch(typesSelect(e.target.value))} className={FilterBlocksStyles.parametrs}>
+            {/* подбор по авто или параметрам */}
+            {/* <select defaultValue={typeSelectsValues[0]} onChange={e => dispatch(typesSelect(e.target.value))} className={FilterBlocksStyles.parametrs}>
                 <option value={typeSelectsValues[0]}>{typeSelectsText[0]}</option>
                 <option value={typeSelectsValues[1]}>{typeSelectsText[1]}</option>
-            </select>
+            </select> */}
+            {/* селекты фильтра */}
             <div className={FilterBlocksStyles.selects}>
                 {parametrsArr.map((item, index) => {
                     return <div className={FilterBlocksStyles.select} key={`${index} - ${item}`}>
@@ -74,12 +76,14 @@ export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                     </div>
                 })}
             </div>
+            {/* выбор сезона */}
             <div className={FilterBlocksStyles.filterButtons}>
                 {filterButtons.map((item, index) =>
                     <button key={`${index} - ${item}`} className={season[0] === item ? FilterBlocksStyles.selectedButton : ''}
                         onClick={() => dispatch(seasonsSelectOne(item))}>{item}</button>)}
             </div>
             <div className={FilterBlocksStyles.bottomBlock}>
+                {/* доп. параметры */}
                 <div className={FilterBlocksStyles.checkboxes}>
                     <Checkbox
                         icon={<img src={checkedIcon} alt="checked" className="checkboxesImg" />}
@@ -110,6 +114,7 @@ export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                         <ExplanationModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
                     </div>
                 </div>
+                {/* кнопка применения фильтра */}
                 <MainFiltersButton title={tabsButtons[0]} />
             </div>
         </div>

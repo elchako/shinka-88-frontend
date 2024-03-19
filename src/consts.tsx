@@ -64,4 +64,4 @@ export const filterButtons: Array<string> = ['все', 'зима, шипы', 'з
 export const checkboxesNames: Array<string> = ['RunFlat', 'Усиленные', 'Бесплатный шиномонтаж']
 
 // каталог шин
-export const sorts = ['По популярности', 'Дешевле', 'Дороже'] // сортировка
+export const sorts: Array<string> = ['Дешевле', 'Дороже'] // сортировка

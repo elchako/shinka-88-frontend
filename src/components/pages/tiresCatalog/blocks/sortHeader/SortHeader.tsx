@@ -8,7 +8,7 @@ import { sorts } from "../../../../../consts"
 export const SortHeader: React.FC = () => {
     const sortType = useAppSelector(sortTypeSelector)
     const dispatch = useAppDispatch()
-
+    console.log(sorts)
     let sortsRender = sorts.map((item, index) => {
         let style = null
         item === sortType 

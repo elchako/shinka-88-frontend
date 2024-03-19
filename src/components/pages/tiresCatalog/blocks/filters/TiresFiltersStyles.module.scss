@@ -160,7 +160,7 @@
 
 .mobileFiltersCounter {
     position: absolute;
-    right: 42%;
+    right: 36%;
     top: 7%;
     color: $orangeTextColor;
     font-weight: bold;
@@ -336,12 +336,12 @@
 
 @media screen and (max-width:430px) {
     .mobileFiltersCounter {
-        right: 34%;
+        right: 27%;
     }
 }
 
 @media screen and (max-width:370px) {
     .mobileFiltersCounter {
-        right: 22%;
+        right: 15%;
     }
 }

@@ -9,8 +9,9 @@ import { useState } from "react"
 export const SortHeaderMobile: React.FC = () => {
     const sortType = useAppSelector(sortTypeSelector)
     const dispatch = useAppDispatch()
-    sorts.splice(sorts.indexOf(sortType), 1)
-    sorts.unshift(sortType)
+    let newSorts = [...sorts]
+    newSorts.splice(sorts.indexOf(sortType), 1)
+    newSorts.unshift(sortType)
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const handleClick = (type: string) => {
@@ -24,7 +25,7 @@ export const SortHeaderMobile: React.FC = () => {
         <div className={styles}>
             <div className={SortHeaderStyles.sortImg}>&#8646;</div>
             <div className={SortHeaderStyles.sorts}>
-                {sorts.map((item, index) => {
+                {newSorts.map((item, index) => {
                     return <p className={SortHeaderStyles.sortsItem} key={`${index} ${item}`}
                         onClick={() => handleClick(item)}>{item}</p>
                 })}

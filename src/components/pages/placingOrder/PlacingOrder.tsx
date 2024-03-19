@@ -24,7 +24,7 @@ export const PlacingOrder: React.FC = () => {
                                 placeholder="+7 999 999 99 99" />
                         </div>
                         <div className={PlacingOrderStyles.field}>
-                            <p className={PlacingOrderStyles.fieldTitle}>Почта *</p>
+                            <p className={PlacingOrderStyles.fieldTitle}>Почта</p>
                             <div>
                                 <input type="text" className={PlacingOrderStyles.fieldInput}
                                     placeholder="user@gmail.com" />

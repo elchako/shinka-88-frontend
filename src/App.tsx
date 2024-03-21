@@ -37,8 +37,8 @@ export const App = () => {
       overflow: modalStyle.overflow,
       height: modalStyle.height,
     }}>
-      {/* <HashRouter basename="/shinka-88-frontend"> */}
-      <BrowserRouter>
+      <HashRouter basename="/shinka-88-frontend">
+        {/* <BrowserRouter> */}
         <Header />
         <HiddenMobileMenu />
         <MobileFiltersModal />
@@ -54,7 +54,7 @@ export const App = () => {
           <Route path={links[13].link} element={<Guarantees />} />
         </Routes>
         <MobileMenu />
-      </BrowserRouter>
+      </HashRouter>
     </div>
   )
 }

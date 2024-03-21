@@ -107,7 +107,7 @@ export const MobileFiltersModal: React.FC = () => {
                                 onChange={() => dispatch(checkboxesSelect(checkboxesNames[2]))}
                             />
                             <img src={explanation} alt="explanation" onClick={() => setIsModalOpen(true)} />
-                            <ExplanationModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+                            <ExplanationModal />
                         </div>
                     </div>
                     <div className={TiresFiltersStyles.selectMobile}>

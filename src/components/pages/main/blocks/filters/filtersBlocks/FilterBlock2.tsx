@@ -41,7 +41,7 @@ export const FilterBlock2: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                             labelClassName='checkboxesLabel'
                         />
                         <img src={explanation} alt="explanation" onClick={() => setIsModalOpen(true)} />
-                        <ExplanationModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+                        <ExplanationModal />
                     </div>
                 </div>
                 <MainFiltersButton title={tabsButtons[1]} />

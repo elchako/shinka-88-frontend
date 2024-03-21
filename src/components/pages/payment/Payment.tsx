@@ -7,7 +7,8 @@ import { NavLink } from "react-router-dom"
 
 export const Payment: React.FC = () => {
     return (
-            <div className={PaymentStyles.mainWrapper}>
+        <div className={PaymentStyles.mainWrapper}>
+            <div className={PaymentStyles.contentWrapper}>
                 <p className="pageTitle">{links[11].title}</p>
                 <div className={PaymentStyles.content}>
                     <p>На данном сайте Вы можете оформить заказ всех необходимых автотоваров и услуг.
@@ -30,7 +31,8 @@ export const Payment: React.FC = () => {
                     <p>Уточнить адрес и график работы Вы можете на <NavLink to={links[0].link}
                         className={PaymentStyles.orangeText}>Главной странице.</NavLink> </p>
                 </div>
-                <Footer />
             </div>
+            <Footer />
+        </div>
     )
 }

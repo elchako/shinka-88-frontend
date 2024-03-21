@@ -1,12 +1,19 @@
 @import '../../../common.scss';
 
 .mainWrapper {
-    max-width: $maxWidth;
     margin: 0 auto;
-    margin-top: 70px;
     height: 100vh;
+    // display: flex;
+    // flex-direction: column;
+}
+
+.contentWrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 40px;
     display: flex;
     flex-direction: column;
+    padding: 0 20px;
 }
 
 .content {
@@ -26,7 +33,7 @@
 .actionForAll {
     display: flex;
     justify-content: space-between;
-    border-radius: 15px;
+    border-radius: 5px;
     background-color: rgb(250, 251, 255);
     padding: 30px 40px;
 }
@@ -84,7 +91,7 @@
     padding: 30px 35px;
     max-width: 370px;
     flex: 1;
-    border-radius: 15px;
+    border-radius: 5px;
     background: rgb(250, 251, 255);
     max-height: 360px;
 }
@@ -134,7 +141,11 @@
     }
 }
 
-@media screen and (max-width: 890px) {
+@media screen and (max-width: 930px) {
+    .contentWrapper {
+        margin-top: 10px;
+    }
+
     .cards {
         margin-top: 20px;
     }
@@ -154,7 +165,7 @@
     .actionForAll {
         display: flex;
         justify-content: space-between;
-        border-radius: 15px;
+        border-radius: 5px;
         background-color: rgb(250, 251, 255);
         padding: 10px 20px;
     }
@@ -173,7 +184,7 @@
         padding: 10px 15px;
         max-width: 370px;
         flex: 1;
-        border-radius: 15px;
+        border-radius: 5px;
         background: rgb(250, 251, 255);
         max-height: 360px;
     }
@@ -212,5 +223,19 @@
         line-height: 39px;
         color: $orangeTextColor;
         text-align: center;
+    }
+
+    .checkboxCN {
+        width: 14px !important;
+        height: 14px !important;
+    }
+
+}
+
+@media screen and (max-width: 475px) {
+    .contentWrapper {
+        transform: scale(1);
+        margin-top: 10px;
+        padding: 0 5px;
     }
 }

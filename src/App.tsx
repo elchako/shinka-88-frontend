@@ -1,5 +1,5 @@
 import "./App.css"
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
 import { MainPage } from "./components/pages/main/MainPage"
 import { links } from './consts'
 import { Header } from "./components/header/Header"
@@ -15,6 +15,7 @@ import { AutoParts } from "./components/pages/autoParts/AutoParts"
 import { Payment } from "./components/pages/payment/Payment"
 import { AboutUs } from "./components/pages/aboutUs/AboutUs"
 import { Guarantees } from "./components/pages/guarantees/Guarantees"
+import { ExplanationModal } from "./components/pages/main/blocks/filters/filtersBlocks/ExplanationModal"
 
 export const App = () => {
   const mobileFiltersState = useAppSelector(mobileFiltersSelector) // закрытие/открытие мобильных параметров в каталоге меню
@@ -34,11 +35,14 @@ export const App = () => {
   return (
     <div style={{
       overflow: modalStyle.overflow,
-      height: modalStyle.height,}}>
-      <BrowserRouter >
+      height: modalStyle.height,
+    }}>
+      {/* <HashRouter basename="/shinka-88-frontend"> */}
+      <BrowserRouter>
         <Header />
         <HiddenMobileMenu />
         <MobileFiltersModal />
+        <ExplanationModal />
         <Routes>
           <Route path={links[0].link} element={<MainPage />} />
           <Route path={links[3].link} element={<TiresCatalog />} />

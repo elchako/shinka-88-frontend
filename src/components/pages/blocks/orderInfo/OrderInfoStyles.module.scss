@@ -4,7 +4,7 @@
     padding: 30px 35px;
     max-width: 370px;
     flex: 1;
-    border-radius: 15px;
+    border-radius: 5px;
     background: rgb(250, 251, 255);
     max-height: 360px;
     margin: 0 auto;
@@ -46,4 +46,20 @@
     line-height: 39px;
     color: $orangeTextColor;
     text-align: center;
+}
+
+@media screen and (max-width: 930px) {
+    .title {
+        font-size: 25px;
+    }
+
+    .infoItem p {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 22px;
+    }
+
+    .price {
+        font-size: 25px;
+    }
 }

@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
     font-family: "Montserrat", sans-serif;
 }
 
-$maxWidth: 1200px;
+$maxWidth: 1000px;
 $maxWidth2: 1600px;
 $font1: Montserrat Alternates;
 $orangeTextColor: rgb(241, 116, 0);
@@ -20,20 +21,21 @@ $orangeTextColor: rgb(241, 116, 0);
 // стилизация чекбоксов
 .checkboxesInput {
     cursor: pointer;
-    width: 25px !important;
-    height: 25px !important;
+    width: 18px !important;
+    height: 18px !important;
+    border-radius: 3px !important;
 }
 
 .checkboxesImg {
-    width: 24px !important;
-    height: 26px !important;
+    width: 15px !important;
+    height: 16px !important;
     margin-left: 0 !important;
     cursor: pointer;
 }
 
 .checkboxesLabel {
     color: rgb(0, 0, 0);
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 500;
     line-height: 24px;
     letter-spacing: 0%;
@@ -48,14 +50,15 @@ $orangeTextColor: rgb(241, 116, 0);
     font-size: 15px;
 }
 
+@media screen and (max-width: 1070px) {
+    .checkboxesLabel {
+        font-size: 13px;
+    }
+}
 
 @media screen and (max-width: 515px) {
     .checkboxesInput {
         width: 20px !important;
         height: 20px !important;
-    }
-
-    .checkboxesLabel {
-        font-size: 15px;
     }
 }

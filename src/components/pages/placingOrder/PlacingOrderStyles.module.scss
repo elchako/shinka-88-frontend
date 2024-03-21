@@ -1,7 +1,6 @@
 @import '../../../common.scss';
 
 .mainWrapper {
-    max-width: $maxWidth;
     margin: 0 auto;
     margin-top: 70px;
     height: 100vh;
@@ -9,13 +8,24 @@
     flex-direction: column;
 }
 
+.contentWrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+}
+
 .content {
     display: flex;
     justify-content: space-between;
-    margin-top: 40px;
     gap: 50px;
     padding: 0px 10px;
     flex: 1 1 auto;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 40px;
 }
 
 .leftBlock {
@@ -143,8 +153,8 @@
     }
 
     .map {
-        width: 570px;
-        height: 414px;
+        width: 450px;
+        height: 300px;
     }
 
     .contactsText {
@@ -158,5 +168,38 @@
 
     .formTitle {
         font-size: 25px;
+    }
+}
+
+
+@media screen and (max-width: 715px) {
+    .map {
+        width: 320px;
+        height: 195px;
+    }
+
+    .contentWrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        padding: 0 10px;
+    }
+
+    .content {
+        padding: 0 5px;
+    }
+
+    .leftBlock {
+        max-width: 90%;
+    }
+}
+
+
+@media screen and (max-width: 450px) {
+    .map {
+        width: 235px;
+        height: 140px;
     }
 }

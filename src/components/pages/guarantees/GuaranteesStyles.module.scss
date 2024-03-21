@@ -1,7 +1,6 @@
 @import '../../../common.scss';
 
 .mainWrapper {
-    max-width: $maxWidth;
     margin: 0 auto;
     margin-top: 70px;
     height: 100vh;
@@ -9,9 +8,17 @@
     flex-direction: column;
 }
 
+.contentWrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+}
+
 .content {
     margin-top: 10px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     line-height: 150%;
     padding: 0px 10px;
@@ -19,19 +26,19 @@
 }
 
 .img {
-    max-width: 500px;
+    max-width: 380px;
     float: right;
 }
 
 .firstText {
     padding-top: 40px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
     line-height: 150%;
 }
 
 .titleText {
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 600;
     line-height: 115%;
     margin-top: 40px;

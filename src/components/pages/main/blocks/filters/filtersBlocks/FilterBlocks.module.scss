@@ -17,12 +17,12 @@
 
 .selects {
     display: flex;
-    gap: 55px;
+    gap: 30px;
 }
 
 .select p {
     color: rgb(0, 0, 0);
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 500;
     line-height: 24px;
     letter-spacing: 0%;
@@ -30,12 +30,12 @@
 
 .select select {
     width: 180px;
-    padding: 13px 18px;
+    padding: 3px 18px;
     border: 1px solid rgb(217, 217, 217);
-    border-radius: 10px;
-    margin-top: 20px;
+    border-radius: 5px;
+    margin-top: 5px;
     color: rgb(0, 0, 0);
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 500;
     line-height: 24px;
     letter-spacing: 0%;
@@ -43,12 +43,12 @@
 
 .select input {
     width: 180px;
-    padding: 13px 18px;
+    padding: 3px 18px;
     border: 1px solid rgb(217, 217, 217);
     border-radius: 10px;
     margin-top: 20px;
     color: rgb(0, 0, 0);
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 500;
     line-height: 24px;
     letter-spacing: 0%;
@@ -56,7 +56,7 @@
 
 .select:last-child select, .select input {
     width: 250px;
-    padding: 13px 18px;
+    padding: 3px 18px;
 }
 
 .select input.vin {
@@ -65,7 +65,7 @@
 
 
 .filterButtons {
-    margin-top: 40px;
+    margin-top: 20px;
     display: flex;
 }
 
@@ -73,9 +73,9 @@
     border: 1px solid rgb(217, 217, 217);
     border-radius: 0px;
     background-color: rgb(255, 255, 255);
-    padding: 10px;
+    padding: 3px;
     color: rgb(0, 0, 0);
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 500;
     line-height: 24px;
     letter-spacing: 0%;
@@ -117,8 +117,8 @@
 }
 
 .checkboxes div:last-child>img {
-    width: 25px;
-    height: 25px;
+    width: 15px;
+    height: 15px;
     border-radius: 100px;
     cursor: pointer;
     align-self: center;
@@ -129,7 +129,7 @@
 
 .explanationModalWrapper {
     position: fixed;
-    z-index: 1;
+    z-index: 5;
     overflow: hidden;
     background-color: #ffffffa3;
     top: 50%;
@@ -294,17 +294,41 @@
     .selects {
         display: flex;
         flex-direction: column;
-        padding: 0px 20px;
+        padding: 0px 15px;
         gap: 20px;
     }
 
     .selects select {
         width: 100%;
+        font-size: 13px;
+        padding: 5px 18px;
+    }
+
+    .select input {
+        padding: 5px 18px;
+        font-size: 13px;
+    }
+    
+    .select:last-child select, .select input {
+        padding: 5px 18px;
+    }
+
+    .select p {
+        font-size: 13px;
     }
 
     .select:last-child select {
         width: 100%;
-        padding: 13px 18px;
+        padding: 5px 18px;
+    }
+
+    .filterButtons button {
+        font-size: 13px;
+    }
+
+    .checkboxesInput+.checkboxesLabel {
+        padding-left: 25px;
+        font-size: 13px;
     }
 }
 
@@ -320,10 +344,7 @@
         width: 100%;
     }
 
-    .select:last-child select {
-        width: 100%;
-        padding: 13px 18px;
-    }
+    
 
     .bottomBlock {
         flex-direction: column;
@@ -368,7 +389,7 @@
         background-color: rgb(255, 255, 255);
         padding: 5px;
         color: rgb(0, 0, 0);
-        font-size: 15px;
+        font-size: 13px;
         font-weight: 500;
         line-height: 24px;
         letter-spacing: 0%;
@@ -380,7 +401,7 @@
 
     .checkboxesInput+.checkboxesLabel {
         padding-left: 25px;
-        font-size: 15px;
+        font-size: 13px;
     }
 
     .checkboxesInput+.checkboxesLabel:before {

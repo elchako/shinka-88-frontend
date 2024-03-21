@@ -2,13 +2,13 @@ import type React from "react"
 import FilterBlocksStyles from "./FilterBlocks.module.scss"
 import closeModal from '../../../../../../imgs/closeHiddenMenu.png';
 import tires from '../../../../../../imgs/modalTires.png';
+import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
+import { explanationToggle, explanationToggleSelector } from "./filterBlock1Slice";
 
-interface IProps {
-    isModalOpen: boolean
-    setIsModalOpen: (value: boolean) => void
-}
+export const ExplanationModal: React.FC = () => {
+    const isModalOpen = useAppSelector(explanationToggleSelector)
+    const dispatch = useAppDispatch()
 
-export const ExplanationModal: React.FC<IProps> = ({ isModalOpen, setIsModalOpen }) => {
     let openModalStyles = null
     isModalOpen
         ? openModalStyles = FilterBlocksStyles.explanationModalWrapper
@@ -19,7 +19,7 @@ export const ExplanationModal: React.FC<IProps> = ({ isModalOpen, setIsModalOpen
             <div className={FilterBlocksStyles.explanationModal}>
                 <div className={FilterBlocksStyles.explanationModalTop}>
                     <p className={FilterBlocksStyles.explanationModalTitle}>АБСОЛЮТНО БЕСПЛАТНЫЙ ШИНОМОНТАЖ</p>
-                    <img src={closeModal} alt="close modal" onClick={() => setIsModalOpen(false)} />
+                    <img src={closeModal} alt="close modal" onClick={() => dispatch(explanationToggle(false))} />
                 </div>
                 <div className={FilterBlocksStyles.explanationModalContent}>
                     <div className={FilterBlocksStyles.explanationModalText}>

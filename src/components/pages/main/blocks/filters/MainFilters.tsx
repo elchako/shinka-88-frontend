@@ -3,7 +3,7 @@ import MainFiltersStyles from "./MainFilters.module.scss"
 import { useState } from "react"
 import { FilterBlock1 } from "./filtersBlocks/FilterBlock1"
 import { tabs } from '../../../../../consts'
-import arrow from '../../../../../imgs/hiddenMenuArrow.png'
+import arrow from '../../../../../imgs/filtersMobileMenu.png'
 import { FilterBlock2 } from "./filtersBlocks/FilterBlock2"
 import { FilterBlock3 } from "./filtersBlocks/FilterBlock3"
 import { FilterBlock4 } from "./filtersBlocks/FilterBlock4"

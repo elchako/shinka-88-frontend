@@ -11,6 +11,7 @@ export interface IinitialState {
     season: Array<string>
     checkboxes: Array<{ checkboxName: string, value: boolean }>
     sortType: string
+    explanationOpenToggle: boolean
 }
 
 // изначальные значения стейта
@@ -51,6 +52,7 @@ const initialState: IinitialState = {
     season: [],
     checkboxes: checkboxes,
     sortType: sorts[0],
+    explanationOpenToggle: false,
 }
 
 export const filterBlock1Slice = createAppSlice({
@@ -114,6 +116,9 @@ export const filterBlock1Slice = createAppSlice({
         sortTypeSelect: (state, action: PayloadAction<string>) => {
             state.sortType = action.payload
         },
+        explanationToggle: (state, action: PayloadAction<boolean>) => {
+            state.explanationOpenToggle = action.payload
+        },
         // incrementAsync: create.asyncThunk(
         //     async (amount: number) => {
         //         const response = await fetchCount(amount)
@@ -143,16 +148,17 @@ export const filterBlock1Slice = createAppSlice({
         seasonsSelectSelector: state => state.season,
         checkboxesSelectSelector: state => state.checkboxes,
         sortTypeSelector: state => state.sortType,
+        explanationToggleSelector: state => state.explanationOpenToggle,
     },
 })
 
 // actions
 export const { seasonsSelectOne, selectsSelect, typesSelect, checkboxesSelect,
-    sortTypeSelect, seasonsSelectMany } =
+    sortTypeSelect, seasonsSelectMany, explanationToggle } =
     filterBlock1Slice.actions
 
 // selectors
 export const { typesSelectSelector, selectSelector, seasonsSelectSelector,
     checkboxesSelectSelector, sortTypeSelector, tiresAPISelector,
-    manufacturerAPISelector, selectedManufacturersSelector } =
+    manufacturerAPISelector, selectedManufacturersSelector, explanationToggleSelector } =
     filterBlock1Slice.selectors

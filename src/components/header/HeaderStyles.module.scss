@@ -4,7 +4,7 @@
 // Desktop Header
 .mainWrapper {
     max-width: $maxWidth;
-    padding: 50px 10px;
+    padding: 12px 10px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -15,14 +15,14 @@
 }
 
 .logoImg img {
-    width: 86px;
+    width: 66px;
 }
 
 .title {
     align-self: center;
     color: rgba(0, 0, 0, 0.76);
     font-family: $font1;
-    font-size: 50px;
+    font-size: 40px;
     font-weight: 700;
     line-height: 61px;
     letter-spacing: 0%;
@@ -42,7 +42,7 @@
 .phone a {
     color: $orangeTextColor;
     font-family: $font1;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     line-height: 29px;
     letter-spacing: 0%;
@@ -60,7 +60,7 @@
 }
 
 .cartImg img {
-    width: 56px;
+    width: 45px;
     cursor: pointer;
     align-self: center;
 }
@@ -68,7 +68,7 @@
 .priceAmount {
     color: rgb(0, 0, 0);
     font-family: $font1;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 500;
     line-height: 29px;
     letter-spacing: 0%;

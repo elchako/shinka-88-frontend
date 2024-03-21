@@ -1,16 +1,17 @@
 @import '../../../common.scss';
 
 .mainWrapper {
-    max-width: $maxWidth;
+    max-width: 1200px;
     margin: 0 auto;
-    margin-top: 70px;
     padding: 0px 10px;
     position: relative;
+    margin-top: 40px;
 }
 
 .content {
     display: flex;
     gap: 60px;
+    height: 100vh;
 }
 
 .cards {
@@ -107,6 +108,9 @@
         width: 350px;
         left: 50%;
         transform: translate(-50%);
+    }
+    .mainWrapper {
+        transform: scale(0.9);
     }
 }
 

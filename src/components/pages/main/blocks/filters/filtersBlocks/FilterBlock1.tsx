@@ -6,6 +6,7 @@ import {
     checkboxesSelectSelector,
     checkboxesSelect,
     tiresAPISelector,
+    explanationToggle,
 } from "./filterBlock1Slice"
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks"
 import {
@@ -110,8 +111,8 @@ export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                             checked={checkboxesSelects[2].value}
                             onChange={() => dispatch(checkboxesSelect(checkboxesNames[2]))}
                         />
-                        <img src={explanation} alt="explanation" onClick={() => setIsModalOpen(true)} />
-                        <ExplanationModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+                        <img src={explanation} alt="explanation" onClick={() => dispatch(explanationToggle(true))} />
+                        <ExplanationModal />
                     </div>
                 </div>
                 {/* кнопка применения фильтра */}

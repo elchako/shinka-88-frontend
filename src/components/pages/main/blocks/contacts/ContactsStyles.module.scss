@@ -3,11 +3,11 @@
 .mainWrapper {
     max-width: $maxWidth;
     margin: 0 auto;
-    margin-top: 80px;
     display: flex;
     gap: 34px;
     justify-content: center;
     padding: 0px 20px;
+    margin-top: 40px;
 }
 
 .contacts {
@@ -19,18 +19,18 @@
 .contactsBlock {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 3px;
 }
 
 .title {
     color: $orangeTextColor;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 500;
     line-height: 24px;
 }
 
 .text {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 500;
     line-height: 24px;
 }
@@ -42,6 +42,12 @@
     background-size: cover;
     width: 682px;
     height: 422px;
+}
+
+@media screen and (max-width: 1070px) {
+    .mainWrapper {
+        margin-top: 15px;
+    }
 }
 
 @media screen and (max-width: 881px) {

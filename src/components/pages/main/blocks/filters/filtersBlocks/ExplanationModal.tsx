@@ -30,7 +30,7 @@ export const ExplanationModal: React.FC = () => {
                         <p className={FilterBlocksStyles.explanationModalText_second}>
                             Дарим весь комплекс необходимых работ:
                         </p>
-                        <p className={FilterBlocksStyles.explanationModalText_third}>
+                        <div className={FilterBlocksStyles.explanationModalText_third}>
                             <ul>
                                 <li>снятие и установка колес</li>
                                 <li>мойка колес</li>
@@ -40,7 +40,7 @@ export const ExplanationModal: React.FC = () => {
                                 <li>замена вентилей (если требуется)</li>
                                 <li>грузики</li>
                             </ul>
-                        </p>
+                        </div>
                     </div>
                     <img className={FilterBlocksStyles.tiresModalImg} src={tires} alt="" />
                 </div>

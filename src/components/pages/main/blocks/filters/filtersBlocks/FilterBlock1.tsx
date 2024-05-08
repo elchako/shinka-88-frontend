@@ -2,12 +2,15 @@ import type React from "react"
 import FilterBlocksStyles from "./FilterBlocks.module.scss"
 import {
     seasonsSelectSelector, seasonsSelectOne, typesSelectSelector,
-    typesSelect, selectSelector, selectsSelect,
+    selectsSelect,
     checkboxesSelectSelector,
     checkboxesSelect,
     tiresAPISelector,
     explanationToggle,
+    getTyresParametrs,
+    selectSelector,
 } from "./filterBlock1Slice"
+import type { tiresAPI } from "./filterBlock1Slice"
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks"
 import {
     selectsNames1, selectsNames1_2, filterButtons,
@@ -20,25 +23,25 @@ import type { ITabsProps } from "../MainFilters"
 import '../../../../../../common.scss'
 import Checkbox from "react-custom-checkbox";
 import checkedIcon from '../../../../../../imgs/checked.png'
+import { useEffect } from "react"
 
 export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen }) => {
 
     //выбор типа параметров
-    const tires = useAppSelector(tiresAPISelector)
+    const tiresAPI = useAppSelector(tiresAPISelector)
     const typeParametrsSelects = useAppSelector(typesSelectSelector)
-    const selectsSelects = useAppSelector(selectSelector)
     const checkboxesSelects = useAppSelector(checkboxesSelectSelector)
+    const selects = useAppSelector(selectSelector)
     const season = useAppSelector(seasonsSelectSelector)
-    let parametrsArr = null
-    if (typeParametrsSelects === typeSelectsValues[0]) {
-        parametrsArr = selectsNames1
-    } else {
-        parametrsArr = selectsNames1_2
-    }
+
 
     const dispatch = useAppDispatch()
     //дефолтные значения для селектов
-    
+
+    useEffect(() => {
+        dispatch(getTyresParametrs(''))
+    }, [dispatch])
+
     return (
         <div className={FilterBlocksStyles.mainWrapper}>
             {/* подбор по авто или параметрам */}
@@ -46,43 +49,36 @@ export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                 <option value={typeSelectsValues[0]}>{typeSelectsText[0]}</option>
                 <option value={typeSelectsValues[1]}>{typeSelectsText[1]}</option>
             </select> */}
+
             {/* селекты фильтра */}
             <div className={FilterBlocksStyles.selects}>
-                {parametrsArr.map((item, index) => {
+                {selects.map((item, index) => {
+                    let values = [...tiresAPI[item.selectName.apiName as keyof tiresAPI]]
+                    values.sort()
                     return <div className={FilterBlocksStyles.select} key={`${index} - ${item}`}>
-                        <p>{item}</p>
-                        {tires[index] !== undefined
-                            ? <select defaultValue={selectsSelects[index].value === ''
-                                ? '-'
-                                : selectsSelects[index].value} key={`${index} - ${item}`}
-                                onChange={e => dispatch(selectsSelect({
-                                    selectName: item,
-                                    value: e.currentTarget.value,
-                                    isMainPage: true
-                                }))}>
-                                <option value='-' disabled>-</option>
-                                {tires[index].map(item => {
-                                    if (selectsSelects[index].value === String(item.value)) {
-                                        return <option value={item.value} >{item.name}</option>
-                                    }
-                                    return <option value={item.value}>{item.name}</option>
-                                })}
-                            </select>
-                            : <input type="text" onChange={e => dispatch(selectsSelect({
-                                selectName: item,
+                        <p>{item.selectName.displayName}</p>
+                        <select defaultValue='' key={`${index} - ${item}`}
+                            onChange={e => dispatch(selectsSelect({
+                                selectName: item.selectName.apiName,
                                 value: e.currentTarget.value,
-                                isMainPage: true
-                            }))} />
-                        }
+                                isOneChoice: true
+                            }))}>
+                            <option value='' disabled>-</option>
+                            {values.map((item, index) => {
+                                return <option key={`${item} - ${index}`} value={item as string}>{item}</option>
+                            })}
+                        </select>
                     </div>
                 })}
             </div>
+
             {/* выбор сезона */}
             <div className={FilterBlocksStyles.filterButtons}>
                 {filterButtons.map((item, index) =>
                     <button key={`${index} - ${item}`} className={season[0] === item ? FilterBlocksStyles.selectedButton : ''}
                         onClick={() => dispatch(seasonsSelectOne(item))}>{item}</button>)}
             </div>
+
             <div className={FilterBlocksStyles.bottomBlock}>
                 {/* доп. параметры */}
                 <div className={FilterBlocksStyles.checkboxes}>
@@ -102,7 +98,7 @@ export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                         checked={checkboxesSelects[1].value}
                         onChange={() => dispatch(checkboxesSelect(checkboxesNames[1]))}
                     />
-                    <div>
+                    {/* <div>
                         <Checkbox
                             icon={<img src={checkedIcon} alt="checked" className="checkboxesImg" />}
                             label={checkboxesNames[2]}
@@ -113,8 +109,9 @@ export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                         />
                         <img src={explanation} alt="explanation" onClick={() => dispatch(explanationToggle(true))} />
                         <ExplanationModal />
-                    </div>
+                    </div> */}
                 </div>
+
                 {/* кнопка применения фильтра */}
                 <MainFiltersButton title={tabsButtons[0]} />
             </div>

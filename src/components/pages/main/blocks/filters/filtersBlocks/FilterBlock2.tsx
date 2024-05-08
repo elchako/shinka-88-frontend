@@ -7,25 +7,37 @@ import { ExplanationModal } from "./ExplanationModal"
 import type { ITabsProps } from "../MainFilters"
 import Checkbox from "react-custom-checkbox";
 import checkedIcon from '../../../../../../imgs/checked.png'
+import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks"
+import { disksAPISelector, getDisksParametrs, selectSelector, selectsSelect } from "./filterBlock2Slice"
+import { useEffect } from "react"
+import type { disksAPI } from "./filterBlock2Slice"
 
 export const FilterBlock2: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen }) => {
-    // эти данные будут поступать с апи
-    const select1 = [150, 155, 160, 165]
-    const select2 = [45, 50, 55, 60]
-    const select3 = [17, 18, 19, 20]
-    const select4 = ['производитель 1', 'производитель 2', 'производитель 3', 'производитель 4',]
-    const selects = [select1, select2, select3, select4]
+    const selects = useAppSelector(selectSelector)
+    const disksAPI = useAppSelector(disksAPISelector)
 
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(getDisksParametrs(''))
+    }, [dispatch])
 
     return (
         <div className={FilterBlocksStyles.mainWrapper}>
             <div className={FilterBlocksStyles.selects}>
-                {selectsNames2.map((item, index) => {
+                {selects.map((item, index) => {
+                    let values = [...disksAPI[item.selectName.apiName as keyof disksAPI]]
+                    values.sort()
                     return <div className={FilterBlocksStyles.select} key={index}>
-                        <p>{item}</p>
-                        <select>
-                            {selects[index].map(item => {
-                                return <option value={item}>{item}</option>
+                        <p>{item.selectName.displayName}</p>
+                        <select defaultValue='' key={`${index} - ${item}`}
+                            onChange={e => dispatch(selectsSelect({
+                                selectName: item.selectName.apiName,
+                                value: e.currentTarget.value,
+                            }))}>
+                            <option value='' disabled>-</option>
+                            {values.map((item, index) => {
+                                return <option key={`${item} - ${index}`} value={item as string}>{item}</option>
                             })}
                         </select>
                     </div>
@@ -33,7 +45,7 @@ export const FilterBlock2: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
             </div>
             <div className={FilterBlocksStyles.bottomBlock}>
                 <div className={FilterBlocksStyles.checkboxes}>
-                    <div className={FilterBlocksStyles.checkboxesMinHeight}>
+                    {/* <div className={FilterBlocksStyles.checkboxesMinHeight}>
                         <Checkbox
                             icon={<img src={checkedIcon} alt="checked" className="checkboxesImg" />}
                             label="Бесплатный шиномонтаж"
@@ -42,7 +54,7 @@ export const FilterBlock2: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                         />
                         <img src={explanation} alt="explanation" onClick={() => setIsModalOpen(true)} />
                         <ExplanationModal />
-                    </div>
+                    </div> */}
                 </div>
                 <MainFiltersButton title={tabsButtons[1]} />
             </div>

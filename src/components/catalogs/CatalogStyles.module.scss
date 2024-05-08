@@ -1,4 +1,4 @@
-@import '../../../common.scss';
+@import '../../common.scss';
 
 .mainWrapper {
     max-width: 1200px;
@@ -109,6 +109,7 @@
         left: 50%;
         transform: translate(-50%);
     }
+
     .mainWrapper {
         transform: scale(0.9);
     }

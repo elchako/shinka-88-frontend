@@ -37,13 +37,13 @@ export const links: Array<{ title: string, link: string }> = [
     {
         title: 'Оформление заказа',
         link: 'placing_order'
-    },{
+    }, {
         title: 'Оплата',
         link: 'payment'
-    },{
+    }, {
         title: 'О нас',
         link: 'aboutUs'
-    },{
+    }, {
         title: 'Гарантии',
         link: 'guarantees'
     },
@@ -53,15 +53,30 @@ export const links: Array<{ title: string, link: string }> = [
 export const tabs: Array<string> = ['Шины', 'Диски', 'Масла', 'АКБ', 'Автозапчасти']
 export const tabsButtons: Array<string> = ['Подобрать шины', 'Подобрать диски', 'Подобрать масла',
     'Подобрать АКБ', 'Подобрать автозапчасти']
-export const selectsNames1: Array<string> = ['Ширина', 'Высота', 'Диаметр', 'Производитель']
-export const selectsNames1_2: Array<string> = ['Марка', 'Модель', 'Год выпуска', 'Модификация']
-export const selectsNames2: Array<string> = ['Диаметр', 'Крепление', 'Тип', 'Производитель']
+export const selectsNames1: Array<{ apiName: string, displayName: string }> = [
+    { apiName: 'width', displayName: 'Ширина' },
+    { apiName: 'height', displayName: 'Высота' },
+    { apiName: 'diameter', displayName: 'Диаметр' },
+    // { apiName: 'goodland', displayName: 'Производитель' }]
+]
+export const selectsNames1_2: Array<{ apiName: string, displayName: string }> = [
+    { apiName: 'marka', displayName: 'Марка' },
+    { apiName: 'model', displayName: 'Модель' },
+    { apiName: 'year', displayName: 'Год выпуска' },
+    { apiName: 'modification', displayName: 'Модификация' }]
+export const selectsNames2: Array<{ apiName: string, displayName: string }> = [
+    { apiName: 'diameter', displayName: 'Диаметр' },
+    { apiName: 'pcd', displayName: 'Крепление' },
+    { apiName: 'type_disk', displayName: 'Тип' }]
 export const selectsNames3: Array<string> = ['Объём', 'Вязкость', 'Состав', 'Бренд']
 export const selectsNames4: Array<string> = ['Размер ДхШхВ', 'Полярность', 'Емкость', 'Производитель']
 export const typeSelectsValues: Array<string> = ['parametrs-select', 'auto-select']
 export const typeSelectsText: Array<string> = ['Подбор по параметрам', 'Подбор по автомобилю']
 export const filterButtons: Array<string> = ['все', 'зима, шипы', 'зима, без шипов', 'лето']
 export const checkboxesNames: Array<string> = ['RunFlat', 'Усиленные', 'Бесплатный шиномонтаж']
+
+// каталоги
+export const catalogsTitles: Array<string> = ['Каталог шин', 'Каталог дисков',]
 
 // каталог шин
 export const sorts: Array<string> = ['Дешевле', 'Дороже'] // сортировка

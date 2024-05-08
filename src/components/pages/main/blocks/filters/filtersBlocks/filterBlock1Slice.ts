@@ -1,13 +1,32 @@
-import type { PayloadAction } from "@reduxjs/toolkit"
+import { type PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../../../../../app/createAppSlice"
 import { selectsNames1, checkboxesNames, typeSelectsValues, sorts } from "../../../../../../consts"
+import { filtersApi } from "../../../../../../api/catalog"
+
+export type tiresAPI = {
+    diameter: Array<string>
+    goodland: Array<string | null>
+    height: Array<string>
+    load: Array<string>
+    marka: Array<string>
+    model: Array<string>
+    powerload: Array<string | null>
+    runflat: Array<string | null>
+    seazon: Array<string>
+    speed: Array<string | null>
+    territory_rn: Array<string>
+    thorning: Array<string>
+    thorntype: Array<string | null>
+    width: Array<string>
+}
 
 export interface IinitialState {
-    tiresAPI: Array<Array<{ name: string, value: string }>>
-    manufacturerAPI: Array<{ name: string, value: string }>
+    tiresAPI: tiresAPI
     typeSelect: string
-    selects: Array<{ selectName: string, value: string | number | readonly string[] | undefined }>
-    selectedManufacturers: Array<string>
+    selects: Array<{
+        selectName: { apiName: string, displayName: string },
+        value: string | Array<string>,
+    }>
     season: Array<string>
     checkboxes: Array<{ checkboxName: string, value: boolean }>
     sortType: string
@@ -15,40 +34,33 @@ export interface IinitialState {
 }
 
 // изначальные значения стейта
-const selects = selectsNames1.map(selectName => ({ selectName, value: '' }))
+const selects = selectsNames1.map((selectName, index) => {
+    let initValue: string | Array<string> = ''
+    if (index !== 3) initValue = []
+    return { selectName, value: initValue }
+})
 const checkboxes = checkboxesNames.map(checkboxName => ({ checkboxName, value: false }))
 
 
-//имитация данных с апи
-// подбор по параметрам
-const width = [{ name: '150', value: '150' }, { name: '150', value: '150' }, { name: '150', value: '150' },]
-const height = [{ name: '150', value: '150' }, { name: '150', value: '150' }, { name: '150', value: '150' },]
-const diameter = [{ name: '150', value: '150' }, { name: '150', value: '150' }, { name: '150', value: '150' },]
-const manufacturer = [{ name: '150', value: '150' }, { name: '150', value: '150' }, { name: '150', value: '150' },]
-const tiresParametrs = [width, height, diameter, manufacturer,]
-
-// подбор по авто
-const brand = [{ name: '150', value: '150' }, { name: '150', value: '150' }, { name: '150', value: '150' },]
-const model = [{ name: '150', value: '150' }, { name: '150', value: '150' }, { name: '150', value: '150' },]
-const year = [{ name: '150', value: '150' }, { name: '150', value: '150' }, { name: '150', value: '150' },]
-const tiresByAuto = [brand, model, year,]
-
-// производители
-const manufacturer1 = [{ name: 'Производитель 1', value: 'Производитель 1' },
-{ name: 'Производитель 2', value: 'Производитель 2' },
-{ name: 'Производитель 3', value: 'Производитель 3' },
-{ name: 'Производитель 3', value: 'Производитель 3' },
-{ name: 'Производитель 3', value: 'Производитель 3' },
-{ name: 'Производитель 3', value: 'Производитель 3' },
-{ name: 'Производитель 3', value: 'Производитель 3' },]
-
-
 const initialState: IinitialState = {
-    tiresAPI: tiresParametrs,
-    manufacturerAPI: manufacturer1,
+    tiresAPI: {
+        diameter: [],
+        goodland: [],
+        height: [],
+        load: [],
+        marka: [],
+        model: [],
+        powerload: [],
+        runflat: [],
+        seazon: [],
+        speed: [],
+        territory_rn: [],
+        thorning: [],
+        thorntype: [],
+        width: [],
+    },
     typeSelect: typeSelectsValues[0],
     selects: selects,
-    selectedManufacturers: [],
     season: [],
     checkboxes: checkboxes,
     sortType: sorts[0],
@@ -58,52 +70,54 @@ const initialState: IinitialState = {
 export const filterBlock1Slice = createAppSlice({
     name: "filterBlock1",
     initialState,
-    reducers: {
+    reducers: create => ({
         // типы параметров (по параметрам, по автомобилю)
-        typesSelect: (state, action: PayloadAction<string>) => {
-            state.typeSelect = action.payload
-            state.selects = selects
-        },
+        // typesSelect: create.reducer((state, action: PayloadAction<string>) => {
+        //     state.typeSelect = action.payload
+        //     state.selects = selects
+        // }),
         // селекты 
-        selectsSelect: (state,
-            action: PayloadAction<{ selectName: string, value: string, isMainPage: boolean }>) => {
+        selectsSelect: create.reducer((state,
+            action: PayloadAction<{ selectName: string, value: string, isOneChoice: boolean }>) => {
             let payload = action.payload
-            // для фильтра на главной
             let newSelects = state.selects.map(item => {
-                if (item.selectName === payload.selectName) {
-                    item.value = payload.value
+                if (item.selectName.apiName === payload.selectName) {
+                    // для постоянных селектов где только 1 значение
+                    if (typeof item.value === 'string') {
+                        item.value = payload.value
+                    } else {
+                        // для селекта с трансформацией в чекбоксы
+                        // где массив значений
+                        if (payload.isOneChoice) {
+                            // если селект
+                            item.value = [payload.value]
+                        } else {
+                            // если чекбоксы
+                            if (item.value.includes(payload.value)) {
+                                item.value = item.value.filter(item => item !== payload.value)
+                            } else {
+                                item.value.push(payload.value)
+                            }
+                        }
+                    }
                 }
                 return item
             })
             state.selects = newSelects
-            // для фильтра на странице каталога шин
-            if (payload.isMainPage) {
-                if (state.selects.length === 4) {
-                    state.selectedManufacturers[0] = payload.value
-                }
-            } else {
-                if (state.selects.length === 4 && payload.selectName === selectsNames1[3]) {
-                    if (state.selectedManufacturers.includes(payload.value)) {
-                        state.selectedManufacturers = state.selectedManufacturers.filter(item => item !== payload.value)
-                    } else {
-                        state.selectedManufacturers.push(payload.value)
-                    }
-                }
-            }
-        },
+        }),
         // сезоны
-        seasonsSelectOne: (state, action: PayloadAction<string>) => {
+        seasonsSelectOne: create.reducer((state, action: PayloadAction<string>) => {
             state.season[0] = action.payload
-        },
-        seasonsSelectMany: (state, action: PayloadAction<string>) => {
+        }),
+        seasonsSelectMany: create.reducer((state, action: PayloadAction<string>) => {
             if (state.season.includes(action.payload)) {
                 state.season = state.season.filter(item => item !== action.payload)
             } else {
                 state.season.push(action.payload)
             }
-        },
+        }),
         // чекбоксы внизу
-        checkboxesSelect: (state, action: PayloadAction<string>) => {
+        checkboxesSelect: create.reducer((state, action: PayloadAction<string>) => {
             let payload = action.payload
             let newCheckboxes = state.checkboxes.map(item => {
                 if (item.checkboxName === payload) {
@@ -112,37 +126,34 @@ export const filterBlock1Slice = createAppSlice({
                 return item
             })
             state.checkboxes = newCheckboxes
-        },
-        sortTypeSelect: (state, action: PayloadAction<string>) => {
+        }),
+        sortTypeSelect: create.reducer((state, action: PayloadAction<string>) => {
             state.sortType = action.payload
-        },
-        explanationToggle: (state, action: PayloadAction<boolean>) => {
+        }),
+        explanationToggle: create.reducer((state, action: PayloadAction<boolean>) => {
             state.explanationOpenToggle = action.payload
-        },
-        // incrementAsync: create.asyncThunk(
-        //     async (amount: number) => {
-        //         const response = await fetchCount(amount)
-        //         // The value we return becomes the `fulfilled` action payload
-        //         return response.data
-        //     },
-        //     {
-        //         pending: state => {
-        //             state.status = "loading"
-        //         },
-        //         fulfilled: (state, action) => {
-        //             state.status = "idle"
-        //             state.value += action.payload
-        //         },
-        //         rejected: state => {
-        //             state.status = "failed"
-        //         },
-        //     },
-        // ),
-    },
+        }),
+        getTyresParametrs: create.asyncThunk(
+            async () => {
+                const response = await filtersApi.getTyres()
+                // The value we return becomes the `fulfilled` action payload
+                return response
+            },
+            {
+                pending: () => {
+                    console.log('pending')
+                },
+                fulfilled: (state, action: PayloadAction<tiresAPI>) => {
+                    state.tiresAPI = { ...state.tiresAPI, ...action.payload }
+                },
+                rejected: () => {
+                    console.log('error')
+                },
+            },
+        ),
+    }),
     selectors: {
         tiresAPISelector: state => state.tiresAPI,
-        manufacturerAPISelector: state => state.manufacturerAPI,
-        selectedManufacturersSelector: state => state.selectedManufacturers,
         typesSelectSelector: state => state.typeSelect,
         selectSelector: state => state.selects,
         seasonsSelectSelector: state => state.season,
@@ -153,12 +164,12 @@ export const filterBlock1Slice = createAppSlice({
 })
 
 // actions
-export const { seasonsSelectOne, selectsSelect, typesSelect, checkboxesSelect,
-    sortTypeSelect, seasonsSelectMany, explanationToggle } =
+export const { seasonsSelectOne, selectsSelect, checkboxesSelect,
+    sortTypeSelect, seasonsSelectMany, explanationToggle, getTyresParametrs } =
     filterBlock1Slice.actions
 
 // selectors
 export const { typesSelectSelector, selectSelector, seasonsSelectSelector,
     checkboxesSelectSelector, sortTypeSelector, tiresAPISelector,
-    manufacturerAPISelector, selectedManufacturersSelector, explanationToggleSelector } =
+    explanationToggleSelector } =
     filterBlock1Slice.selectors

@@ -1,9 +1,9 @@
 import type React from "react"
 import SortHeaderStyles from "./SortHeaderStyles.module.scss"
-import { sorts } from "../../../../../consts"
-import { useAppDispatch, useAppSelector } from "../../../../../app/hooks"
-import { sortTypeSelect, sortTypeSelector } from "../../../main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import { useState } from "react"
+import { sortTypeSelect, sortTypeSelector } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { sorts } from "../../../../consts"
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 
 
 export const SortHeaderMobile: React.FC = () => {
@@ -18,9 +18,9 @@ export const SortHeaderMobile: React.FC = () => {
         dispatch(sortTypeSelect(type))
         setIsOpen(!isOpen)
     }
-    const styles = isOpen 
-    ? SortHeaderStyles.mainWrapperMobile + ' ' + SortHeaderStyles.sortsOpen 
-    : SortHeaderStyles.mainWrapperMobile
+    const styles = isOpen
+        ? SortHeaderStyles.mainWrapperMobile + ' ' + SortHeaderStyles.sortsOpen
+        : SortHeaderStyles.mainWrapperMobile
     return (
         <div className={styles}>
             <div className={SortHeaderStyles.sortImg}>&#8646;</div>

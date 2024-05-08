@@ -1,4 +1,5 @@
 import type React from "react"
+import * as R from "react"
 import MainFiltersStyles from "./MainFilters.module.scss"
 import { useState } from "react"
 import { FilterBlock1 } from "./filtersBlocks/FilterBlock1"
@@ -57,13 +58,14 @@ export const MainFilters: React.FC = () => {
                     }
                     let content = null
                     mobileSelectedTab === null ? content = '' : content = tabsContent[mobileSelectedTab]
-                    return <>
-                        <div className={tabStyle} id={item} key={`${index} - ${item}`} onClick={() => toggleTabs(index)}>
+                    return <R.Fragment key={`${index} - ${item}`}>
+                        <div className={tabStyle}
+                            id={item} onClick={() => toggleTabs(index)}>
                             <p>{item}</p>
                             <img className={arrowStyles} src={arrow} alt="arrow" />
                         </div>
                         <div className={tabMobileStyle}>{content}</div>
-                    </>
+                    </R.Fragment>
                 })}
             </div>
             <div className={MainFiltersStyles.content}>

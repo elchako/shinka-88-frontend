@@ -1,4 +1,4 @@
-@import '../../../../../common.scss';
+@import '../../../../common.scss';
 
 // Desktop
 
@@ -193,7 +193,7 @@
 }
 
 .closeFilters {
-    background: url('../../../../../imgs/closeHiddenMenu.png');
+    background: url('../../../../imgs/closeHiddenMenu.png');
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
@@ -304,7 +304,8 @@
     margin-top: 12px;
 }
 
-.priceFromMobile input, .priceToMobile input {
+.priceFromMobile input,
+.priceToMobile input {
     width: 120px;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 7px;

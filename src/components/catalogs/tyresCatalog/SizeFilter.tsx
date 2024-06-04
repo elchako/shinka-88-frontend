@@ -16,8 +16,13 @@ export const SizeFilter: React.FC = () => {
             {selects.map((item, index) => {
                 let values = [...tiresAPI[item.selectName.apiName as keyof tiresAPI]]
                 values.sort()
-                return <select className={FiltersStyles.select} key={`${index} - ${item}`}
-                    defaultValue=''
+                let defaultValue = ''
+                if (item.value !== '' && item.value.length !== 0) {
+                    typeof item.value === 'string' ? defaultValue = item.value : defaultValue = item.value[0]
+                }
+                return <select className={FiltersStyles.select}
+                    key={`${index} - ${item.selectName.apiName} - ${index}`}
+                    defaultValue={defaultValue}
                     onChange={e => dispatch(selectsSelect({
                         selectName: item.selectName.apiName,
                         value: e.currentTarget.value,

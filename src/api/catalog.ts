@@ -18,6 +18,14 @@ class FiltersAPI {
         const response = await this.instance.get(URLs.filters.disks)
         return response.data
     }
+
+    async getFilteredTyres() {
+        console.log(URLs.filters.filteredTyres)
+        const response = await this.instance.post(URLs.filters.filteredTyres, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        return response.data
+    }
 }
 
 export const filtersApi = new FiltersAPI(URLs.base)

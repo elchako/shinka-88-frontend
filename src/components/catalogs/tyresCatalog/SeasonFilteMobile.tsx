@@ -15,9 +15,9 @@ export const SeasonFilterMobile: React.FC = () => {
     return (
         <div className={FiltersStyles.modalMobileFilterButtons}>
             {filterButtons.map((item, index) =>
-                <button key={`${index} - ${index} - ${item}`} className={season[0] === item
+                <button key={`${index} - ${index} - ${item.name}`} className={season[0]?.name === item.name
                     ? FiltersStyles.modalMobileSelectedButton : ''}
-                    onClick={() => dispatch(seasonsSelectOne(item))}>{item}</button>)}
+                    onClick={() => dispatch(seasonsSelectOne(item))}>{item.name}</button>)}
         </div>
     )
 }

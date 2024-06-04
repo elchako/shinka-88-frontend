@@ -17,7 +17,7 @@ export const AdditionalFilterMobile: React.FC = () => {
                 label={checkboxesNames[0]}
                 className='checkboxesInput'
                 labelClassName='checkboxesLabelMobile'
-                checked={checkboxesSelects[0].value}
+                checked={checkboxesSelects[0].checked}
                 onChange={() => dispatch(checkboxesSelect(checkboxesNames[0]))}
             />
             <Checkbox
@@ -25,7 +25,7 @@ export const AdditionalFilterMobile: React.FC = () => {
                 label={checkboxesNames[1]}
                 className='checkboxesInput'
                 labelClassName='checkboxesLabelMobile'
-                checked={checkboxesSelects[1].value}
+                checked={checkboxesSelects[1].checked}
                 onChange={() => dispatch(checkboxesSelect(checkboxesNames[1]))}
             />
             {/* <div>
@@ -34,7 +34,7 @@ export const AdditionalFilterMobile: React.FC = () => {
                                 label={checkboxesNames[2]}
                                 className='checkboxesInput'
                                 labelClassName='checkboxesLabelMobile'
-                                checked={checkboxesSelects[2].value}
+                                checked={checkboxesSelects[2].checked}
                                 onChange={() => dispatch(checkboxesSelect(checkboxesNames[2]))}
                             />
                             <img src={explanation} alt="explanation" onClick={() => setIsModalOpen(true)} />

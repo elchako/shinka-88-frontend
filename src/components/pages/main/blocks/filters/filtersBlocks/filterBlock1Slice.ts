@@ -20,6 +20,43 @@ export type tiresAPI = {
     width: Array<string>
 }
 
+export type tyresCards = {
+    count: number | null,
+    next: string | null,
+    previous: string | null,
+    results: Array<{
+        id: number,
+        article: string,
+        name: string,
+        name_origin: string,
+        product_type: string,
+        price_purchase: number,
+        price_sale: number,
+        image_url: string,
+        image: string,
+        date_add: string,
+        description: string | null,
+        balance: number,
+        is_active: boolean,
+        goodland: string,
+        marka: string,
+        model: string,
+        seazon: string,
+        diameter: string,
+        width: string,
+        height: string,
+        thorning: string,
+        speed: string,
+        load: string,
+        thorntype: string,
+        mnfcode: string | null,
+        runflat: string | null,
+        powerload: string | null,
+        territory_rn: string,
+        provider: number
+    }>
+}
+
 export interface IinitialState {
     tiresAPI: tiresAPI
     typeSelect: string
@@ -27,10 +64,13 @@ export interface IinitialState {
         selectName: { apiName: string, displayName: string },
         value: string | Array<string>,
     }>
-    season: Array<string>
-    checkboxes: Array<{ checkboxName: string, value: boolean }>
+    season: Array<{ name: string, value1: string, value2: string }>
+    checkboxes: Array<{ checkboxName: string, checked: boolean, value: Array<null | string> }>
+    priceStart: number,
+    priceEnd: number,
     sortType: string
     explanationOpenToggle: boolean
+    tyresCardsArr: tyresCards
 }
 
 // изначальные значения стейта
@@ -39,7 +79,7 @@ const selects = selectsNames1.map((selectName, index) => {
     if (index !== 3) initValue = []
     return { selectName, value: initValue }
 })
-const checkboxes = checkboxesNames.map(checkboxName => ({ checkboxName, value: false }))
+const checkboxes = checkboxesNames.map(checkboxName => ({ checkboxName, checked: false, value: [] }))
 
 
 const initialState: IinitialState = {
@@ -63,8 +103,16 @@ const initialState: IinitialState = {
     selects: selects,
     season: [],
     checkboxes: checkboxes,
+    priceStart: 3500,
+    priceEnd: 20000,
     sortType: sorts[0],
     explanationOpenToggle: false,
+    tyresCardsArr: {
+        count: null,
+        next: null,
+        previous: null,
+        results: []
+    },
 }
 
 export const filterBlock1Slice = createAppSlice({
@@ -106,14 +154,19 @@ export const filterBlock1Slice = createAppSlice({
             state.selects = newSelects
         }),
         // сезоны
-        seasonsSelectOne: create.reducer((state, action: PayloadAction<string>) => {
+        seasonsSelectOne: create.reducer((state,
+            action: PayloadAction<{ name: string, value1: string, value2: string }>) => {
             state.season[0] = action.payload
         }),
-        seasonsSelectMany: create.reducer((state, action: PayloadAction<string>) => {
-            if (state.season.includes(action.payload)) {
-                state.season = state.season.filter(item => item !== action.payload)
-            } else {
+        seasonsSelectMany: create.reducer((state,
+            action: PayloadAction<{ name: string, value1: string, value2: string }>) => {
+            let isThere = false
+            state.season.forEach(item => item.name !== action.payload.name ? null : isThere = true)
+
+            if (!isThere) {
                 state.season.push(action.payload)
+            } else {
+                state.season.splice(state.season.indexOf(action.payload), 1)
             }
         }),
         // чекбоксы внизу
@@ -121,7 +174,7 @@ export const filterBlock1Slice = createAppSlice({
             let payload = action.payload
             let newCheckboxes = state.checkboxes.map(item => {
                 if (item.checkboxName === payload) {
-                    item.value = !item.value
+                    item.checked = !item.checked
                 }
                 return item
             })
@@ -145,6 +198,33 @@ export const filterBlock1Slice = createAppSlice({
                 },
                 fulfilled: (state, action: PayloadAction<tiresAPI>) => {
                     state.tiresAPI = { ...state.tiresAPI, ...action.payload }
+                    // console.log(action.payload.runflat)
+                    let checkboxesWithValues = state.checkboxes.map(item => {
+                        item.value = action.payload.runflat
+                        return item
+                    })
+                    state.checkboxes = checkboxesWithValues
+                },
+                rejected: () => {
+                    console.log('error')
+                },
+            },
+        ),
+        getTyresCards: create.asyncThunk(
+            async () => {
+                const response = await filtersApi.getFilteredTyres()
+                // The value we return becomes the `fulfilled` action payload
+                return response
+            },
+            {
+                pending: () => {
+                    console.log('pending')
+                },
+                fulfilled: (state, action: PayloadAction<tyresCards>) => {
+                    state.tyresCardsArr.count = action.payload.count
+                    state.tyresCardsArr.next = action.payload.next
+                    state.tyresCardsArr.previous = action.payload.previous
+                    state.tyresCardsArr.results = action.payload.results
                 },
                 rejected: () => {
                     console.log('error')
@@ -160,16 +240,18 @@ export const filterBlock1Slice = createAppSlice({
         checkboxesSelectSelector: state => state.checkboxes,
         sortTypeSelector: state => state.sortType,
         explanationToggleSelector: state => state.explanationOpenToggle,
+        filteredTyresSelector: state => state.tyresCardsArr
     },
 })
 
 // actions
 export const { seasonsSelectOne, selectsSelect, checkboxesSelect,
-    sortTypeSelect, seasonsSelectMany, explanationToggle, getTyresParametrs } =
+    sortTypeSelect, seasonsSelectMany, explanationToggle, getTyresParametrs,
+    getTyresCards } =
     filterBlock1Slice.actions
 
 // selectors
 export const { typesSelectSelector, selectSelector, seasonsSelectSelector,
     checkboxesSelectSelector, sortTypeSelector, tiresAPISelector,
-    explanationToggleSelector } =
+    explanationToggleSelector, filteredTyresSelector } =
     filterBlock1Slice.selectors

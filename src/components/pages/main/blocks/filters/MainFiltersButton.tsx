@@ -4,14 +4,16 @@ import { tabsButtons } from '../../../../../consts'
 
 interface IProps {
     title: string
+    handler: () => void
 }
 
-export const MainFiltersButton: React.FC<IProps> = ({ title }) => {
+export const MainFiltersButton: React.FC<IProps> = ({ title, handler }) => {
     let buttonStyles = MainFiltersStyles.sendButton
     if (title !== tabsButtons[0]) {
         buttonStyles = MainFiltersStyles.sendButton + ' ' + MainFiltersStyles.below
-    } 
+    }
+
     return (
-        <button className={buttonStyles}>{title}</button>
+        <button onClick={handler} className={buttonStyles}>{title}</button>
     )
 }

@@ -14,13 +14,14 @@ export const AdditionalFilter: React.FC = () => {
             <p className={FiltersStyles.filterTitle}>Дополнительно</p>
             {checkboxes.map((item, index) => {
                 if (index === 2) return null
+                console.log(item.checked)
                 return <div key={`${index} ${item}`} className={FiltersStyles.seasonBlock}>
                     <Checkbox
                         icon={<img src={checkedIcon} alt="checked" className="checkboxesImg" />}
                         label={item.checkboxName}
                         className='checkboxesInput'
                         labelClassName={FiltersStyles.inputLabel}
-                        checked={item.value}
+                        checked={item.checked}
                         onChange={() => dispatch(checkboxesSelect(item.checkboxName))}
                     />
                 </div>

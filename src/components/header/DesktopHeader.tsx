@@ -4,9 +4,12 @@ import { NavLink } from "react-router-dom";
 import cart from '../../imgs/cart/desktopHeader.png'
 import { Logo } from "../common/Logo";
 import { links } from "../../consts";
+import { useAppSelector } from "../../app/hooks";
+import { priceAmountSelector, tyresDataSelector } from "../pages/cart/cartSlice";
 
 
 export const DesktopHeader: React.FC = () => {
+    const priceAmount = useAppSelector(priceAmountSelector)
 
     const logoStyles = {
         logoImg: HeaderStyles.logoImg,
@@ -22,7 +25,7 @@ export const DesktopHeader: React.FC = () => {
                 <div className={HeaderStyles.cartImg}>
                     <img src={cart} alt="cart" />
                 </div>
-                <p className={HeaderStyles.priceAmount}>500 000 р.</p>
+                <p className={HeaderStyles.priceAmount}>{`${priceAmount} р.`}</p>
             </NavLink>
         </div>
 

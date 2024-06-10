@@ -15,9 +15,13 @@ export const SizeFilterMobile: React.FC = () => {
             {selects.map((item, index) => {
                 let values = [...tiresAPI[item.selectName.apiName as keyof tiresAPI]]
                 values.sort()
+                let defaultValue = ''
+                if (item.value !== '' && item.value.length !== 0) {
+                    typeof item.value === 'string' ? defaultValue = item.value : defaultValue = item.value[0]
+                }
                 return <div className={FiltersStyles.selectMobile} key={`${index} - ${item}`}>
                     <p>{item.selectName.displayName}</p>
-                    {<select defaultValue='' key={`${index} - ${item}`}
+                    {<select value={defaultValue} key={`${index} - ${item}`}
                         onChange={e => dispatch(selectsSelect({
                             selectName: item.selectName.apiName,
                             value: e.currentTarget.value,
@@ -27,8 +31,7 @@ export const SizeFilterMobile: React.FC = () => {
                         {values.map((item, index) => {
                             return <option key={`${index} - ${item}`} value={item as string}>{item}</option>
                         })}
-                    </select>
-                    }
+                    </select>}
                 </div>
             })}
         </>

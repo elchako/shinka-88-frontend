@@ -12,6 +12,13 @@ import { TyresFilterBlocks } from '../components/catalogs/tyresCatalog/TyresFilt
 import { TyresFilterBlocksMobileModal } from '../components/catalogs/tyresCatalog/TyresFiltersBlocksMobileModal'
 import { DisksFilterBlocks } from '../components/catalogs/disksCatalog/DisksFiltersBlocks'
 import { DisksFilterBlocksMobileModal } from '../components/catalogs/disksCatalog/DisksFiltersBlocksMobileModal'
+import { filteredTyresSelector as cardsData1, type resultsType } from '../components/pages/main/blocks/filters/filtersBlocks/filterBlock1Slice'
+import summer from '../imgs/tiresCard/summer.png'
+import winter from '../imgs/tiresCard/winter.png'
+import allSeasons from '../imgs/tiresCard/all-seasons.png'
+import runflat from '../imgs/tiresCard/runflat.png'
+import strong from '../imgs/tiresCard/strong.png'
+
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
@@ -21,18 +28,43 @@ export const useCatalogDataHook = (page: string) => {
     let title: string = 'Каталог шин'
     let filtersBlocks: React.FC<{}> = TyresFilterBlocks
     let filtersBlocksMobile: React.FC<{}> = TyresFilterBlocksMobileModal
+    let selectSelector = cardsData1
 
     switch (page.slice(1)) {
         case links[4].link:
             title = 'Каталог дисков'
             filtersBlocks = DisksFilterBlocks
             filtersBlocksMobile = DisksFilterBlocksMobileModal
+            selectSelector = cardsData1
             break
     }
-
+    const cardsData = useAppSelector(selectSelector)
     return {
         title,
         filtersBlocks,
-        filtersBlocksMobile
+        filtersBlocksMobile,
+        cardsData
+    }
+}
+
+export const useCardData = (data: resultsType) => {
+    const runflatText = data.runflat ? 'RunFlat' : ''
+    const runflatIcon = data.runflat ? runflat : ''
+    const strongText = data.powerload ? 'Усилинные' : ''
+    const strongIcon = data.powerload ? strong : ''
+    const seasonIcons = [{ icon: summer, name: 'Летняя' }, { icon: winter, name: 'Зимняя' },
+    { icon: allSeasons, name: 'Всесезонная' }]
+    let seasonIcon
+    seasonIcons.forEach(element => {
+        if (element.name === data.seazon) {
+            seasonIcon = element.icon
+        }
+    })
+    return {
+        seasonIcon,
+        runflatText,
+        runflatIcon,
+        strongText,
+        strongIcon
     }
 }

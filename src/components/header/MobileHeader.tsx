@@ -4,9 +4,12 @@ import { NavLink } from "react-router-dom";
 import phone from '../../imgs/phone.png';
 import mobileCart from '../../imgs/cart/mobileCart.png'
 import { Logo } from "../common/Logo";
+import { useAppSelector } from "../../app/hooks";
+import { tyresDataSelector } from "../pages/cart/cartSlice";
 
 
 export const MobileHeader: React.FC = () => {
+    const tyresAmount = useAppSelector(tyresDataSelector).length
 
     const mobileLogoStyles = {
         logoImg: HeaderStyles.logoImgMobile,
@@ -18,9 +21,9 @@ export const MobileHeader: React.FC = () => {
         <a href="tel:+79197728888" className={HeaderStyles.mobilePhone}>
             <img src={phone} alt="phone" />
         </a>
-        <Logo {...mobileLogoStyles}/>
+        <Logo {...mobileLogoStyles} />
         <NavLink to='cart' className={HeaderStyles.mobileCart}>
-            <p className={HeaderStyles.productsCounter}>1</p>
+            <p className={HeaderStyles.productsCounter}>{tyresAmount}</p>
             <img src={mobileCart} alt="cart" />
         </NavLink>
     </div>

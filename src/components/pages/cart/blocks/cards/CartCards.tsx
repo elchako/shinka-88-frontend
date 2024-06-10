@@ -8,10 +8,15 @@ import gift from '../../../../../imgs/tiresCard/gift.png'
 import tireExample from '../../../../../imgs/tiresCard/tire-example.png'
 import delElement from '../../../../../imgs/cart/del_from_cart.png'
 import Checkbox from "react-custom-checkbox";
+import type { resultsType } from "../../../main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { useCardData } from "../../../../../app/hooks"
 
+interface IProps {
+    data: resultsType
+}
 
-export const CartCards: React.FC = () => {
-
+export const CartCards: React.FC<IProps> = ({ data }) => {
+    const cardData = useCardData(data)
 
     return (
         <div className={CartCardsStyles.mainWrapper}>
@@ -27,9 +32,9 @@ export const CartCards: React.FC = () => {
                 />}
                 <div className={CartCardsStyles.iconsContent}>
                     <div className={CartCardsStyles.iconsTop}>
-                        <img src={summer} alt="" />
-                        <img src={runflat} alt="" />
-                        <img src={strong} alt="" />
+                        {cardData.seasonIcon !== '' && <img src={cardData.seasonIcon} alt="" />}
+                        {cardData.runflatIcon !== '' && <img src={cardData.runflatIcon} alt="" />}
+                        {cardData.strongIcon && <img src={cardData.strongIcon} alt="" />}
                     </div>
                     <div className={CartCardsStyles.iconsBottom}>
                         <img src={gift} alt="" />

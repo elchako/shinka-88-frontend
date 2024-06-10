@@ -5,8 +5,11 @@ import { Footer } from "../../footer/Footer"
 import Checkbox from "react-custom-checkbox";
 import { CartCards } from "./blocks/cards/CartCards";
 import { OrderInfo } from "../blocks/orderInfo/OrderInfo";
+import { useAppSelector } from "../../../app/hooks";
+import { allProductsSelector } from "./cartSlice";
 
 export const Cart: React.FC = () => {
+    const cardData = useAppSelector(allProductsSelector)
     return (
         <div className={CartStyles.mainWrapper}>
             <div className={CartStyles.contentWrapper}>
@@ -27,8 +30,9 @@ export const Cart: React.FC = () => {
                             <p className={CartStyles.clearCart}>Очистить корзину</p>
                         </div>
                         <div className={CartStyles.cards}>
-                            {[...Array(4)].map(item => {
-                                return <CartCards />
+                            {cardData.map(item => {
+                                console.log(item)
+                                return <CartCards data={item} />
                             })}
                         </div>
                     </div>

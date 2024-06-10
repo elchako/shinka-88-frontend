@@ -22,8 +22,16 @@
     gap: 3px;
 }
 
+.iconsTop img {
+    width: 35px;
+}
+
 .productImg {
     margin-left: 12px;
+}
+
+.productImg img {
+    max-width: 170px;
 }
 
 .productName {
@@ -83,6 +91,11 @@
     gap: 3px;
 }
 
+.productInfoAmountItem>div>p {
+    width: 30px;
+    text-align: center;
+}
+
 // Мобильная версия
 
 .mainWrapperMobile {
@@ -117,6 +130,10 @@
     bottom: -5px;
 }
 
+.iconsBottom img {
+    width: 30px;
+}
+
 .productInfoMobile {
     display: flex;
     flex-direction: column;
@@ -132,7 +149,7 @@
 .productNameMobile {
     font-size: 18px;
     font-weight: 600;
-    line-height: 12px;
+    line-height: 20px;
 }
 
 .productInfoContentMobile {

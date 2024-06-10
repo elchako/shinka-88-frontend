@@ -1,55 +1,61 @@
 import type React from "react"
 import CardMobileStyles from "./CardDesktopStyles.module.scss"
-import summer from '../../../../imgs/tiresCard/summer.png'
-import runflat from '../../../../imgs/tiresCard/runflat.png'
-import strong from '../../../../imgs/tiresCard/strong.png'
 import gift from '../../../../imgs/tiresCard/gift.png'
-import tireExample from '../../../../imgs/tiresCard/tire-example.png'
 import cart from '../../../../imgs/cart/productMobileCart.png'
-import inCart from '../../../../imgs/cart/productInCart.png'
+import { useAppDispatch, useCardData } from "../../../../app/hooks"
+import { amountHandler, type resultsType } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 
 
-export const CardMobile: React.FC = () => {
+interface IProps {
+    data: resultsType
+    handler: (data: resultsType) => void
+}
+
+export const CardMobile: React.FC<IProps> = ({ data, handler }) => {
+    const dispatch = useAppDispatch()
+    const cardData = useCardData(data)
     return (
         <div className={CardMobileStyles.mainWrapperMobile}>
             <div className={CardMobileStyles.productImgMobile}>
                 <div className={CardMobileStyles.iconsMobile}>
                     <div className={CardMobileStyles.iconsTopMobile}>
-                        <img src={summer} alt="" />
-                        <img src={runflat} alt="" />
-                        <img src={strong} alt="" />
+                        {cardData.seasonIcon !== '' && <img src={cardData.seasonIcon} alt="" />}
+                        {cardData.runflatIcon !== '' && <img src={cardData.runflatIcon} alt="" />}
+                        {cardData.strongIcon && <img src={cardData.strongIcon} alt="" />}
                     </div>
                     <div className={CardMobileStyles.iconsBottomMobile}>
                         <img src={gift} alt="" />
                     </div>
                 </div>
-                <img src={tireExample} alt="" />
+                <img src={data.image_url} alt="" />
             </div>
             <div className={CardMobileStyles.productInfoMobile}>
                 <div className={CardMobileStyles.productInfoMobileTop}>
-                    <p className={CardMobileStyles.productNameMobile}>Наименование модели</p>
+                    <p className={CardMobileStyles.productNameMobile}>{data.name}</p>
                     <div className={CardMobileStyles.productInfoContentMobile}>
                         <div>
-                            <p>205/55</p>
-                            <p>Лето</p>
-                            <p>Производитель</p>
+                            <p>{`${data.width}/${data.height}`}</p>
+                            <p>{data.seazon}</p>
+                            <p>{data.marka}</p>
                         </div>
                         <div>
-                            <p>RunFlat</p>
-                            <p>Усиленные</p>
+                            <p>{cardData.runflatText}</p>
+                            <p>{cardData.strongText}</p>
                         </div>
                     </div>
                 </div>
                 <div className={CardMobileStyles.productInfoMobileBottom}>
                     <div className={CardMobileStyles.productInfoAmountItemMobile}>
-                        <button>-</button>
-                        <p>50</p>
-                        <button>+</button>
+                        <button onClick={() =>
+                            dispatch(amountHandler({ id: data.id, isPlus: false }))}>-</button>
+                        <p>{data.amount}</p>
+                        <button onClick={() =>
+                            dispatch(amountHandler({ id: data.id, isPlus: true }))}>+</button>
                     </div>
                     <div className={CardMobileStyles.productPriceMobile}>
-                        15 000
+                        {data.price_sale}
                     </div>
-                    <div className={CardMobileStyles.productCartMobile}>
+                    <div onClick={() => handler(data)} className={CardMobileStyles.productCartMobile}>
                         <img src={cart} alt="" />
                     </div>
                 </div>

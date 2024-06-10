@@ -21,16 +21,16 @@ export const SizeFilter: React.FC = () => {
                     typeof item.value === 'string' ? defaultValue = item.value : defaultValue = item.value[0]
                 }
                 return <select className={FiltersStyles.select}
-                    key={`${index} - ${item.selectName.apiName} - ${index}`}
-                    defaultValue={defaultValue}
+                    key={`${index} - ${item.selectName.apiName}`}
+                    value={defaultValue}
                     onChange={e => dispatch(selectsSelect({
                         selectName: item.selectName.apiName,
                         value: e.currentTarget.value,
                         isOneChoice: true
                     }))}>
                     <option value='' disabled>{item.selectName.displayName}</option>
-                    {values.map(item => {
-                        return <option value={item as string}>{item}</option>
+                    {values.map((item, index) => {
+                        return <option key={`${index} - ${item}`} value={item as string}>{item}</option>
                     })}
                 </select>
             })}

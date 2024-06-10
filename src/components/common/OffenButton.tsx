@@ -3,11 +3,12 @@ import commonStyles from "./common.module.scss"
 
 interface IProps {
     name: string
+    handler?: () => void
 }
 
-export const OffenButton: React.FC<IProps> = ({ name }) => {
+export const OffenButton: React.FC<IProps> = ({ name, handler }) => {
     return (
-        <div className={commonStyles.mainWrapperOffenButton}>
+        <div onClick={handler} className={commonStyles.mainWrapperOffenButton}>
             <p>{name}</p>
         </div>
     )

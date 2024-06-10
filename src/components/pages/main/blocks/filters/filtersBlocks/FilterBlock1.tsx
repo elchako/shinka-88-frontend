@@ -10,6 +10,7 @@ import {
     getTyresParametrs,
     selectSelector,
     getTyresCards,
+    resetFilters,
 } from "./filterBlock1Slice"
 import type { tiresAPI } from "./filterBlock1Slice"
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks"
@@ -40,16 +41,15 @@ export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
 
     const navigate = useNavigate()
     const searchButtonHandler = (): void => {
-        dispatch(getTyresCards(''))
-            .then(unwrapResult)
-            .then(() => navigate(links[3].link))
+        navigate(links[3].link)
     }
-
     const dispatch = useAppDispatch()
+
     //дефолтные значения для селектов
 
     useEffect(() => {
         dispatch(getTyresParametrs(''))
+        dispatch(resetFilters())
     }, [dispatch])
 
     return (

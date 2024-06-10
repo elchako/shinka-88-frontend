@@ -19,11 +19,10 @@ class FiltersAPI {
         return response.data
     }
 
-    async getFilteredTyres() {
-        console.log(URLs.filters.filteredTyres)
-        const response = await this.instance.post(URLs.filters.filteredTyres, {
+    async getFilteredTyres(fields: any = {}) {
+        const response = await this.instance.post(URLs.filters.filteredTyres, JSON.stringify({ fields }), {
             headers: { 'Content-Type': 'application/json' }
-        })
+        });
         return response.data
     }
 }

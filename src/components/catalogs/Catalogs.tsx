@@ -8,12 +8,20 @@ import { SortHeaderMobile } from "./blocks/sortHeader/SortHeaderMobile"
 import { MobileFilters } from "./blocks/filters/MobileFilters"
 import { CardMobile } from "./blocks/card/CardMobile"
 import { useLocation } from "react-router-dom"
-import { useCatalogDataHook } from "../../app/hooks"
+import { useAppDispatch, useCatalogDataHook } from "../../app/hooks"
+import { addToCart } from "../pages/cart/cartSlice"
+import type { resultsType } from "../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 
 
 export const Catalogs: React.FC = () => {
     const { pathname } = useLocation()
     const catalogData = useCatalogDataHook(pathname)
+    const dispatch = useAppDispatch()
+
+    const addToCartHandler = (data: resultsType) => {
+        dispatch(addToCart(data))
+    }
+
     return (
         <div className={CatalogStyles.mainWrapper}>
             <p className="pageTitle">{catalogData.title}</p>
@@ -21,8 +29,8 @@ export const Catalogs: React.FC = () => {
             <div className={CatalogStyles.content}>
                 <DesktopFilters filterBlocks={<catalogData.filtersBlocks />} />
                 <div className={CatalogStyles.cards}>
-                    {[...Array(10)].map((item, index) => {
-                        return <CardDesktop key={`${item} - ${index}`} />
+                    {catalogData.cardsData.results.map((item, index) => {
+                        return <CardDesktop handler={addToCartHandler} data={item} key={`${item} - ${index}`} />
                     })}
                 </div>
             </div>
@@ -32,8 +40,8 @@ export const Catalogs: React.FC = () => {
                     <MobileFilters />
                 </div>
                 <div className={CatalogStyles.cardsMobile}>
-                    {[...Array(10)].map((item, index) => {
-                        return <CardMobile key={`${item} - ${index}`} />
+                    {catalogData.cardsData.results.map((item, index) => {
+                        return <CardMobile handler={addToCartHandler} data={item} key={`${item} - ${index}`} />
                     })}
                 </div>
             </div>

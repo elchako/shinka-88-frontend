@@ -3,8 +3,9 @@
 .mainWrapper {
     margin: 0 auto;
     height: 100vh;
-    // display: flex;
-    // flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .contentWrapper {
@@ -14,6 +15,10 @@
     display: flex;
     flex-direction: column;
     padding: 0 20px;
+}
+
+.contentWrapperAnotherWidth {
+    min-width: 1000px;
 }
 
 .content {
@@ -139,11 +144,19 @@
     .content {
         gap: 25px;
     }
+
+    .contentWrapperAnotherWidth {
+        min-width: 900px;
+    }
 }
 
 @media screen and (max-width: 930px) {
     .contentWrapper {
         margin-top: 10px;
+    }
+
+    .contentWrapperAnotherWidth {
+        min-width: 0px;
     }
 
     .cards {

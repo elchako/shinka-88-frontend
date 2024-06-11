@@ -3,16 +3,21 @@ import CartStyles from "./CartStyles.module.scss"
 import '../../../common.scss'
 import { Footer } from "../../footer/Footer"
 import Checkbox from "react-custom-checkbox";
-import { CartCards } from "./blocks/cards/CartCards";
+import { CartTyresCards } from "./blocks/cards/CartTyresCards";
 import { OrderInfo } from "../blocks/orderInfo/OrderInfo";
-import { useAppSelector } from "../../../app/hooks";
-import { allProductsSelector } from "./cartSlice";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { allProductsSelector, resetCart, selectAllHandler, selectAllSelector } from "./cartSlice";
 
 export const Cart: React.FC = () => {
+    const dispatch = useAppDispatch()
     const cardData = useAppSelector(allProductsSelector)
+    const selectAll = useAppSelector(selectAllSelector)
+    let wrapperStyle = cardData.length === 0
+        ? CartStyles.contentWrapper + ' ' + CartStyles.contentWrapperAnotherWidth
+        : CartStyles.contentWrapper
     return (
         <div className={CartStyles.mainWrapper}>
-            <div className={CartStyles.contentWrapper}>
+            <div className={wrapperStyle}>
                 <p className="pageTitle">Корзина</p>
                 <div className={CartStyles.content}>
                     <div className={CartStyles.leftBlock}>
@@ -24,15 +29,15 @@ export const Cart: React.FC = () => {
                                 labelClassName={CartStyles.checkboxLCN}
                                 borderRadius={10}
                                 borderColor={'#000'}
-                                checked={true}
+                                checked={selectAll}
+                                onChange={() => dispatch(selectAllHandler())}
                             // onChange={() => dispatch(checkboxesSelect(checkboxesNames[0]))}
                             />}
-                            <p className={CartStyles.clearCart}>Очистить корзину</p>
+                            <p onClick={() => dispatch(resetCart())} className={CartStyles.clearCart}>Очистить корзину</p>
                         </div>
                         <div className={CartStyles.cards}>
                             {cardData.map(item => {
-                                console.log(item)
-                                return <CartCards data={item} />
+                                return <CartTyresCards data={item} />
                             })}
                         </div>
                     </div>

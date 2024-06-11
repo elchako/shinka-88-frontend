@@ -9,15 +9,16 @@ import tireExample from '../../../../../imgs/tiresCard/tire-example.png'
 import delElement from '../../../../../imgs/cart/del_from_cart.png'
 import Checkbox from "react-custom-checkbox";
 import type { resultsType } from "../../../main/blocks/filters/filtersBlocks/filterBlock1Slice"
-import { useCardData } from "../../../../../app/hooks"
+import { useAppDispatch, useCardData } from "../../../../../app/hooks"
+import { changeAmount, delOneTypeProduct, selectProductHandler, type selectedTyresType } from "../../cartSlice"
 
 interface IProps {
-    data: resultsType
+    data: selectedTyresType & resultsType
 }
 
-export const CartCards: React.FC<IProps> = ({ data }) => {
+export const CartTyresCards: React.FC<IProps> = ({ data }) => {
     const cardData = useCardData(data)
-
+    const dispatch = useAppDispatch()
     return (
         <div className={CartCardsStyles.mainWrapper}>
             <div className={CartCardsStyles.icons}>
@@ -27,8 +28,9 @@ export const CartCards: React.FC<IProps> = ({ data }) => {
                     labelClassName={CartStyles.checkboxLCN}
                     borderRadius={10}
                     borderColor={'#000'}
-                    checked={true}
-                // onChange={() => dispatch(checkboxesSelect(checkboxesNames[0]))}
+                    checked={!data.canceled}
+                    onChange={() =>
+                        dispatch(selectProductHandler({ productType: data.product_type, id: data.id }))}
                 />}
                 <div className={CartCardsStyles.iconsContent}>
                     <div className={CartCardsStyles.iconsTop}>
@@ -42,33 +44,44 @@ export const CartCards: React.FC<IProps> = ({ data }) => {
                 </div>
             </div>
             <div className={CartCardsStyles.productImg}>
-                <img src={tireExample} alt="" />
+                <img src={data.image_url} alt="" />
             </div>
             <div className={CartCardsStyles.productInfo}>
-                <p className={CartCardsStyles.productName}>Наименование модели</p>
+                <p className={CartCardsStyles.productName}>{data.name}</p>
                 <div className={CartCardsStyles.productInfoContent}>
                     <div>
-                        <p>205/55</p>
-                        <p>Лето</p>
-                        <p>Производитель</p>
+                        <p>{`${data.width}/${data.height}`}</p>
+                        <p>{data.seazon}</p>
+                        <p>{data.marka}</p>
                     </div>
                     <div>
-                        <p>RunFlat</p>
+                        <p>{cardData.runflatText}</p>
+                        <p>{cardData.strongText}</p>
                     </div>
                 </div>
                 <div className={CartCardsStyles.productButtons}>
                     <div className={CartCardsStyles.productInfoAmountItem}>
-                        <button>-</button>
-                        <p>50</p>
-                        <button>+</button>
+                        <button onClick={() => dispatch(changeAmount({
+                            type: data.product_type,
+                            id: data.id,
+                            isPlus: false
+                        }))}>-</button>
+                        <p>{data.amount}</p>
+                        <button onClick={() => dispatch(changeAmount({
+                            type: data.product_type,
+                            id: data.id,
+                            isPlus: true
+                        }))}>+</button>
                     </div>
                     <div className={CartCardsStyles.productPrice}>
-                        15 000
+                        {data.price_sale}
                     </div>
                 </div>
             </div>
             <div className={CartCardsStyles.delElement}>
-                <img src={delElement} alt="" />
+                <img onClick={() =>
+                    dispatch(delOneTypeProduct({ productType: data.product_type, id: data.id }))}
+                    src={delElement} alt="" />
             </div>
         </div>
     )

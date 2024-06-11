@@ -28,6 +28,10 @@
     gap: 3px;
 }
 
+.iconsTop img {
+    width: 30px;
+}
+
 .productImg {
     margin-left: 12px;
     display: flex;
@@ -35,6 +39,11 @@
 
 .productImg img {
     align-self: center;
+    max-width: 170px;
+}
+
+.iconsBottom img {
+    width: 30px;
 }
 
 

@@ -9,7 +9,7 @@ export interface IinitialState {
 
 const initialState: IinitialState = {
     mobileMenuIsClose: true,
-    mobileFiltersClose: true
+    mobileFiltersClose: true,
 }
 
 export const smallActions = createAppSlice({
@@ -22,29 +22,10 @@ export const smallActions = createAppSlice({
         mobileFiltersReducer: state => {
             state.mobileFiltersClose = !state.mobileFiltersClose
         },
-        // incrementAsync: create.asyncThunk(
-        //     async (amount: number) => {
-        //         const response = await fetchCount(amount)
-        //         // The value we return becomes the `fulfilled` action payload
-        //         return response.data
-        //     },
-        //     {
-        //         pending: state => {
-        //             state.status = "loading"
-        //         },
-        //         fulfilled: (state, action) => {
-        //             state.status = "idle"
-        //             state.value += action.payload
-        //         },
-        //         rejected: state => {
-        //             state.status = "failed"
-        //         },
-        //     },
-        // ),
     },
     selectors: {
         mobileMenuSelector: state => state.mobileMenuIsClose,
-        mobileFiltersSelector: state => state.mobileFiltersClose,
+        mobileFiltersSelector: state => state.mobileFiltersClose
     },
 })
 

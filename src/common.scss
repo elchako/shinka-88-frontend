@@ -50,6 +50,22 @@ $orangeTextColor: rgb(241, 116, 0);
     font-size: 15px;
 }
 
+.infinite-scroll-component::-webkit-scrollbar {
+    display: none;
+}
+
+.infinite-scroll-component {
+    -ms-overflow-style: none;
+    /* IE и Edge */
+    scrollbar-width: none;
+    /* Firefox */
+
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
 @media screen and (max-width: 1070px) {
     .checkboxesLabel {
         font-size: 13px;

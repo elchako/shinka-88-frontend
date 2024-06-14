@@ -1,6 +1,7 @@
 import type { AxiosInstance } from "axios"
 import axios from "axios"
 import { URLs } from './config'
+import { type fieldsTyresType } from "../components/pages/main/blocks/filters/filtersBlocks/filterBlock1Slice";
 
 class FiltersAPI {
     instance: AxiosInstance;
@@ -19,8 +20,10 @@ class FiltersAPI {
         return response.data
     }
 
-    async getFilteredTyres(fields: any = {}) {
-        const response = await this.instance.post(URLs.filters.filteredTyres, JSON.stringify({ fields }), {
+    async getFilteredTyres(fields: fieldsTyresType, order_by: string, url: string | null) {
+        let path
+        url ? path = `${URLs.filters.filteredTyres}?${url}` : path = URLs.filters.filteredTyres
+        const response = await this.instance.post(path, JSON.stringify({ fields, order_by }), {
             headers: { 'Content-Type': 'application/json' }
         });
         return response.data

@@ -61,6 +61,18 @@ export type tyresCards = {
     results: Array<resultsType>
 }
 
+
+export type fieldsTyresType = {
+    width?: Array<string> | string
+    height?: Array<string> | string
+    diameter?: Array<string> | string
+    seazon?: Array<string>
+    thorning?: Array<string>
+    runflat?: Array<string | null>
+    powerload?: Array<string | null>
+    price?: Array<number>
+}
+
 export interface IinitialState {
     tiresAPI: tiresAPI
     typeSelect: string
@@ -70,11 +82,11 @@ export interface IinitialState {
     }>
     season: Array<{ name: string, value1: string, value2: string }>
     checkboxes: Array<{ checkboxName: string, checked: boolean, value: Array<null | string> }>
-    priceStart: number,
-    priceEnd: number,
-    sortType: string
+    priceStart: number
+    priceEnd: number
     explanationOpenToggle: boolean
     tyresCardsArr: tyresCards
+    sortType: string
 }
 
 // изначальные значения стейта
@@ -109,7 +121,6 @@ const initialState: IinitialState = {
     checkboxes: checkboxes,
     priceStart: 0,
     priceEnd: 0,
-    sortType: sorts[0],
     explanationOpenToggle: false,
     tyresCardsArr: {
         count: null,
@@ -117,6 +128,7 @@ const initialState: IinitialState = {
         previous: null,
         results: []
     },
+    sortType: sorts[0],
 }
 
 export const filterBlock1Slice = createAppSlice({
@@ -184,9 +196,6 @@ export const filterBlock1Slice = createAppSlice({
             })
             state.checkboxes = newCheckboxes
         }),
-        sortTypeSelect: create.reducer((state, action: PayloadAction<string>) => {
-            state.sortType = action.payload
-        }),
         explanationToggle: create.reducer((state, action: PayloadAction<boolean>) => {
             state.explanationOpenToggle = action.payload
         }),
@@ -220,6 +229,9 @@ export const filterBlock1Slice = createAppSlice({
                 }
             }
         }),
+        sortTyresTypeSelect: create.reducer((state, action: PayloadAction<string>) => {
+            state.sortType = action.payload
+        }),
         getTyresParametrs: create.asyncThunk(
             async () => {
                 const response = await filtersApi.getTyres()
@@ -243,20 +255,11 @@ export const filterBlock1Slice = createAppSlice({
             },
         ),
         getTyresCards: create.asyncThunk(
-            async (_, thunkAPI) => {
+            async (refresh, thunkAPI) => {
                 const store = thunkAPI.getState() as RootState
                 const state = store.filterBlock1
-                type fieldsType = {
-                    width?: Array<string> | string
-                    height?: Array<string> | string
-                    diameter?: Array<string> | string
-                    seazon?: Array<string>
-                    thorning?: Array<string>
-                    runflat?: Array<string | null>
-                    powerload?: Array<string | null>
-                    price?: Array<number>
-                }
-                const fields: fieldsType = {}
+
+                const fields: fieldsTyresType = {}
 
                 if (state.selects[0].value.length !== 0) fields.width = state.selects[0].value
                 if (state.selects[1].value.length !== 0) fields.height = state.selects[1].value
@@ -284,22 +287,37 @@ export const filterBlock1Slice = createAppSlice({
                         : price[1] = 20000
                     fields.price = price
                 }
-                const response = await filtersApi.getFilteredTyres(fields)
+
+                let url = null
+                if (!refresh && state.tyresCardsArr.next) {
+                    url = state.tyresCardsArr.next.split('?')[1]
+                }
+
+                let orderBy = 'price_sale'
+                if (state.sortType === sorts[1]) orderBy = '-' + orderBy
+
+                const response = await filtersApi.getFilteredTyres(fields, orderBy, url)
                 // The value we return becomes the `fulfilled` action payload
-                return response
+                return { response, refresh }
             },
             {
                 pending: () => {
                     console.log('pending')
                 },
-                fulfilled: (state, action: PayloadAction<tyresCards>) => {
-                    state.tyresCardsArr.count = action.payload.count
-                    state.tyresCardsArr.next = action.payload.next
-                    state.tyresCardsArr.previous = action.payload.previous
-                    state.tyresCardsArr.results = action.payload.results.map(item => {
+                fulfilled: (state, action: PayloadAction<{ response: tyresCards, refresh: boolean }>) => {
+                    let res = action.payload.response
+                    state.tyresCardsArr.count = res.count
+                    state.tyresCardsArr.next = res.next
+                    state.tyresCardsArr.previous = res.previous
+                    let results = res.results.map(item => {
                         item.amount = 1
                         return item
                     })
+                    if (action.payload.refresh) {
+                        state.tyresCardsArr.results = res.results
+                    } else {
+                        state.tyresCardsArr.results = [...state.tyresCardsArr.results, ...results]
+                    }
                 },
                 rejected: () => {
                     console.log('error')
@@ -313,23 +331,24 @@ export const filterBlock1Slice = createAppSlice({
         selectSelector: state => state.selects,
         seasonsSelectSelector: state => state.season,
         checkboxesSelectSelector: state => state.checkboxes,
-        sortTypeSelector: state => state.sortType,
         explanationToggleSelector: state => state.explanationOpenToggle,
         filteredTyresSelector: state => state.tyresCardsArr,
         priceStartSelector: state => state.priceStart,
         priceEndSelector: state => state.priceEnd,
+        sortTyresTypeSelector: state => state.sortType,
     },
 })
 
 // actions
 export const { seasonsSelectOne, selectsSelect, checkboxesSelect,
-    sortTypeSelect, seasonsSelectMany, explanationToggle, getTyresParametrs,
-    getTyresCards, resetFilters, setPrice, amountHandler } =
+    seasonsSelectMany, explanationToggle, getTyresParametrs,
+    getTyresCards, resetFilters, setPrice, amountHandler,
+    sortTyresTypeSelect } =
     filterBlock1Slice.actions
 
 // selectors
 export const { typesSelectSelector, selectSelector, seasonsSelectSelector,
-    checkboxesSelectSelector, sortTypeSelector, tiresAPISelector,
+    checkboxesSelectSelector, tiresAPISelector, sortTyresTypeSelector,
     explanationToggleSelector, filteredTyresSelector, priceStartSelector,
     priceEndSelector } =
     filterBlock1Slice.selectors

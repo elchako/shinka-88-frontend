@@ -10,7 +10,9 @@ import { CardMobile } from "./blocks/card/CardMobile"
 import { useLocation } from "react-router-dom"
 import { useAppDispatch, useCatalogDataHook } from "../../app/hooks"
 import { addToCart } from "../pages/cart/cartSlice"
-import type { resultsType } from "../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { getTyresCards, sortTyresTypeSelect, type resultsType } from "../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import InfiniteScroll from "react-infinite-scroll-component"
+import { sorts } from "../../consts"
 
 
 export const Catalogs: React.FC = () => {
@@ -21,17 +23,28 @@ export const Catalogs: React.FC = () => {
     const addToCartHandler = (data: resultsType) => {
         dispatch(addToCart(data))
     }
-
+    const newDataUpload = () => {
+        dispatch(getTyresCards(false))
+    }
+    console.log(catalogData.cardsData.results.length)
     return (
         <div className={CatalogStyles.mainWrapper}>
             <p className="pageTitle">{catalogData.title}</p>
-            <SortHeader />
+            <SortHeader sortData={catalogData.sortData} />
             <div className={CatalogStyles.content}>
                 <DesktopFilters filterBlocks={<catalogData.filtersBlocks />} />
-                <div className={CatalogStyles.cards}>
-                    {catalogData.cardsData.results.map((item, index) => {
-                        return <CardDesktop handler={addToCartHandler} data={item} key={`${item} - ${index}`} />
-                    })}
+                <div className={CatalogStyles.cards} id='scrollableDiv'>
+                    <InfiniteScroll
+                        dataLength={catalogData.cardsData.results.length}
+                        next={(newDataUpload)}
+                        hasMore={catalogData.cardsData.next !== null}
+                        loader={'Загрузка...'}
+                        scrollableTarget='scrollableDiv'
+                    >
+                        {catalogData.cardsData.results.map((item, index) => {
+                            return <CardDesktop handler={addToCartHandler} data={item} key={`${item} - ${index}`} />
+                        })}
+                    </InfiniteScroll>
                 </div>
             </div>
             <div className={CatalogStyles.contentMobile}>

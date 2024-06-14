@@ -12,7 +12,7 @@ import { TyresFilterBlocks } from '../components/catalogs/tyresCatalog/TyresFilt
 import { TyresFilterBlocksMobileModal } from '../components/catalogs/tyresCatalog/TyresFiltersBlocksMobileModal'
 import { DisksFilterBlocks } from '../components/catalogs/disksCatalog/DisksFiltersBlocks'
 import { DisksFilterBlocksMobileModal } from '../components/catalogs/disksCatalog/DisksFiltersBlocksMobileModal'
-import { filteredTyresSelector as cardsData1, type resultsType } from '../components/pages/main/blocks/filters/filtersBlocks/filterBlock1Slice'
+import { filteredTyresSelector as cardsData1, getTyresCards, sortTyresTypeSelect, sortTyresTypeSelector, type resultsType } from '../components/pages/main/blocks/filters/filtersBlocks/filterBlock1Slice'
 import summer from '../imgs/tiresCard/summer.png'
 import winter from '../imgs/tiresCard/winter.png'
 import allSeasons from '../imgs/tiresCard/all-seasons.png'
@@ -29,6 +29,9 @@ export const useCatalogDataHook = (page: string) => {
     let filtersBlocks: React.FC<{}> = TyresFilterBlocks
     let filtersBlocksMobile: React.FC<{}> = TyresFilterBlocksMobileModal
     let selectSelector = cardsData1
+    let sortTypeSelector = sortTyresTypeSelector
+    let sortTypeAction = sortTyresTypeSelect
+    let newDataReq = getTyresCards
 
     switch (page.slice(1)) {
         case links[4].link:
@@ -36,14 +39,24 @@ export const useCatalogDataHook = (page: string) => {
             filtersBlocks = DisksFilterBlocks
             filtersBlocksMobile = DisksFilterBlocksMobileModal
             selectSelector = cardsData1
+            sortTypeSelector = sortTyresTypeSelector
+            sortTypeAction = sortTyresTypeSelect
+            newDataReq = getTyresCards
             break
     }
     const cardsData = useAppSelector(selectSelector)
+    const sortType = useAppSelector(sortTypeSelector)
+    const sortData = {
+        sortType,
+        sortTypeAction,
+        newDataReq
+    }
     return {
         title,
         filtersBlocks,
         filtersBlocksMobile,
-        cardsData
+        cardsData,
+        sortData,
     }
 }
 

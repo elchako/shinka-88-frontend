@@ -3,9 +3,10 @@ import { SizeFilter } from "./SizeFilter"
 import { SeasonFilter } from "./SeasonFilter"
 import { AdditionalFilter } from "./AdditionalFilter"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
-import { getTyresCards, priceEndSelector, selectSelector } from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { getTyresCards, priceEndSelector, selectSelector, sortTyresTypeSelect } from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import { checkboxesSelectSelector, priceStartSelector, seasonsSelectSelector } from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import { useEffect } from "react"
+import { sorts } from "../../../consts"
 
 
 export const TyresFilterBlocks: React.FC = () => {
@@ -17,7 +18,9 @@ export const TyresFilterBlocks: React.FC = () => {
     const statePriceEnd = useAppSelector(priceEndSelector)
 
     useEffect(() => {
-        dispatch(getTyresCards(''))
+        dispatch(getTyresCards(true)).then(res => {
+            dispatch(sortTyresTypeSelect(sorts[0]))
+        })
     }, [dispatch, stateSelects, stateSeasons, stateCheckboxes, statePriceStart, statePriceEnd])
     return (
         <>

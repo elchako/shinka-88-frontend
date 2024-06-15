@@ -109,6 +109,11 @@
     background-position: center center;
 }
 
+.map>iframe {
+    width: 370px !important;
+    height: 214px !important;
+}
+
 .mapHelpText {
     font-size: 20px;
     font-weight: 500;
@@ -157,6 +162,11 @@
         height: 300px;
     }
 
+    .map>iframe {
+        width: 450px !important;
+        height: 300px !important;
+    }
+
     .contactsText {
         gap: 15px;
         font-size: 16px;
@@ -176,6 +186,11 @@
     .map {
         width: 320px;
         height: 195px;
+    }
+
+    .map>iframe {
+        width: 320px !important;
+        height: 195px !important;
     }
 
     .contentWrapper {
@@ -201,5 +216,10 @@
     .map {
         width: 235px;
         height: 140px;
+    }
+
+    .map>iframe {
+        width: 235px !important;
+        height: 140px !important;
     }
 }

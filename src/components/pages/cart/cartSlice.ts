@@ -62,11 +62,13 @@ export const cartSlice = createAppSlice({
             }
             if (!founded) state.tyres.push({ ...action.payload, canceled: false, queue: state.queueCounter++ })
             state.priceAmount = recalcPriceAmount(state.tyres)
+            localStorage.setItem('cartData', JSON.stringify(state))
         }),
         selectAllHandler: create.reducer(state => {
             state.selectAll = !state.selectAll
             state.tyres.forEach(item => item.canceled = !state.selectAll)
             state.priceAmount = recalcPriceAmount(sortAllProducts(state))
+            localStorage.setItem('cartData', JSON.stringify(state))
         }),
         selectProductHandler: create.reducer((state,
             action: PayloadAction<{ productType: string, id: number }>) => {
@@ -76,6 +78,7 @@ export const cartSlice = createAppSlice({
             }
 
             state.priceAmount = recalcPriceAmount(sortAllProducts(state))
+            localStorage.setItem('cartData', JSON.stringify(state))
         }),
         resetCart: create.reducer(state => {
             state.tyres = state.tyres.filter(item => item.canceled)
@@ -85,6 +88,7 @@ export const cartSlice = createAppSlice({
             if (newCartArr.length !== 0) {
                 newCartArr.forEach((item, index) => item.queue = index)
             }
+            localStorage.removeItem('cartData')
         }),
         delOneTypeProduct: create.reducer((state,
             action: PayloadAction<{ productType: string, id: number }>) => {
@@ -98,6 +102,7 @@ export const cartSlice = createAppSlice({
             if (newCartArr.length !== 0) {
                 newCartArr.forEach((item, index) => item.queue = index)
             }
+            localStorage.setItem('cartData', JSON.stringify(state))
 
         }),
         changeAmount: create.reducer((state,
@@ -116,22 +121,31 @@ export const cartSlice = createAppSlice({
                 }
             }
             state.priceAmount = recalcPriceAmount(sortAllProducts(state))
-        })
+            localStorage.setItem('cartData', JSON.stringify(state))
+        }),
+        pullLocalStorageData: create.reducer(state => {
+            const localData = localStorage.getItem('cartData')
+            if (localData) {
+                const localDataParsed = JSON.parse(localData)
+                state.tyres = localDataParsed.tyres
+                state.priceAmount = localDataParsed.priceAmount
+                state.queueCounter = localDataParsed.queueCounter
+                state.selectAll = localDataParsed.selectAll
+            }
+        }),
     }),
     selectors: {
         priceAmountSelector: state => state.priceAmount,
         tyresDataSelector: state => state.tyres,
-        allProductsSelector: state => [...state.tyres].sort((a, b) => a.queue - b.queue),
         selectAllSelector: state => state.selectAll
     },
 })
 
 // actions
 export const { addToCart, selectAllHandler, selectProductHandler,
-    resetCart, delOneTypeProduct, changeAmount } =
+    resetCart, delOneTypeProduct, changeAmount, pullLocalStorageData } =
     cartSlice.actions
 
 // selectors
-export const { priceAmountSelector, tyresDataSelector, allProductsSelector,
-    selectAllSelector } =
+export const { priceAmountSelector, tyresDataSelector, selectAllSelector } =
     cartSlice.selectors

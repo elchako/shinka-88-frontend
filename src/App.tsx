@@ -5,7 +5,7 @@ import { links } from './consts'
 import { Header } from "./components/header/Header"
 import { MobileMenu } from "./components/Menu/MobileMenu/MobileMenu"
 import { HiddenMobileMenu } from "./components/Menu/MobileMenu/HiddenMobileMenu"
-import { useAppSelector } from "./app/hooks"
+import { useAppDispatch, useAppSelector } from "./app/hooks"
 import { mobileFiltersSelector } from "./components/common/slices/smallActions"
 import { Cart } from "./components/pages/cart/Cart"
 import { PlacingOrder } from "./components/pages/placingOrder/PlacingOrder"
@@ -16,10 +16,12 @@ import { Guarantees } from "./components/pages/guarantees/Guarantees"
 import { ExplanationModal } from "./components/pages/main/blocks/filters/filtersBlocks/ExplanationModal"
 import { Catalogs } from "./components/catalogs/Catalogs"
 import { MobileFiltersModal } from "./components/catalogs/blocks/filters/MobileFiltersModal"
+import { useEffect } from "react"
+import { pullLocalStorageData } from "./components/pages/cart/cartSlice"
 
 export const App = () => {
   const mobileFiltersState = useAppSelector(mobileFiltersSelector) // закрытие/открытие мобильных параметров в каталоге меню
-
+  const dispatch = useAppDispatch()
   let modalStyle = {
     overflow: 'auto',
     height: 'auto',
@@ -31,6 +33,10 @@ export const App = () => {
     modalStyle.overflow = 'hidden'
     modalStyle.height = '100vh'
   }
+
+  useEffect(() => {
+    dispatch(pullLocalStorageData())
+  }, [dispatch])
 
   return (
     <div style={{

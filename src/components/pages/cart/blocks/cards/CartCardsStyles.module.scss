@@ -58,7 +58,7 @@
     flex-direction: column;
     width: 100%;
     max-width: 300px;
-    gap: 20px;
+    gap: 10px;
     padding: 0px 10px;
 }
 
@@ -130,30 +130,6 @@
 @media screen and (max-width: 1090px) {
     .productInfo {
         gap: 10px;
-    }
-
-    .productButtons {
-        display: flex;
-        gap: 30px;
-    }
-
-    .productInfoAmountItem {
-        padding: 10px 9px;
-        gap: 10px;
-        font-size: 14px;
-    }
-
-    .productInfoAmountItem p {
-        font-size: 14px;
-    }
-
-    .productInfoAmountItem button {
-        font-size: 14px;
-    }
-
-    .productPrice {
-        padding: 9px 7px;
-        font-size: 14px;
     }
 }
 

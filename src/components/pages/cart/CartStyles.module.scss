@@ -31,8 +31,8 @@
 }
 
 .leftBlock {
-    max-width: 70%;
-    flex: 1;
+    max-width: 100%;
+    flex: none;
 }
 
 .actionForAll {
@@ -150,7 +150,7 @@
     }
 }
 
-@media screen and (max-width: 930px) {
+@media screen and (max-width: 1065px) {
     .contentWrapper {
         margin-top: 10px;
     }

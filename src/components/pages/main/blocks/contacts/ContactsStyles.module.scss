@@ -36,12 +36,16 @@
 }
 
 .map {
-    background: url('../../../../../imgs/tempMap.png');
-    background-repeat:  no-repeat;
+    background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
     width: 682px;
     height: 422px;
+}
+
+.map>iframe {
+    width: 682px !important;
+    height: 422px !important;
 }
 
 @media screen and (max-width: 1070px) {
@@ -60,9 +64,15 @@
     .mainWrapper {
         flex-direction: column-reverse;
     }
+
     .map {
         width: 560px;
         height: 400px;
+    }
+
+    .map>iframe {
+        width: 560px !important;
+        height: 400px !important;
     }
 }
 
@@ -70,9 +80,15 @@
     .mainWrapper {
         flex-direction: column-reverse;
     }
+
     .map {
         width: 400px;
         height: 240px;
+    }
+
+    .map>iframe {
+        width: 400px !important;
+        height: 240px !important;
     }
 }
 
@@ -81,13 +97,16 @@
     .mainWrapper {
         flex-direction: column-reverse;
     }
+
     .map {
         width: 330px;
         height: 170px;
     }
+
     .title {
         font-size: 16px;
     }
+
     .text {
         font-size: 16px;
     }

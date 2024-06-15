@@ -6,11 +6,12 @@ import Checkbox from "react-custom-checkbox";
 import { CartTyresCards } from "./blocks/cards/CartTyresCards";
 import { OrderInfo } from "../blocks/orderInfo/OrderInfo";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { allProductsSelector, resetCart, selectAllHandler, selectAllSelector } from "./cartSlice";
+import { resetCart, selectAllHandler, selectAllSelector, tyresDataSelector } from "./cartSlice";
 
 export const Cart: React.FC = () => {
     const dispatch = useAppDispatch()
-    const cardData = useAppSelector(allProductsSelector)
+    const tyres = useAppSelector(tyresDataSelector)
+    const cardData = [...tyres].sort((a, b) => a.queue - b.queue)
     const selectAll = useAppSelector(selectAllSelector)
     let wrapperStyle = cardData.length === 0
         ? CartStyles.contentWrapper + ' ' + CartStyles.contentWrapperAnotherWidth
@@ -36,8 +37,8 @@ export const Cart: React.FC = () => {
                             <p onClick={() => dispatch(resetCart())} className={CartStyles.clearCart}>Очистить корзину</p>
                         </div>
                         <div className={CartStyles.cards}>
-                            {cardData.map(item => {
-                                return <CartTyresCards data={item} />
+                            {cardData.map((item, index) => {
+                                return <CartTyresCards data={item} key={`${item} - ${index}`} />
                             })}
                         </div>
                     </div>

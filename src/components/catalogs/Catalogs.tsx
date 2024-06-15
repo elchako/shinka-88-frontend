@@ -26,7 +26,6 @@ export const Catalogs: React.FC = () => {
     const newDataUpload = () => {
         dispatch(getTyresCards(false))
     }
-    console.log(catalogData.cardsData.results.length)
     return (
         <div className={CatalogStyles.mainWrapper}>
             <p className="pageTitle">{catalogData.title}</p>

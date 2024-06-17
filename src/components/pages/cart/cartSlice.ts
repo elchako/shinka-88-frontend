@@ -1,8 +1,33 @@
 import { type PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../../app/createAppSlice"
-import type { resultsType } from "../main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import type { resultsTyresType, tyresCards } from "../main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { type resultsDisksType } from "../main/blocks/filters/filtersBlocks/filterBlock2Slice"
 
-const recalcPriceAmount = (arr: Array<selectedTyresType & resultsType>): number => {
+export type selectedType = {
+    canceled: boolean
+    queue: number
+}
+
+interface IinitialState {
+    priceAmount: number
+    queueCounter: number
+    selectAll: boolean
+    tyres: Array<selectedType & resultsTyresType>
+    disks: Array<selectedType & resultsDisksType>
+}
+
+type commonArrDataType = ((selectedType & resultsTyresType) | (selectedType & resultsDisksType))[]
+
+const initialState: IinitialState = {
+    priceAmount: 0,
+    queueCounter: 0,
+    selectAll: true,
+    tyres: [],
+    disks: [],
+}
+
+
+const recalcPriceAmount = (arr: commonArrDataType): number => {
     return arr.reduce((sum, item) => {
         if (!item.canceled) {
             return sum + item.price_sale * item.amount
@@ -12,11 +37,11 @@ const recalcPriceAmount = (arr: Array<selectedTyresType & resultsType>): number 
     }, 0)
 }
 
-const sortAllProducts = (state: IinitialState): Array<selectedTyresType & resultsType> => {
-    return [...state.tyres].sort((a, b) => a.queue - b.queue)
+const sortAllProducts = (state: IinitialState): commonArrDataType => {
+    return [...state.tyres, ...state.disks].sort((a, b) => a.queue - b.queue)
 }
 
-const cancelProduct = (arr: Array<selectedTyresType & resultsType>, id: number): { index: number; value: boolean; } => {
+const cancelProduct = (arr: commonArrDataType, id: number): { index: number; value: boolean; } => {
     let result = { index: 0, value: false }
     for (let i = 0; i < arr.length; i++) {
         if (arr[i].id === id) {
@@ -27,30 +52,12 @@ const cancelProduct = (arr: Array<selectedTyresType & resultsType>, id: number):
     return result
 }
 
-export type selectedTyresType = {
-    canceled: boolean
-    queue: number
-}
-
-interface IinitialState {
-    priceAmount: number
-    queueCounter: number
-    selectAll: boolean
-    tyres: Array<selectedTyresType & resultsType>
-}
-
-const initialState: IinitialState = {
-    priceAmount: 0,
-    queueCounter: 0,
-    selectAll: true,
-    tyres: [],
-}
-
 export const cartSlice = createAppSlice({
     name: "cart",
     initialState,
     reducers: create => ({
-        addToCart: create.reducer((state, action: PayloadAction<resultsType>) => {
+        addTyresToCart: create.reducer((state,
+            action: PayloadAction<resultsTyresType>) => {
             let founded = false
             for (let i = 0; i < state.tyres.length; i++) {
                 if (state.tyres[i].id === action.payload.id) {
@@ -61,7 +68,22 @@ export const cartSlice = createAppSlice({
                 }
             }
             if (!founded) state.tyres.push({ ...action.payload, canceled: false, queue: state.queueCounter++ })
-            state.priceAmount = recalcPriceAmount(state.tyres)
+            state.priceAmount = recalcPriceAmount([...state.tyres, ...state.disks])
+            localStorage.setItem('cartData', JSON.stringify(state))
+        }),
+        addDisksToCart: create.reducer((state,
+            action: PayloadAction<resultsDisksType>) => {
+            let founded = false
+            for (let i = 0; i < state.tyres.length; i++) {
+                if (state.disks[i].id === action.payload.id) {
+                    state.disks[i].amount = action.payload.amount
+                    state.disks[i].canceled = false
+                    founded = true
+                    break
+                }
+            }
+            if (!founded) state.disks.push({ ...action.payload, canceled: false, queue: state.queueCounter++ })
+            state.priceAmount = recalcPriceAmount([...state.tyres, ...state.disks])
             localStorage.setItem('cartData', JSON.stringify(state))
         }),
         selectAllHandler: create.reducer(state => {
@@ -107,7 +129,7 @@ export const cartSlice = createAppSlice({
         }),
         changeAmount: create.reducer((state,
             action: PayloadAction<{ type: string, id: number, isPlus: boolean }>) => {
-            let arrData: Array<selectedTyresType & resultsType> = []
+            let arrData: commonArrDataType = []
             if (action.payload.type === 'Шины') arrData = state.tyres
 
             for (let i = 0; i < arrData.length; i++) {
@@ -142,8 +164,9 @@ export const cartSlice = createAppSlice({
 })
 
 // actions
-export const { addToCart, selectAllHandler, selectProductHandler,
-    resetCart, delOneTypeProduct, changeAmount, pullLocalStorageData } =
+export const { addTyresToCart, selectAllHandler, selectProductHandler,
+    resetCart, delOneTypeProduct, changeAmount, pullLocalStorageData,
+    addDisksToCart } =
     cartSlice.actions
 
 // selectors

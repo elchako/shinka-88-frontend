@@ -40,9 +40,7 @@ export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
     const season = useAppSelector(seasonsSelectSelector)
 
     const navigate = useNavigate()
-    const searchButtonHandler = (): void => {
-        navigate(links[3].link)
-    }
+
     const dispatch = useAppDispatch()
 
     //дефолтные значения для селектов
@@ -123,7 +121,7 @@ export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                 </div>
 
                 {/* кнопка применения фильтра */}
-                <MainFiltersButton handler={searchButtonHandler} title={tabsButtons[0]} />
+                <MainFiltersButton handler={() => navigate(links[3].link)} title={tabsButtons[0]} />
             </div>
         </div>
     )

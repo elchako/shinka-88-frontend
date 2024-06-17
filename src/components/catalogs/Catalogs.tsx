@@ -9,19 +9,27 @@ import { MobileFilters } from "./blocks/filters/MobileFilters"
 import { CardMobile } from "./blocks/card/CardMobile"
 import { useLocation } from "react-router-dom"
 import { useAppDispatch, useCatalogDataHook } from "../../app/hooks"
-import { addToCart } from "../pages/cart/cartSlice"
-import { getTyresCards, sortTyresTypeSelect, type resultsType } from "../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { addDisksToCart, addTyresToCart } from "../pages/cart/cartSlice"
+import { getTyresCards, sortTyresTypeSelect, type resultsTyresType } from "../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import InfiniteScroll from "react-infinite-scroll-component"
 import { sorts } from "../../consts"
+import { type resultsDisksType } from "../pages/main/blocks/filters/filtersBlocks/filterBlock2Slice"
 
+export type dataType = resultsTyresType & resultsDisksType
 
 export const Catalogs: React.FC = () => {
     const { pathname } = useLocation()
     const catalogData = useCatalogDataHook(pathname)
     const dispatch = useAppDispatch()
+    const addToCartHandler = (data: dataType, type: string) => {
+        switch (type) {
+            case 'tyres':
+                dispatch(addTyresToCart(data))
+                break
+            case 'disks':
+                dispatch(addDisksToCart(data))
 
-    const addToCartHandler = (data: resultsType) => {
-        dispatch(addToCart(data))
+        }
     }
     const newDataUpload = () => {
         dispatch(getTyresCards(false))
@@ -41,7 +49,13 @@ export const Catalogs: React.FC = () => {
                         scrollableTarget='scrollableDiv'
                     >
                         {catalogData.cardsData.results.map((item, index) => {
-                            return <CardDesktop handler={addToCartHandler} data={item} key={`${item} - ${index}`} />
+                            if (catalogData.title === 'Каталог шин') {
+                                return <CardDesktop
+                                    handler={addToCartHandler}
+                                    data={item}
+                                    key={`${item} - ${index}`} />
+                            }
+                            return null
                         })}
                     </InfiniteScroll>
                 </div>

@@ -2,12 +2,14 @@ import type React from "react"
 import CardDesktopStyles from "./CardDesktopStyles.module.scss"
 import gift from '../../../../imgs/tiresCard/gift.png'
 import { OffenButton } from "../../../common/OffenButton"
-import { amountHandler, type resultsType } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { amountHandler, type resultsTyresType } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import { useAppDispatch, useCardData } from "../../../../app/hooks"
+import { type resultsDisksType } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock2Slice"
+import { type dataType } from "../../Catalogs"
 
 interface IProps {
-    data: resultsType
-    handler: (data: resultsType) => void
+    data: resultsTyresType
+    handler: (data: dataType, productType: string) => void
 }
 
 
@@ -24,7 +26,7 @@ export const CardDesktop: React.FC<IProps> = ({ data, handler }) => {
                     {cardData.strongIcon && <img src={cardData.strongIcon} alt="" />}
                 </div>
                 <div className={CardDesktopStyles.iconsBottom}>
-                    <img src={gift} alt="" />
+                    {/* <img src={gift} alt="" /> */}
                 </div>
             </div>
             <div className={CardDesktopStyles.productImg}>
@@ -63,7 +65,7 @@ export const CardDesktop: React.FC<IProps> = ({ data, handler }) => {
                     <p>Итого:</p>
                     <p>{data.price_sale * data.amount}</p>
                 </div>
-                <OffenButton handler={() => handler(data)} name={'КОРЗИНА'} />
+                <OffenButton handler={() => handler(data as dataType, 'tyres')} name={'КОРЗИНА'} />
             </div>
         </div>
     )

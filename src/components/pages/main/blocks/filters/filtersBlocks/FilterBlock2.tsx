@@ -1,6 +1,6 @@
 import type React from "react"
 import FilterBlocksStyles from "./FilterBlocks.module.scss"
-import { selectsNames2, tabsButtons } from '../../../../../../consts'
+import { links, selectsNames2, tabsButtons } from '../../../../../../consts'
 import explanation from '../../../../../../imgs/explanation.png'
 import { MainFiltersButton } from "../MainFiltersButton"
 import { ExplanationModal } from "./ExplanationModal"
@@ -11,12 +11,15 @@ import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks"
 import { disksAPISelector, getDisksParametrs, selectSelector, selectsSelect } from "./filterBlock2Slice"
 import { useEffect } from "react"
 import type { disksAPI } from "./filterBlock2Slice"
+import { useNavigate } from "react-router-dom"
 
 export const FilterBlock2: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen }) => {
     const selects = useAppSelector(selectSelector)
     const disksAPI = useAppSelector(disksAPISelector)
 
+    const navigate = useNavigate()
     const dispatch = useAppDispatch()
+
 
     useEffect(() => {
         dispatch(getDisksParametrs(''))
@@ -56,7 +59,7 @@ export const FilterBlock2: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                         <ExplanationModal />
                     </div> */}
                 </div>
-                <MainFiltersButton title={tabsButtons[1]} />
+                <MainFiltersButton handler={() => navigate(links[4].link)} title={tabsButtons[1]} />
             </div>
         </div>
     )

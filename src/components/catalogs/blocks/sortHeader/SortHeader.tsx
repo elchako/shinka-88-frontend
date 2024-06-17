@@ -8,11 +8,7 @@ import { type ActionCreatorWithPayload, type AsyncThunk } from "@reduxjs/toolkit
 
 
 interface IProps {
-    sortData: {
-        sortType: string;
-        sortTypeAction: ActionCreatorWithPayload<string>
-        newDataReq: AsyncThunk<{ response: any; refresh: any; }, any, any>
-    }
+    sortData: { sortType: unknown; sortTypeAction: any; newDataReq: any; }
 }
 
 export const SortHeader: React.FC<IProps> = ({ sortData }) => {

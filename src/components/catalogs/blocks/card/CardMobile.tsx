@@ -3,12 +3,12 @@ import CardMobileStyles from "./CardDesktopStyles.module.scss"
 import gift from '../../../../imgs/tiresCard/gift.png'
 import cart from '../../../../imgs/cart/productMobileCart.png'
 import { useAppDispatch, useCardData } from "../../../../app/hooks"
-import { amountHandler, type resultsType } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { amountHandler, type resultsTyresType } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 
 
 interface IProps {
-    data: resultsType
-    handler: (data: resultsType) => void
+    data: resultsTyresType
+    handler: (data: resultsTyresType, productType: string) => void
 }
 
 export const CardMobile: React.FC<IProps> = ({ data, handler }) => {
@@ -55,7 +55,7 @@ export const CardMobile: React.FC<IProps> = ({ data, handler }) => {
                     <div className={CardMobileStyles.productPriceMobile}>
                         {data.price_sale}
                     </div>
-                    <div onClick={() => handler(data)} className={CardMobileStyles.productCartMobile}>
+                    <div onClick={() => handler(data, 'tyres')} className={CardMobileStyles.productCartMobile}>
                         <img src={cart} alt="" />
                     </div>
                 </div>

@@ -28,6 +28,15 @@ class FiltersAPI {
         });
         return response.data
     }
+
+    async getFilteredDisks(fields: fieldsTyresType, order_by: string, url: string | null) {
+        let path
+        url ? path = `${URLs.filters.filteredDisks}?${url}` : path = URLs.filters.filteredDisks
+        const response = await this.instance.post(path, JSON.stringify({ fields, order_by }), {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return response.data
+    }
 }
 
 export const filtersApi = new FiltersAPI(URLs.base)

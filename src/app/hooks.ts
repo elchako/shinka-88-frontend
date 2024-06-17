@@ -12,12 +12,13 @@ import { TyresFilterBlocks } from '../components/catalogs/tyresCatalog/TyresFilt
 import { TyresFilterBlocksMobileModal } from '../components/catalogs/tyresCatalog/TyresFiltersBlocksMobileModal'
 import { DisksFilterBlocks } from '../components/catalogs/disksCatalog/DisksFiltersBlocks'
 import { DisksFilterBlocksMobileModal } from '../components/catalogs/disksCatalog/DisksFiltersBlocksMobileModal'
-import { filteredTyresSelector as cardsData1, getTyresCards, sortTyresTypeSelect, sortTyresTypeSelector, type resultsType } from '../components/pages/main/blocks/filters/filtersBlocks/filterBlock1Slice'
+import { filteredTyresSelector, getTyresCards, sortTyresTypeSelect, sortTyresTypeSelector, type resultsTyresType } from '../components/pages/main/blocks/filters/filtersBlocks/filterBlock1Slice'
 import summer from '../imgs/tiresCard/summer.png'
 import winter from '../imgs/tiresCard/winter.png'
 import allSeasons from '../imgs/tiresCard/all-seasons.png'
 import runflat from '../imgs/tiresCard/runflat.png'
 import strong from '../imgs/tiresCard/strong.png'
+import { filteredDisksSelector, getDisksCards, sortDisksTypeSelect, sortDisksTypeSelector } from '../components/pages/main/blocks/filters/filtersBlocks/filterBlock2Slice'
 
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
@@ -28,20 +29,20 @@ export const useCatalogDataHook = (page: string) => {
     let title: string = 'Каталог шин'
     let filtersBlocks: React.FC<{}> = TyresFilterBlocks
     let filtersBlocksMobile: React.FC<{}> = TyresFilterBlocksMobileModal
-    let selectSelector = cardsData1
-    let sortTypeSelector = sortTyresTypeSelector
-    let sortTypeAction = sortTyresTypeSelect
-    let newDataReq = getTyresCards
+    let selectSelector: any = filteredTyresSelector
+    let sortTypeSelector: any = sortTyresTypeSelector
+    let sortTypeAction: any = sortTyresTypeSelect
+    let newDataReq: any = getTyresCards
 
     switch (page.slice(1)) {
         case links[4].link:
             title = 'Каталог дисков'
             filtersBlocks = DisksFilterBlocks
             filtersBlocksMobile = DisksFilterBlocksMobileModal
-            selectSelector = cardsData1
-            sortTypeSelector = sortTyresTypeSelector
-            sortTypeAction = sortTyresTypeSelect
-            newDataReq = getTyresCards
+            selectSelector = filteredDisksSelector
+            sortTypeSelector = sortDisksTypeSelector
+            sortTypeAction = sortDisksTypeSelect
+            newDataReq = getDisksCards
             break
     }
     const cardsData = useAppSelector(selectSelector)
@@ -60,7 +61,7 @@ export const useCatalogDataHook = (page: string) => {
     }
 }
 
-export const useCardData = (data: resultsType) => {
+export const useCardData = (data: resultsTyresType) => {
     const runflatText = data.runflat ? 'RunFlat' : ''
     const runflatIcon = data.runflat ? runflat : ''
     const strongText = data.powerload ? 'Усилинные' : ''

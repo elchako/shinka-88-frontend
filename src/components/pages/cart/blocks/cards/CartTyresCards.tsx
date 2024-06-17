@@ -8,12 +8,12 @@ import gift from '../../../../../imgs/tiresCard/gift.png'
 import tireExample from '../../../../../imgs/tiresCard/tire-example.png'
 import delElement from '../../../../../imgs/cart/del_from_cart.png'
 import Checkbox from "react-custom-checkbox";
-import type { resultsType } from "../../../main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import type { resultsTyresType } from "../../../main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import { useAppDispatch, useCardData } from "../../../../../app/hooks"
 import { changeAmount, delOneTypeProduct, selectProductHandler, type selectedTyresType } from "../../cartSlice"
 
 interface IProps {
-    data: selectedTyresType & resultsType
+    data: selectedTyresType & resultsTyresType
 }
 
 export const CartTyresCards: React.FC<IProps> = ({ data }) => {
@@ -39,7 +39,7 @@ export const CartTyresCards: React.FC<IProps> = ({ data }) => {
                         {cardData.strongIcon && <img src={cardData.strongIcon} alt="" />}
                     </div>
                     <div className={CartCardsStyles.iconsBottom}>
-                        <img src={gift} alt="" />
+                        {/* <img src={gift} alt="" /> */}
                     </div>
                 </div>
             </div>

@@ -21,7 +21,7 @@ export type tiresAPI = {
     width: Array<string>
 }
 
-export type resultsType = {
+export type resultsTyresType = {
     id: number,
     article: string,
     name: string,
@@ -58,7 +58,7 @@ export type tyresCards = {
     count: number | null,
     next: string | null,
     previous: string | null,
-    results: Array<resultsType>
+    results: Array<resultsTyresType>
 }
 
 
@@ -98,7 +98,7 @@ const selects = selectsNames1.map((selectName, index) => {
 const checkboxes = checkboxesNames.map(checkboxName => ({ checkboxName, checked: false, value: [] }))
 
 
-const initialState: IinitialState = {
+export const initialState: IinitialState = {
     tiresAPI: {
         diameter: [],
         goodland: [],

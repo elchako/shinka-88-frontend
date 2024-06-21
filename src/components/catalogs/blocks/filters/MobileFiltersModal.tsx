@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector, useCatalogDataHook } from "../../../../
 import { mobileFiltersReducer, mobileFiltersSelector } from "../../../common/slices/smallActions";
 import { OffenButton } from "../../../common/OffenButton";
 import { useLocation } from "react-router-dom";
-import { priceEndSelector, priceStartSelector, resetFilters, setPrice } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice";
 
 export const MobileFiltersModal: React.FC = () => {
     // открытие/закрытие модалки
@@ -18,8 +17,8 @@ export const MobileFiltersModal: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
     const dispatch = useAppDispatch()
-    const priceStart = useAppSelector(priceStartSelector)
-    const priceEnd = useAppSelector(priceEndSelector)
+    const priceStart = catalogData.commonFilters.priceStartNumber
+    const priceEnd = catalogData.commonFilters.priceEndNumber
 
     let openCloseStyles = null
     mobileFiltersState
@@ -32,7 +31,8 @@ export const MobileFiltersModal: React.FC = () => {
                 <div className={FiltersStyles.modalMobileTop}>
                     <p>Параметры</p>
                     <div className={FiltersStyles.modalMobilesButtons}>
-                        <p onClick={() => dispatch(resetFilters())}>Сбросить</p>
+                        <p onClick={() =>
+                            dispatch(catalogData.commonFilters.resetFiltersAction())}>Сбросить</p>
                         <div onClick={() => dispatch(mobileFiltersReducer())} className={FiltersStyles.closeFilters}></div>
                     </div>
                 </div>
@@ -45,14 +45,14 @@ export const MobileFiltersModal: React.FC = () => {
                                 <input type="text" placeholder="3 500"
                                     value={priceStart === 0 ? '' : priceStart}
                                     onChange={e =>
-                                        dispatch(setPrice({ number: Number(e.currentTarget.value), isStartOrEnd: true }))} />
+                                        dispatch(catalogData.commonFilters.priceSetter({ number: Number(e.currentTarget.value), isStartOrEnd: true }))} />
                             </div>
                             <div className={FiltersStyles.priceLineMobile}></div>
                             <div className={FiltersStyles.priceToMobile}>
                                 <input type="text" placeholder="20 000"
                                     value={priceEnd === 0 ? '' : priceEnd}
                                     onChange={e =>
-                                        dispatch(setPrice({ number: Number(e.currentTarget.value), isStartOrEnd: false }))} />
+                                        dispatch(catalogData.commonFilters.priceSetter({ number: Number(e.currentTarget.value), isStartOrEnd: false }))} />
                             </div>
                         </div>
                     </div>

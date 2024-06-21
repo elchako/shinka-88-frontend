@@ -3,28 +3,14 @@ import Checkbox from "react-custom-checkbox";
 import FiltersStyles from '../blocks/filters/FiltersStyles.module.scss'
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import { filterButtons } from "../../../consts"
-import { getTyresParametrs, seasonsSelectMany, seasonsSelectSelector, tiresAPISelector } from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice";
-import type { tiresAPI } from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice";
+import { seasonsSelectMany, seasonsSelectSelector } from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice";
 import checkedIcon from '../../../imgs/checked.png'
-import { useEffect } from "react";
 
 
 export const SeasonFilter: React.FC = () => {
     const season = useAppSelector(seasonsSelectSelector)
-    const tiresAPI = useAppSelector(tiresAPISelector)
-
     const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        let dataIsEmpty = true
-        for (const key in tiresAPI) {
-            if (tiresAPI[key as keyof tiresAPI].length === 0) {
-                dataIsEmpty = false
-            }
-        }
-
-        if (!dataIsEmpty) dispatch(getTyresParametrs(''))
-    }, [dispatch, tiresAPI])
     return (
         <div className={FiltersStyles.season}>
             <p className={FiltersStyles.filterTitle}>Сезон</p>

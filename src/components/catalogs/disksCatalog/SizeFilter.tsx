@@ -15,6 +15,7 @@ export const SizeFilter: React.FC = () => {
         for (const key in disksAPI) {
             if (disksAPI[key as keyof disksAPI].length === 0) {
                 dataIsEmpty = false
+                break
             }
         }
 
@@ -30,11 +31,12 @@ export const SizeFilter: React.FC = () => {
                 if (item.value !== '' && item.value.length !== 0) {
                     typeof item.value === 'string' ? defaultValue = item.value : defaultValue = item.value[0]
                 }
-                return <select className={FiltersStyles.select} defaultValue='' key={`${index} - ${item}`}
+                return <select className={FiltersStyles.select} key={`${index} - ${item}`}
                     value={defaultValue}
                     onChange={e => dispatch(selectsSelect({
                         selectName: item.selectName.apiName,
                         value: e.currentTarget.value,
+                        isOneChoice: true
                     }))}>
                     <option value='' disabled>{item.selectName.displayName}</option>
                     {values.map((item, index) => {

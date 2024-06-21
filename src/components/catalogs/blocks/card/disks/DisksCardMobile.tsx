@@ -1,32 +1,21 @@
 import type React from "react"
-import CardMobileStyles from "./CardDesktopStyles.module.scss"
-import gift from '../../../../imgs/tiresCard/gift.png'
-import cart from '../../../../imgs/cart/productMobileCart.png'
-import { useAppDispatch, useCardData } from "../../../../app/hooks"
-import { amountHandler, type resultsTyresType } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import CardMobileStyles from "../CardDesktopStyles.module.scss"
+import cart from '../../../../../imgs/cart/productMobileCart.png'
+import { useAppDispatch } from "../../../../../app/hooks"
+import { amountHandler, type resultsDisksType } from "../../../../pages/main/blocks/filters/filtersBlocks/filterBlock2Slice"
 
 
 interface IProps {
-    data: resultsTyresType
-    handler: (data: resultsTyresType, productType: string) => void
+    data: resultsDisksType
+    handler: (data: resultsDisksType, productType: string) => void
 }
 
-export const CardMobile: React.FC<IProps> = ({ data, handler }) => {
+export const DisksCardMobile: React.FC<IProps> = ({ data, handler }) => {
     const dispatch = useAppDispatch()
-    const cardData = useCardData(data)
     return (
         <div className={CardMobileStyles.mainWrapperMobile}>
             <div className={CardMobileStyles.productImgMobile}>
-                <div className={CardMobileStyles.iconsMobile}>
-                    <div className={CardMobileStyles.iconsTopMobile}>
-                        {cardData.seasonIcon !== '' && <img src={cardData.seasonIcon} alt="" />}
-                        {cardData.runflatIcon !== '' && <img src={cardData.runflatIcon} alt="" />}
-                        {cardData.strongIcon && <img src={cardData.strongIcon} alt="" />}
-                    </div>
-                    <div className={CardMobileStyles.iconsBottomMobile}>
-                        <img src={gift} alt="" />
-                    </div>
-                </div>
+
                 <img src={data.image_url} alt="" />
             </div>
             <div className={CardMobileStyles.productInfoMobile}>
@@ -34,13 +23,9 @@ export const CardMobile: React.FC<IProps> = ({ data, handler }) => {
                     <p className={CardMobileStyles.productNameMobile}>{data.name}</p>
                     <div className={CardMobileStyles.productInfoContentMobile}>
                         <div>
-                            <p>{`${data.width}/${data.height}`}</p>
-                            <p>{data.seazon}</p>
-                            <p>{data.marka}</p>
-                        </div>
-                        <div>
-                            <p>{cardData.runflatText}</p>
-                            <p>{cardData.strongText}</p>
+                            <p>{data.diameter}</p>
+                            <p>{data.pcd}</p>
+                            <p>{data.type_disk}</p>
                         </div>
                     </div>
                 </div>

@@ -6,12 +6,18 @@ import Checkbox from "react-custom-checkbox";
 import { CartTyresCards } from "./blocks/cards/CartTyresCards";
 import { OrderInfo } from "../blocks/orderInfo/OrderInfo";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { resetCart, selectAllHandler, selectAllSelector, tyresDataSelector } from "./cartSlice";
+import { disksDataSelector, resetCart, selectAllHandler, selectAllSelector, type selectedType, tyresDataSelector } from "./cartSlice";
+import { tabs } from "../../../consts";
+import { CartDisksCards } from "./blocks/cards/CartDisksCards";
+import { type resultsTyresType } from "../main/blocks/filters/filtersBlocks/filterBlock1Slice";
+import { type resultsDisksType } from "../main/blocks/filters/filtersBlocks/filterBlock2Slice";
 
 export const Cart: React.FC = () => {
     const dispatch = useAppDispatch()
     const tyres = useAppSelector(tyresDataSelector)
-    const cardData = [...tyres].sort((a, b) => a.queue - b.queue)
+    const disks = useAppSelector(disksDataSelector)
+    const cardData: Array<(selectedType & resultsTyresType) | (selectedType & resultsDisksType)>
+        = [...tyres, ...disks].sort((a, b) => a.queue - b.queue)
     const selectAll = useAppSelector(selectAllSelector)
     let wrapperStyle = cardData.length === 0
         ? CartStyles.contentWrapper + ' ' + CartStyles.contentWrapperAnotherWidth
@@ -38,7 +44,10 @@ export const Cart: React.FC = () => {
                         </div>
                         <div className={CartStyles.cards}>
                             {cardData.map((item, index) => {
-                                return <CartTyresCards data={item} key={`${item} - ${index}`} />
+                                if (item.product_type === tabs[0]) {
+                                    return <CartTyresCards data={item as selectedType & resultsTyresType} key={`${item} - ${index}`} />
+                                }
+                                return <CartDisksCards data={item as selectedType & resultsDisksType} key={`${item} - ${index}`} />
                             })}
                         </div>
                     </div>

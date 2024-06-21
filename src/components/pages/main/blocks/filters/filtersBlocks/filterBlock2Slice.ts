@@ -35,7 +35,7 @@ export type resultsDisksType = {
     description: string | null,
     balance: number,
     is_active: boolean,
-    type_dist: string
+    type_disk: string
     goodland: string,
     marka: string,
     model: string,
@@ -62,8 +62,9 @@ export type disksCards = {
 
 export type fieldsDiskType = {
     diameter?: string | Array<string>
-    type_disk?: string | Array<string>
     pcd?: string | Array<string>
+    type_disk?: string | Array<string>
+    price?: Array<number>
 }
 
 export interface IinitialState {
@@ -74,10 +75,15 @@ export interface IinitialState {
     }>
     disksCardsArr: disksCards
     sortType: string
+    priceStart: number
+    priceEnd: number
 }
 
 // изначальные значения стейта
-const selects = selectsNames2.map(selectName => ({ selectName, value: '' }))
+const selects = selectsNames2.map(selectName => {
+    let initValue: Array<string> = []
+    return { selectName, value: initValue }
+})
 
 
 const initialState: IinitialState = {
@@ -104,7 +110,9 @@ const initialState: IinitialState = {
         previous: null,
         results: []
     },
-    sortType: sorts[0]
+    sortType: sorts[0],
+    priceStart: 0,
+    priceEnd: 0,
 }
 
 export const filterBlock2Slice = createAppSlice({
@@ -112,11 +120,28 @@ export const filterBlock2Slice = createAppSlice({
     initialState,
     reducers: create => ({
         selectsSelect: create.reducer((state,
-            action: PayloadAction<{ selectName: string, value: string }>) => {
+            action: PayloadAction<{ selectName: string, value: string, isOneChoice: boolean }>) => {
             let payload = action.payload
             let newSelects = state.selects.map(item => {
                 if (item.selectName.apiName === payload.selectName) {
-                    item.value = payload.value
+                    // для постоянных селектов где только 1 значение
+                    if (typeof item.value === 'string') {
+                        item.value = payload.value
+                    } else {
+                        // для селекта с трансформацией в чекбоксы
+                        // где массив значений
+                        if (payload.isOneChoice) {
+                            // если селект
+                            item.value = [payload.value]
+                        } else {
+                            // если чекбоксы
+                            if (item.value.includes(payload.value)) {
+                                item.value = item.value.filter(item => item !== payload.value)
+                            } else {
+                                item.value.push(payload.value)
+                            }
+                        }
+                    }
                 }
                 return item
             })
@@ -124,6 +149,33 @@ export const filterBlock2Slice = createAppSlice({
         }),
         sortDisksTypeSelect: create.reducer((state, action: PayloadAction<string>) => {
             state.sortType = action.payload
+        }),
+        amountHandler: create.reducer((state, action: PayloadAction<{ id: number, isPlus: boolean }>) => {
+            for (let i = 0; i < state.disksCardsArr.results.length; i++) {
+                if (state.disksCardsArr.results[i].id === action.payload.id) {
+                    if (action.payload.isPlus
+                        && state.disksCardsArr.results[i].amount < state.disksCardsArr.results[i].balance) {
+                        state.disksCardsArr.results[i].amount++
+                    } else if (!action.payload.isPlus &&
+                        state.disksCardsArr.results[i].amount > 1) {
+                        state.disksCardsArr.results[i].amount--
+                    }
+                    break
+                }
+            }
+        }),
+        setPrice: create.reducer((state, action: PayloadAction<{ number: number, isStartOrEnd: boolean }>) => {
+            let number = action.payload.number
+            if (action.payload.number > 20000) number = 20000
+            action.payload.isStartOrEnd
+                ? state.priceStart = number
+                : state.priceEnd = number
+        }),
+        resetFilters: create.reducer(state => {
+            console.log('test')
+            state.selects = selects
+            state.priceStart = 0
+            state.priceEnd = 0
         }),
         getDisksParametrs: create.asyncThunk(
             async () => {
@@ -151,18 +203,29 @@ export const filterBlock2Slice = createAppSlice({
                 const fields: fieldsDiskType = {}
 
                 if (state.selects[0].value.length !== 0) fields.diameter = state.selects[0].value
-                if (state.selects[1].value.length !== 0) fields.type_disk = state.selects[1].value
-                if (state.selects[2].value.length !== 0) fields.pcd = state.selects[2].value
+                if (state.selects[1].value.length !== 0) fields.pcd = state.selects[1].value
+                if (state.selects[2].value.length !== 0) fields.type_disk = state.selects[2].value
+
                 let url = null
                 if (!refresh && state.disksCardsArr.next) {
                     url = state.disksCardsArr.next.split('?')[1]
                 }
 
+                if (state.priceStart !== 0 || state.priceEnd !== 0) {
+                    const price = []
+                    state.priceStart !== 0
+                        ? price[0] = state.priceStart
+                        : price[0] = 0
+                    state.priceEnd !== 0
+                        ? price[1] = state.priceEnd
+                        : price[1] = 20000
+                    fields.price = price
+                }
+
                 let orderBy = 'price_sale'
                 if (state.sortType === sorts[1]) orderBy = '-' + orderBy
+                const response = await filtersApi.getFilteredDisks(fields, orderBy, url)
 
-                const response = await filtersApi.getFilteredTyres(fields, orderBy, url)
-                // The value we return becomes the `fulfilled` action payload
                 return { response, refresh }
             },
             {
@@ -195,14 +258,16 @@ export const filterBlock2Slice = createAppSlice({
         selectSelector: state => state.selects,
         filteredDisksSelector: state => state.disksCardsArr,
         sortDisksTypeSelector: state => state.sortType,
+        priceStartSelector: state => state.priceStart,
+        priceEndSelector: state => state.priceEnd,
     },
 })
 
 // actions
 export const { selectsSelect, getDisksParametrs, sortDisksTypeSelect,
-    getDisksCards } = filterBlock2Slice.actions
+    getDisksCards, amountHandler, setPrice, resetFilters } = filterBlock2Slice.actions
 
 // selectors
 export const { selectSelector, disksAPISelector, filteredDisksSelector,
-    sortDisksTypeSelector
+    sortDisksTypeSelector, priceStartSelector, priceEndSelector
 } = filterBlock2Slice.selectors

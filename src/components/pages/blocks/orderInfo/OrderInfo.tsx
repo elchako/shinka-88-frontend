@@ -3,8 +3,9 @@ import OrderInfoStyles from "./OrderInfoStyles.module.scss"
 import '../../../../common.scss'
 import { OffenButton } from "../../../common/OffenButton"
 import { useAppSelector } from "../../../../app/hooks"
-import { priceAmountSelector, tyresDataSelector } from "../../cart/cartSlice"
+import { disksDataSelector, priceAmountSelector, tyresDataSelector } from "../../cart/cartSlice"
 import { links } from "../../../../consts"
+import { useNavigate } from "react-router-dom"
 
 interface IProps {
     name: string
@@ -13,9 +14,19 @@ interface IProps {
 
 export const OrderInfo: React.FC<IProps> = ({ nameButton, name }) => {
     const tyres = useAppSelector(tyresDataSelector)
-    const products = [...tyres].sort((a, b) => a.queue - b.queue)
+    const disks = useAppSelector(disksDataSelector)
+    const products = [...tyres, ...disks].sort((a, b) => a.queue - b.queue)
     const productsData: Array<{ type: string, amount: number, price: number }> = []
     const priceAmount = useAppSelector(priceAmountSelector)
+    const navigate = useNavigate()
+    const toOrderHandle = () => {
+        if (priceAmount === 0) {
+            alert('Нет выбранных товаров')
+        } else {
+            navigate('/' + links[10].link)
+        }
+    }
+
     products.forEach(item => {
         if (item.canceled) return
         let isThere = false
@@ -45,7 +56,7 @@ export const OrderInfo: React.FC<IProps> = ({ nameButton, name }) => {
                 })}
             </div>
             <p className={OrderInfoStyles.price}>{`Итого ${priceAmount} р`}</p>
-            <a href={links[10].link}><OffenButton name={nameButton} /></a>
+            <OffenButton name={nameButton} handler={toOrderHandle} />
         </div>
     )
 }

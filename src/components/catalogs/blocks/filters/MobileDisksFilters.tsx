@@ -3,15 +3,13 @@ import FiltersStyles from "./FiltersStyles.module.scss"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 import { mobileFiltersReducer } from "../../../common/slices/smallActions"
 import { useEffect, useState } from "react"
-import { checkboxesSelectSelector, priceEndSelector, priceStartSelector, seasonsSelectSelector, selectSelector } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { priceEndSelector, priceStartSelector, selectSelector } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock2Slice"
 
 
-export const MobileFilters: React.FC = () => {
+export const MobileDisksFilters: React.FC = () => {
     const dispatch = useAppDispatch()
     const [filterCounter, setFilterCounter] = useState<number>(0)
     const stateSelects = useAppSelector(selectSelector)
-    const stateSeason = useAppSelector(seasonsSelectSelector)
-    const stateCheckboxes = useAppSelector(checkboxesSelectSelector)
     const statePriceStart = useAppSelector(priceStartSelector)
     const statePriceEnd = useAppSelector(priceEndSelector)
 
@@ -23,21 +21,11 @@ export const MobileFilters: React.FC = () => {
                 newCount++
             }
         }
-        // сезоны
-        if (stateSeason.length !== 0) newCount++
-        // чекбоксы
-        for (let i = 0; i < stateCheckboxes.length; i++) {
-            if (stateCheckboxes[i].checked) {
-                newCount++
-                break
-            }
-        }
         // цена
-        if (statePriceStart !== 0 && statePriceEnd !== 0) newCount++
+        if (statePriceStart !== 0 || statePriceEnd !== 0) newCount++
         setFilterCounter(newCount)
 
-    }, [dispatch, stateSelects, stateSeason, stateCheckboxes,
-        statePriceStart, statePriceEnd])
+    }, [dispatch, stateSelects, statePriceStart, statePriceEnd])
     return (
         <div onClick={() => dispatch(mobileFiltersReducer())} className={FiltersStyles.mainWrapperMobile}>
             <div className={FiltersStyles.mobileFilterImg}></div>

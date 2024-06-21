@@ -5,11 +5,12 @@ import phone from '../../imgs/phone.png';
 import mobileCart from '../../imgs/cart/mobileCart.png'
 import { Logo } from "../common/Logo";
 import { useAppSelector } from "../../app/hooks";
-import { tyresDataSelector } from "../pages/cart/cartSlice";
+import { disksDataSelector, tyresDataSelector } from "../pages/cart/cartSlice";
 
 
 export const MobileHeader: React.FC = () => {
     const tyresAmount = useAppSelector(tyresDataSelector).length
+    const disksAmount = useAppSelector(disksDataSelector).length
 
     const mobileLogoStyles = {
         logoImg: HeaderStyles.logoImgMobile,
@@ -23,7 +24,7 @@ export const MobileHeader: React.FC = () => {
         </a>
         <Logo {...mobileLogoStyles} />
         <NavLink to='cart' className={HeaderStyles.mobileCart}>
-            <p className={HeaderStyles.productsCounter}>{tyresAmount}</p>
+            <p className={HeaderStyles.productsCounter}>{tyresAmount + disksAmount}</p>
             <img src={mobileCart} alt="cart" />
         </NavLink>
     </div>

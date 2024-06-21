@@ -12,23 +12,45 @@ import { TyresFilterBlocks } from '../components/catalogs/tyresCatalog/TyresFilt
 import { TyresFilterBlocksMobileModal } from '../components/catalogs/tyresCatalog/TyresFiltersBlocksMobileModal'
 import { DisksFilterBlocks } from '../components/catalogs/disksCatalog/DisksFiltersBlocks'
 import { DisksFilterBlocksMobileModal } from '../components/catalogs/disksCatalog/DisksFiltersBlocksMobileModal'
-import { filteredTyresSelector, getTyresCards, sortTyresTypeSelect, sortTyresTypeSelector, type resultsTyresType } from '../components/pages/main/blocks/filters/filtersBlocks/filterBlock1Slice'
+import {
+    filteredTyresSelector, getTyresCards, sortTyresTypeSelect, sortTyresTypeSelector,
+    type tyresCards, type resultsTyresType,
+    priceStartSelector as priceStart1,
+    priceEndSelector as priceEnd1,
+    setPrice as setPrice1,
+    resetFilters as resetFilters1,
+} from '../components/pages/main/blocks/filters/filtersBlocks/filterBlock1Slice'
 import summer from '../imgs/tiresCard/summer.png'
 import winter from '../imgs/tiresCard/winter.png'
 import allSeasons from '../imgs/tiresCard/all-seasons.png'
 import runflat from '../imgs/tiresCard/runflat.png'
 import strong from '../imgs/tiresCard/strong.png'
-import { filteredDisksSelector, getDisksCards, sortDisksTypeSelect, sortDisksTypeSelector } from '../components/pages/main/blocks/filters/filtersBlocks/filterBlock2Slice'
+import {
+    type disksCards, filteredDisksSelector, getDisksCards,
+    priceStartSelector as priceStart2,
+    priceEndSelector as priceEnd2,
+    setPrice as setPrice2,
+    resetFilters as resetFilters2,
+    sortDisksTypeSelect, sortDisksTypeSelector
+} from '../components/pages/main/blocks/filters/filtersBlocks/filterBlock2Slice'
 
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
 export const useAppSelector = useSelector.withTypes<RootState>()
 
+export interface IFilterBlockProps {
+    parentRef: React.RefObject<HTMLDivElement>
+}
+
 export const useCatalogDataHook = (page: string) => {
     let title: string = 'Каталог шин'
-    let filtersBlocks: React.FC<{}> = TyresFilterBlocks
+    let filtersBlocks: React.FC<IFilterBlockProps> = TyresFilterBlocks
     let filtersBlocksMobile: React.FC<{}> = TyresFilterBlocksMobileModal
+    let priceStart: any = priceStart1
+    let priceEnd: any = priceEnd1
+    let priceSetter: any = setPrice1
+    let resetFiltersAction: any = resetFilters1
     let selectSelector: any = filteredTyresSelector
     let sortTypeSelector: any = sortTyresTypeSelector
     let sortTypeAction: any = sortTyresTypeSelect
@@ -39,13 +61,28 @@ export const useCatalogDataHook = (page: string) => {
             title = 'Каталог дисков'
             filtersBlocks = DisksFilterBlocks
             filtersBlocksMobile = DisksFilterBlocksMobileModal
+            priceStart = priceStart2
+            priceEnd = priceEnd2
+            priceSetter = setPrice2
+            resetFiltersAction = resetFilters2
             selectSelector = filteredDisksSelector
             sortTypeSelector = sortDisksTypeSelector
             sortTypeAction = sortDisksTypeSelect
             newDataReq = getDisksCards
             break
     }
-    const cardsData = useAppSelector(selectSelector)
+
+    const priceStartNumber: number = useAppSelector(priceStart)
+    const priceEndNumber: number = useAppSelector(priceEnd)
+
+    let commonFilters = {
+        resetFiltersAction,
+        priceStartNumber,
+        priceEndNumber,
+        priceSetter,
+    }
+
+    const cardsData: tyresCards | disksCards = useAppSelector(selectSelector)
     const sortType = useAppSelector(sortTypeSelector)
     const sortData = {
         sortType,
@@ -56,12 +93,13 @@ export const useCatalogDataHook = (page: string) => {
         title,
         filtersBlocks,
         filtersBlocksMobile,
+        commonFilters,
         cardsData,
         sortData,
     }
 }
 
-export const useCardData = (data: resultsTyresType) => {
+export const useTyresCardData = (data: resultsTyresType) => {
     const runflatText = data.runflat ? 'RunFlat' : ''
     const runflatIcon = data.runflat ? runflat : ''
     const strongText = data.powerload ? 'Усилинные' : ''

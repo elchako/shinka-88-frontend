@@ -176,13 +176,13 @@ export const filterBlock1Slice = createAppSlice({
         }),
         seasonsSelectMany: create.reducer((state,
             action: PayloadAction<{ name: string, value1: string, value2: string }>) => {
-            let isThere = false
-            state.season.forEach(item => item.name !== action.payload.name ? null : isThere = true)
+            let isThere: number | null = null
+            state.season.forEach((item, index) => item.name !== action.payload.name ? null : isThere = index)
 
-            if (!isThere) {
+            if (isThere === null) {
                 state.season.push(action.payload)
             } else {
-                state.season.splice(state.season.indexOf(action.payload), 1)
+                state.season.splice(isThere, 1)
             }
         }),
         // чекбоксы внизу
@@ -220,7 +220,7 @@ export const filterBlock1Slice = createAppSlice({
             for (let i = 0; i < state.tyresCardsArr.results.length; i++) {
                 if (state.tyresCardsArr.results[i].id === action.payload.id) {
                     if (action.payload.isPlus
-                        && state.tyresCardsArr.results[i].amount <= state.tyresCardsArr.results[i].balance) {
+                        && state.tyresCardsArr.results[i].amount < state.tyresCardsArr.results[i].balance) {
                         state.tyresCardsArr.results[i].amount++
                     } else if (state.tyresCardsArr.results[i].amount > 1) {
                         state.tyresCardsArr.results[i].amount--
@@ -258,7 +258,6 @@ export const filterBlock1Slice = createAppSlice({
             async (refresh, thunkAPI) => {
                 const store = thunkAPI.getState() as RootState
                 const state = store.filterBlock1
-
                 const fields: fieldsTyresType = {}
 
                 if (state.selects[0].value.length !== 0) fields.width = state.selects[0].value
@@ -297,7 +296,7 @@ export const filterBlock1Slice = createAppSlice({
                 if (state.sortType === sorts[1]) orderBy = '-' + orderBy
 
                 const response = await filtersApi.getFilteredTyres(fields, orderBy, url)
-                // The value we return becomes the `fulfilled` action payload
+
                 return { response, refresh }
             },
             {
@@ -309,6 +308,7 @@ export const filterBlock1Slice = createAppSlice({
                     state.tyresCardsArr.count = res.count
                     state.tyresCardsArr.next = res.next
                     state.tyresCardsArr.previous = res.previous
+
                     let results = res.results.map(item => {
                         item.amount = 1
                         return item

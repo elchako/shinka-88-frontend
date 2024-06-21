@@ -3,56 +3,61 @@ import CatalogStyles from "./CatalogStyles.module.scss"
 import '../../common.scss'
 import { SortHeader } from "./blocks/sortHeader/SortHeader"
 import { DesktopFilters } from "./blocks/filters/DesktopFilters"
-import { CardDesktop } from "./blocks/card/CardDesktop"
 import { SortHeaderMobile } from "./blocks/sortHeader/SortHeaderMobile"
-import { MobileFilters } from "./blocks/filters/MobileFilters"
-import { CardMobile } from "./blocks/card/CardMobile"
+import { MobileTyresFilters } from "./blocks/filters/MobileTyresFilters"
+import { TyresCardMobile } from "./blocks/card/tyres/TyresCardMobile"
 import { useLocation } from "react-router-dom"
 import { useAppDispatch, useCatalogDataHook } from "../../app/hooks"
 import { addDisksToCart, addTyresToCart } from "../pages/cart/cartSlice"
-import { getTyresCards, sortTyresTypeSelect, type resultsTyresType } from "../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { type resultsTyresType } from "../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import InfiniteScroll from "react-infinite-scroll-component"
-import { sorts } from "../../consts"
 import { type resultsDisksType } from "../pages/main/blocks/filters/filtersBlocks/filterBlock2Slice"
-
-export type dataType = resultsTyresType & resultsDisksType
+import { TyresCardDesktop } from "./blocks/card/tyres/TyresCardDesktop"
+import { DisksCardDesktop } from "./blocks/card/disks/DisksCardDesktop"
+import { useRef } from "react"
+import { DisksCardMobile } from "./blocks/card/disks/DisksCardMobile"
+import { MobileDisksFilters } from "./blocks/filters/MobileDisksFilters"
 
 export const Catalogs: React.FC = () => {
     const { pathname } = useLocation()
     const catalogData = useCatalogDataHook(pathname)
     const dispatch = useAppDispatch()
-    const addToCartHandler = (data: dataType, type: string) => {
-        switch (type) {
-            case 'tyres':
-                dispatch(addTyresToCart(data))
-                break
-            case 'disks':
-                dispatch(addDisksToCart(data))
+    const scrollableElement = useRef<HTMLDivElement>(null)
 
-        }
+    const addToCartTiresHandler = (data: resultsTyresType): void => {
+        dispatch(addTyresToCart(data))
     }
-    const newDataUpload = () => {
-        dispatch(getTyresCards(false))
+    const addToCartDisksHandler = (data: resultsDisksType): void => {
+        dispatch(addDisksToCart(data))
     }
     return (
         <div className={CatalogStyles.mainWrapper}>
             <p className="pageTitle">{catalogData.title}</p>
             <SortHeader sortData={catalogData.sortData} />
             <div className={CatalogStyles.content}>
-                <DesktopFilters filterBlocks={<catalogData.filtersBlocks />} />
-                <div className={CatalogStyles.cards} id='scrollableDiv'>
+                <DesktopFilters
+                    filterBlocks={<catalogData.filtersBlocks parentRef={scrollableElement} />}
+                    commonFilters={catalogData.commonFilters} />
+                <div className={CatalogStyles.cards} id='scrollableDiv'
+                    ref={scrollableElement}>
                     <InfiniteScroll
                         dataLength={catalogData.cardsData.results.length}
-                        next={(newDataUpload)}
+                        next={() => dispatch(catalogData.sortData.newDataReq(false))}
                         hasMore={catalogData.cardsData.next !== null}
                         loader={'Загрузка...'}
                         scrollableTarget='scrollableDiv'
                     >
                         {catalogData.cardsData.results.map((item, index) => {
                             if (catalogData.title === 'Каталог шин') {
-                                return <CardDesktop
-                                    handler={addToCartHandler}
-                                    data={item}
+                                return <TyresCardDesktop
+                                    handler={addToCartTiresHandler}
+                                    data={item as resultsTyresType}
+                                    key={`${item} - ${index}`} />
+                            }
+                            if (catalogData.title === 'Каталог дисков') {
+                                return <DisksCardDesktop
+                                    handler={addToCartDisksHandler}
+                                    data={item as resultsDisksType}
                                     key={`${item} - ${index}`} />
                             }
                             return null
@@ -63,11 +68,22 @@ export const Catalogs: React.FC = () => {
             <div className={CatalogStyles.contentMobile}>
                 <div className={CatalogStyles.sortFilter}>
                     <SortHeaderMobile />
-                    <MobileFilters />
+                    {catalogData.title === 'Каталог шин'
+                        ? <MobileTyresFilters />
+                        : <MobileDisksFilters />}
                 </div>
                 <div className={CatalogStyles.cardsMobile}>
                     {catalogData.cardsData.results.map((item, index) => {
-                        return <CardMobile handler={addToCartHandler} data={item} key={`${item} - ${index}`} />
+                        if (catalogData.title === 'Каталог шин') {
+                            return <TyresCardMobile handler={addToCartTiresHandler}
+                                data={item as resultsTyresType} key={`${item} - ${index}`} />
+                        }
+
+                        if (catalogData.title === 'Каталог дисков') {
+                            return <DisksCardMobile handler={addToCartDisksHandler}
+                                data={item as resultsDisksType} key={`${item} - ${index}`} />
+                        }
+                        return null
                     })}
                 </div>
             </div>

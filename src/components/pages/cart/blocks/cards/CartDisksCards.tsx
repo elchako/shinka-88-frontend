@@ -3,16 +3,15 @@ import CartCardsStyles from "./CartCardsStyles.module.scss"
 import CartStyles from '../../CartStyles.module.scss'
 import delElement from '../../../../../imgs/cart/del_from_cart.png'
 import Checkbox from "react-custom-checkbox";
-import type { resultsTyresType } from "../../../main/blocks/filters/filtersBlocks/filterBlock1Slice"
-import { useAppDispatch, useTyresCardData } from "../../../../../app/hooks"
+import { useAppDispatch } from "../../../../../app/hooks"
 import { changeAmount, delOneTypeProduct, selectProductHandler, type selectedType } from "../../cartSlice"
+import { type resultsDisksType } from "../../../main/blocks/filters/filtersBlocks/filterBlock2Slice"
 
 interface IProps {
-    data: selectedType & resultsTyresType
+    data: selectedType & resultsDisksType
 }
 
-export const CartTyresCards: React.FC<IProps> = ({ data }) => {
-    const cardData = useTyresCardData(data)
+export const CartDisksCards: React.FC<IProps> = ({ data }) => {
     const dispatch = useAppDispatch()
     return (
         <div className={CartCardsStyles.mainWrapper}>
@@ -27,16 +26,6 @@ export const CartTyresCards: React.FC<IProps> = ({ data }) => {
                     onChange={() =>
                         dispatch(selectProductHandler({ productType: data.product_type, id: data.id }))}
                 />}
-                <div className={CartCardsStyles.iconsContent}>
-                    <div className={CartCardsStyles.iconsTop}>
-                        {cardData.seasonIcon !== '' && <img src={cardData.seasonIcon} alt="" />}
-                        {cardData.runflatIcon !== '' && <img src={cardData.runflatIcon} alt="" />}
-                        {cardData.strongIcon && <img src={cardData.strongIcon} alt="" />}
-                    </div>
-                    <div className={CartCardsStyles.iconsBottom}>
-                        {/* <img src={gift} alt="" /> */}
-                    </div>
-                </div>
             </div>
             <div className={CartCardsStyles.productImg}>
                 <img src={data.image_url} alt="" />
@@ -45,13 +34,9 @@ export const CartTyresCards: React.FC<IProps> = ({ data }) => {
                 <p className={CartCardsStyles.productName}>{data.name}</p>
                 <div className={CartCardsStyles.productInfoContent}>
                     <div>
-                        <p>{`${data.width}/${data.height}`}</p>
-                        <p>{data.seazon}</p>
-                        <p>{data.marka}</p>
-                    </div>
-                    <div>
-                        <p>{cardData.runflatText}</p>
-                        <p>{cardData.strongText}</p>
+                        <p>{data.diameter}</p>
+                        <p>{data.pcd}</p>
+                        <p>{data.type_disk}</p>
                     </div>
                 </div>
                 <div className={CartCardsStyles.productButtons}>

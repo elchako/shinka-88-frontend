@@ -2,7 +2,8 @@ import type React from "react"
 import type { tiresAPI } from '../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice'
 import FiltersStyles from '../blocks/filters/FiltersStyles.module.scss'
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
-import { selectSelector, selectsSelect, tiresAPISelector } from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { getTyresParametrs, selectSelector, selectsSelect, tiresAPISelector } from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { useEffect } from "react"
 
 
 export const SizeFilter: React.FC = () => {
@@ -10,6 +11,18 @@ export const SizeFilter: React.FC = () => {
     const tiresAPI = useAppSelector(tiresAPISelector)
 
     const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        let dataIsEmpty = true
+        for (const key in tiresAPI) {
+            if (tiresAPI[key as keyof tiresAPI].length === 0) {
+                dataIsEmpty = false
+                break
+            }
+        }
+
+        if (!dataIsEmpty) dispatch(getTyresParametrs(''))
+    }, [dispatch, tiresAPI])
     return (
         <div className={FiltersStyles.size}>
             <p className={FiltersStyles.filterTitle}>Размер</p>

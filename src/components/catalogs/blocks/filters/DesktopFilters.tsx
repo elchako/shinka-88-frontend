@@ -2,17 +2,22 @@ import type React from "react"
 import FiltersStyles from "./FiltersStyles.module.scss"
 import '../../../../common.scss'
 import type { ReactElement } from "react"
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { priceEndSelector, priceStartSelector, resetFilters, setPrice } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { useAppDispatch } from "../../../../app/hooks"
 
 interface IProps {
     filterBlocks: ReactElement
+    commonFilters: {
+        resetFiltersAction: any;
+        priceStartNumber: number;
+        priceEndNumber: number;
+        priceSetter: any;
+    }
 }
 
-export const DesktopFilters: React.FC<IProps> = ({ filterBlocks }) => {
+export const DesktopFilters: React.FC<IProps> = ({ filterBlocks, commonFilters }) => {
     const dispatch = useAppDispatch()
-    const priceStart = useAppSelector(priceStartSelector)
-    const priceEnd = useAppSelector(priceEndSelector)
+    const priceStart = commonFilters.priceStartNumber
+    const priceEnd = commonFilters.priceEndNumber
 
     return (
         <div className={FiltersStyles.mainWrapper}>
@@ -47,19 +52,25 @@ export const DesktopFilters: React.FC<IProps> = ({ filterBlocks }) => {
                             <input type="text" placeholder="3 500"
                                 value={priceStart === 0 ? '' : priceStart}
                                 onChange={e =>
-                                    dispatch(setPrice({ number: Number(e.currentTarget.value), isStartOrEnd: true }))} />
+                                    dispatch(commonFilters.priceSetter({
+                                        number: Number(e.currentTarget.value),
+                                        isStartOrEnd: true
+                                    }))} />
                         </div>
                         <div className={FiltersStyles.priceLine}></div>
                         <div className={FiltersStyles.priceTo}>
                             <input type="text" placeholder="20 000"
                                 value={priceEnd === 0 ? '' : priceEnd}
                                 onChange={e =>
-                                    dispatch(setPrice({ number: Number(e.currentTarget.value), isStartOrEnd: false }))} />
+                                    dispatch(commonFilters.priceSetter({
+                                        number: Number(e.currentTarget.value),
+                                        isStartOrEnd: false
+                                    }))} />
                         </div>
                     </div>
                 </div>
                 <div className={FiltersStyles.clearFilters}>
-                    <button onClick={() => dispatch(resetFilters())} className={FiltersStyles.title
+                    <button onClick={() => dispatch(commonFilters.resetFiltersAction())} className={FiltersStyles.title
                         + ' ' + FiltersStyles.clearButton}>Сбросить все параметры</button>
                 </div>
             </div>

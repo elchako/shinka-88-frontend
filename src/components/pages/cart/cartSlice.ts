@@ -74,7 +74,7 @@ export const cartSlice = createAppSlice({
         addDisksToCart: create.reducer((state,
             action: PayloadAction<resultsDisksType>) => {
             let founded = false
-            for (let i = 0; i < state.tyres.length; i++) {
+            for (let i = 0; i < state.disks.length; i++) {
                 if (state.disks[i].id === action.payload.id) {
                     state.disks[i].amount = action.payload.amount
                     state.disks[i].canceled = false
@@ -89,6 +89,7 @@ export const cartSlice = createAppSlice({
         selectAllHandler: create.reducer(state => {
             state.selectAll = !state.selectAll
             state.tyres.forEach(item => item.canceled = !state.selectAll)
+            state.disks.forEach(item => item.canceled = !state.selectAll)
             state.priceAmount = recalcPriceAmount(sortAllProducts(state))
             localStorage.setItem('cartData', JSON.stringify(state))
         }),
@@ -98,12 +99,17 @@ export const cartSlice = createAppSlice({
                 let productValue = cancelProduct(state.tyres, action.payload.id)
                 state.tyres[productValue.index].canceled = productValue.value
             }
+            if (action.payload.productType === 'Диски') {
+                let productValue = cancelProduct(state.disks, action.payload.id)
+                state.disks[productValue.index].canceled = productValue.value
+            }
 
             state.priceAmount = recalcPriceAmount(sortAllProducts(state))
             localStorage.setItem('cartData', JSON.stringify(state))
         }),
         resetCart: create.reducer(state => {
             state.tyres = state.tyres.filter(item => item.canceled)
+            state.disks = state.disks.filter(item => item.canceled)
             const newCartArr = sortAllProducts(state)
             state.priceAmount = recalcPriceAmount(newCartArr)
             state.queueCounter = newCartArr.length
@@ -116,6 +122,10 @@ export const cartSlice = createAppSlice({
             action: PayloadAction<{ productType: string, id: number }>) => {
             if (action.payload.productType === 'Шины') {
                 state.tyres = state.tyres.filter(item => item.id !== action.payload.id)
+            }
+
+            if (action.payload.productType === 'Диски') {
+                state.disks = state.disks.filter(item => item.id !== action.payload.id)
             }
 
             const newCartArr = sortAllProducts(state)
@@ -131,6 +141,7 @@ export const cartSlice = createAppSlice({
             action: PayloadAction<{ type: string, id: number, isPlus: boolean }>) => {
             let arrData: commonArrDataType = []
             if (action.payload.type === 'Шины') arrData = state.tyres
+            if (action.payload.type === 'Диски') arrData = state.disks
 
             for (let i = 0; i < arrData.length; i++) {
                 if (arrData[i].id === action.payload.id) {
@@ -150,6 +161,7 @@ export const cartSlice = createAppSlice({
             if (localData) {
                 const localDataParsed = JSON.parse(localData)
                 state.tyres = localDataParsed.tyres
+                state.disks = localDataParsed.disks
                 state.priceAmount = localDataParsed.priceAmount
                 state.queueCounter = localDataParsed.queueCounter
                 state.selectAll = localDataParsed.selectAll
@@ -159,6 +171,7 @@ export const cartSlice = createAppSlice({
     selectors: {
         priceAmountSelector: state => state.priceAmount,
         tyresDataSelector: state => state.tyres,
+        disksDataSelector: state => state.disks,
         selectAllSelector: state => state.selectAll
     },
 })
@@ -170,5 +183,7 @@ export const { addTyresToCart, selectAllHandler, selectProductHandler,
     cartSlice.actions
 
 // selectors
-export const { priceAmountSelector, tyresDataSelector, selectAllSelector } =
+export const { priceAmountSelector, tyresDataSelector, selectAllSelector,
+    disksDataSelector
+} =
     cartSlice.selectors

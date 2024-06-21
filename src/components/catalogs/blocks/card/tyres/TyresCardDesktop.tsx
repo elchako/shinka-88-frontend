@@ -1,21 +1,19 @@
 import type React from "react"
-import CardDesktopStyles from "./CardDesktopStyles.module.scss"
+import CardDesktopStyles from "../CardDesktopStyles.module.scss"
 import gift from '../../../../imgs/tiresCard/gift.png'
-import { OffenButton } from "../../../common/OffenButton"
-import { amountHandler, type resultsTyresType } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
-import { useAppDispatch, useCardData } from "../../../../app/hooks"
-import { type resultsDisksType } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock2Slice"
-import { type dataType } from "../../Catalogs"
+import { OffenButton } from "../../../../common/OffenButton"
+import { amountHandler, type resultsTyresType } from "../../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import { useAppDispatch, useTyresCardData, } from "../../../../../app/hooks"
 
 interface IProps {
     data: resultsTyresType
-    handler: (data: dataType, productType: string) => void
+    handler: (data: resultsTyresType) => void
 }
 
 
-export const CardDesktop: React.FC<IProps> = ({ data, handler }) => {
+export const TyresCardDesktop: React.FC<IProps> = ({ data, handler }) => {
     const dispatch = useAppDispatch()
-    const cardData = useCardData(data)
+    const cardData = useTyresCardData(data)
 
     return (
         <div className={CardDesktopStyles.mainWrapper}>
@@ -65,7 +63,7 @@ export const CardDesktop: React.FC<IProps> = ({ data, handler }) => {
                     <p>Итого:</p>
                     <p>{data.price_sale * data.amount}</p>
                 </div>
-                <OffenButton handler={() => handler(data as dataType, 'tyres')} name={'КОРЗИНА'} />
+                <OffenButton handler={() => handler(data)} name={'КОРЗИНА'} />
             </div>
         </div>
     )

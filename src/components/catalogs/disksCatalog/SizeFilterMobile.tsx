@@ -19,6 +19,7 @@ export const SizeFilterMobile: React.FC = () => {
                         onChange={e => dispatch(selectsSelect({
                             selectName: item.selectName.apiName,
                             value: e.currentTarget.value,
+                            isOneChoice: true
                         }))}>
                         <option value='' disabled>-</option>
                         {values.map((item, index) => {

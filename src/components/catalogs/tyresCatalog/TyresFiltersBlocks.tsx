@@ -17,7 +17,6 @@ export const TyresFilterBlocks: React.FC<IFilterBlockProps> = ({ parentRef }) =>
     const stateCheckboxes = useAppSelector(checkboxesSelectSelector)
     const statePriceStart = useAppSelector(priceStartSelector)
     const statePriceEnd = useAppSelector(priceEndSelector)
-    console.log(parentRef)
     useEffect(() => {
         dispatch(getTyresCards(true)).then(res => {
             dispatch(sortTyresTypeSelect(sorts[0]))

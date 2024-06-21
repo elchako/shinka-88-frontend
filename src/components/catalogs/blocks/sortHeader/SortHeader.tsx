@@ -1,10 +1,8 @@
 import type React from "react"
 import SortHeaderStyles from "./SortHeaderStyles.module.scss"
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
+import { useAppDispatch } from "../../../../app/hooks"
 import { sorts } from "../../../../consts"
-import { sortTyresTypeSelect, sortTyresTypeSelector } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import { useEffect } from "react"
-import { type ActionCreatorWithPayload, type AsyncThunk } from "@reduxjs/toolkit"
 
 
 interface IProps {

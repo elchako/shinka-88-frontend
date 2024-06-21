@@ -7,7 +7,7 @@ import { amountHandler, type resultsDisksType } from "../../../../pages/main/blo
 
 interface IProps {
     data: resultsDisksType
-    handler: (data: resultsDisksType, productType: string) => void
+    handler: (data: resultsDisksType) => void
 }
 
 export const DisksCardMobile: React.FC<IProps> = ({ data, handler }) => {
@@ -40,7 +40,7 @@ export const DisksCardMobile: React.FC<IProps> = ({ data, handler }) => {
                     <div className={CardMobileStyles.productPriceMobile}>
                         {data.price_sale}
                     </div>
-                    <div onClick={() => handler(data, 'tyres')} className={CardMobileStyles.productCartMobile}>
+                    <div onClick={() => handler(data)} className={CardMobileStyles.productCartMobile}>
                         <img src={cart} alt="" />
                     </div>
                 </div>

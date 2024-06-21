@@ -3,7 +3,7 @@ import CatalogStyles from "./CatalogStyles.module.scss"
 import '../../common.scss'
 import { SortHeader } from "./blocks/sortHeader/SortHeader"
 import { DesktopFilters } from "./blocks/filters/DesktopFilters"
-import { SortHeaderMobile } from "./blocks/sortHeader/SortHeaderMobile"
+import { TyresSortHeaderMobile } from "./blocks/sortHeader/TyresSortHeaderMobile"
 import { MobileTyresFilters } from "./blocks/filters/MobileTyresFilters"
 import { TyresCardMobile } from "./blocks/card/tyres/TyresCardMobile"
 import { useLocation } from "react-router-dom"
@@ -17,6 +17,7 @@ import { DisksCardDesktop } from "./blocks/card/disks/DisksCardDesktop"
 import { useRef } from "react"
 import { DisksCardMobile } from "./blocks/card/disks/DisksCardMobile"
 import { MobileDisksFilters } from "./blocks/filters/MobileDisksFilters"
+import { DisksSortHeaderMobile } from "./blocks/sortHeader/DisksSortHeaderMobile"
 
 export const Catalogs: React.FC = () => {
     const { pathname } = useLocation()
@@ -67,7 +68,9 @@ export const Catalogs: React.FC = () => {
             </div>
             <div className={CatalogStyles.contentMobile}>
                 <div className={CatalogStyles.sortFilter}>
-                    <SortHeaderMobile />
+                    {catalogData.title === 'Каталог шин'
+                        ? <TyresSortHeaderMobile />
+                        : <DisksSortHeaderMobile />}
                     {catalogData.title === 'Каталог шин'
                         ? <MobileTyresFilters />
                         : <MobileDisksFilters />}

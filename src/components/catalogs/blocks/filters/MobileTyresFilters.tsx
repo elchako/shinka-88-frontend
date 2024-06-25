@@ -1,9 +1,15 @@
 import type React from "react"
 import FiltersStyles from "./FiltersStyles.module.scss"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { mobileFiltersReducer } from "../../../common/slices/smallActions"
 import { useEffect, useState } from "react"
-import { checkboxesSelectSelector, priceEndSelector, priceStartSelector, seasonsSelectSelector, selectSelector } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import {
+    checkboxesSelectSelector,
+    priceEndSelector,
+    priceStartSelector,
+    seasonsSelectSelector,
+    selectSelector
+} from "../../../../app/slices/filters/tiresFiltersSlice"
+import { mobileFiltersReducer } from "../../../../app/slices/common/smallActions"
 
 
 export const MobileTyresFilters: React.FC = () => {

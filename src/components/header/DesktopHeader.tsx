@@ -5,7 +5,7 @@ import cart from '../../imgs/cart/desktopHeader.png'
 import { Logo } from "../common/Logo";
 import { links } from "../../consts";
 import { useAppSelector } from "../../app/hooks";
-import { priceAmountSelector, tyresDataSelector } from "../pages/cart/cartSlice";
+import { priceAmountSelector } from "../../app/slices/cartSlice";
 
 
 export const DesktopHeader: React.FC = () => {

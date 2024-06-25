@@ -1,10 +1,13 @@
 import type React from "react"
 import FiltersStyles from "./FiltersStyles.module.scss"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { mobileFiltersReducer } from "../../../common/slices/smallActions"
 import { useEffect, useState } from "react"
-import { priceEndSelector, priceStartSelector, selectSelector } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock2Slice"
-
+import {
+    priceEndSelector,
+    priceStartSelector,
+    selectSelector
+} from "../../../../app/slices/filters/disksFiltersSlice"
+import { mobileFiltersReducer } from "../../../../app/slices/common/smallActions"
 
 export const MobileDisksFilters: React.FC = () => {
     const dispatch = useAppDispatch()

@@ -6,11 +6,18 @@ import Checkbox from "react-custom-checkbox";
 import { CartTyresCards } from "./blocks/cards/CartTyresCards";
 import { OrderInfo } from "../blocks/orderInfo/OrderInfo";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { disksDataSelector, resetCart, selectAllHandler, selectAllSelector, type selectedType, tyresDataSelector } from "./cartSlice";
 import { tabs } from "../../../consts";
 import { CartDisksCards } from "./blocks/cards/CartDisksCards";
-import { type resultsTyresType } from "../main/blocks/filters/filtersBlocks/filterBlock1Slice";
-import { type resultsDisksType } from "../main/blocks/filters/filtersBlocks/filterBlock2Slice";
+import { type resultsTyresType } from "../../../app/slices/filters/tiresFiltersSlice";
+import { type resultsDisksType } from "../../../app/slices/filters/disksFiltersSlice";
+import {
+    disksDataSelector,
+    resetCart,
+    selectAllHandler,
+    selectAllSelector,
+    type selectedType,
+    tyresDataSelector
+} from "../../../app/slices/cartSlice";
 
 export const Cart: React.FC = () => {
     const dispatch = useAppDispatch()

@@ -28,12 +28,9 @@ export const MainFilters: React.FC = () => {
         }
     }
 
-    // открытие/закрытие модалки в табах
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-
     // контент табов
-    const tabsContent = [<FilterBlock1 isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />,
-    <FilterBlock2 isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />, <FilterBlock3 />,
+    const tabsContent = [<FilterBlock1 />,
+    <FilterBlock2 />, <FilterBlock3 />,
     <FilterBlock4 />, <FilterBlock5 />]
     return (
         <div className={MainFiltersStyles.mainWrapper}>

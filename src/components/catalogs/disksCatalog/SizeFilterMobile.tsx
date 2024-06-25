@@ -1,7 +1,12 @@
 import type React from "react"
-import { disksAPISelector, selectSelector, selectsSelect, type disksAPI } from '../../pages/main/blocks/filters/filtersBlocks/filterBlock2Slice'
 import FiltersStyles from '../blocks/filters/FiltersStyles.module.scss'
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
+import {
+    type disksAPI,
+    disksAPISelector,
+    selectSelector,
+    selectsSelect
+} from "../../../app/slices/filters/disksFiltersSlice"
 
 export const SizeFilterMobile: React.FC = () => {
     const selects = useAppSelector(selectSelector)

@@ -1,40 +1,32 @@
 import type React from "react"
 import FilterBlocksStyles from "./FilterBlocks.module.scss"
-import {
-    seasonsSelectSelector, seasonsSelectOne, typesSelectSelector,
-    selectsSelect,
-    checkboxesSelectSelector,
-    checkboxesSelect,
-    tiresAPISelector,
-    explanationToggle,
-    getTyresParametrs,
-    selectSelector,
-    getTyresCards,
-    resetFilters,
-} from "./filterBlock1Slice"
-import type { tiresAPI } from "./filterBlock1Slice"
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks"
 import {
-    selectsNames1, selectsNames1_2, filterButtons,
-    tabsButtons, checkboxesNames, typeSelectsValues, typeSelectsText,
-    links
+    filterButtons, tabsButtons, checkboxesNames, links
 } from '../../../../../../consts'
-import explanation from '../../../../../../imgs/explanation.png'
 import { MainFiltersButton } from "../MainFiltersButton"
-import { ExplanationModal } from "./ExplanationModal"
-import type { ITabsProps } from "../MainFilters"
 import '../../../../../../common.scss'
 import Checkbox from "react-custom-checkbox";
 import checkedIcon from '../../../../../../imgs/checked.png'
 import { useEffect } from "react"
-import { unwrapResult } from "@reduxjs/toolkit"
 import { useNavigate } from "react-router-dom"
+import {
+    checkboxesSelect,
+    checkboxesSelectSelector,
+    getTyresParametrs,
+    resetFilters,
+    seasonsSelectOne,
+    seasonsSelectSelector,
+    selectSelector,
+    selectsSelect,
+    type tiresAPI,
+    tiresAPISelector
+} from "../../../../../../app/slices/filters/tiresFiltersSlice"
 
-export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen }) => {
+export const FilterBlock1: React.FC = () => {
 
     //выбор типа параметров
     const tiresAPI = useAppSelector(tiresAPISelector)
-    const typeParametrsSelects = useAppSelector(typesSelectSelector)
     const checkboxesSelects = useAppSelector(checkboxesSelectSelector)
     const selects = useAppSelector(selectSelector)
     const season = useAppSelector(seasonsSelectSelector)
@@ -52,13 +44,6 @@ export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
 
     return (
         <div className={FilterBlocksStyles.mainWrapper}>
-            {/* подбор по авто или параметрам */}
-            {/* <select defaultValue={typeSelectsValues[0]} onChange={e => dispatch(typesSelect(e.target.value))} className={FilterBlocksStyles.parametrs}>
-                <option value={typeSelectsValues[0]}>{typeSelectsText[0]}</option>
-                <option value={typeSelectsValues[1]}>{typeSelectsText[1]}</option>
-            </select> */}
-
-            {/* селекты фильтра */}
             <div className={FilterBlocksStyles.selects}>
                 {selects.map((item, index) => {
                     let values = [...tiresAPI[item.selectName.apiName as keyof tiresAPI]]
@@ -106,18 +91,6 @@ export const FilterBlock1: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                         checked={checkboxesSelects[1].checked}
                         onChange={() => dispatch(checkboxesSelect(checkboxesNames[1]))}
                     />
-                    {/* <div>
-                        <Checkbox
-                            icon={<img src={checkedIcon} alt="checked" className="checkboxesImg" />}
-                            label={checkboxesNames[2]}
-                            className='checkboxesInput'
-                            labelClassName='checkboxesLabel'
-                            checked={checkboxesSelects[2].value}
-                            onChange={() => dispatch(checkboxesSelect(checkboxesNames[2]))}
-                        />
-                        <img src={explanation} alt="explanation" onClick={() => dispatch(explanationToggle(true))} />
-                        <ExplanationModal />
-                    </div> */}
                 </div>
 
                 {/* кнопка применения фильтра */}

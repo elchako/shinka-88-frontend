@@ -3,8 +3,8 @@ import Checkbox from "react-custom-checkbox";
 import FiltersStyles from '../blocks/filters/FiltersStyles.module.scss'
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import { filterButtons } from "../../../consts"
-import { seasonsSelectMany, seasonsSelectSelector } from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice";
 import checkedIcon from '../../../imgs/checked.png'
+import { seasonsSelectMany, seasonsSelectSelector } from "../../../app/slices/filters/tiresFiltersSlice";
 
 
 export const SeasonFilter: React.FC = () => {

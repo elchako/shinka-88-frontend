@@ -1,4 +1,3 @@
-import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../../app/createAppSlice"
 
 export interface IinitialState {

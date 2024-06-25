@@ -3,9 +3,14 @@ import CartCardsStyles from "./CartCardsStyles.module.scss"
 import CartStyles from '../../CartStyles.module.scss'
 import delElement from '../../../../../imgs/cart/del_from_cart.png'
 import Checkbox from "react-custom-checkbox";
-import type { resultsTyresType } from "../../../main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import { useAppDispatch, useTyresCardData } from "../../../../../app/hooks"
-import { changeAmount, delOneTypeProduct, selectProductHandler, type selectedType } from "../../cartSlice"
+import {
+    changeAmount,
+    delOneTypeProduct,
+    selectProductHandler,
+    type selectedType
+} from "../../../../../app/slices/cartSlice";
+import { type resultsTyresType } from "../../../../../app/slices/filters/tiresFiltersSlice";
 
 interface IProps {
     data: selectedType & resultsTyresType
@@ -34,7 +39,6 @@ export const CartTyresCards: React.FC<IProps> = ({ data }) => {
                         {cardData.strongIcon && <img src={cardData.strongIcon} alt="" />}
                     </div>
                     <div className={CartCardsStyles.iconsBottom}>
-                        {/* <img src={gift} alt="" /> */}
                     </div>
                 </div>
             </div>

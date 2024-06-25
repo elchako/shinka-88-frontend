@@ -1,7 +1,7 @@
 import { type PayloadAction } from "@reduxjs/toolkit"
-import { createAppSlice } from "../../../app/createAppSlice"
-import type { resultsTyresType, tyresCards } from "../main/blocks/filters/filtersBlocks/filterBlock1Slice"
-import { type resultsDisksType } from "../main/blocks/filters/filtersBlocks/filterBlock2Slice"
+import { type resultsTyresType } from "./filters/tiresFiltersSlice"
+import { type resultsDisksType } from "./filters/disksFiltersSlice"
+import { createAppSlice } from "../createAppSlice"
 
 export type selectedType = {
     canceled: boolean

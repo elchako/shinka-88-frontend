@@ -3,9 +3,13 @@ import OrderInfoStyles from "./OrderInfoStyles.module.scss"
 import '../../../../common.scss'
 import { OffenButton } from "../../../common/OffenButton"
 import { useAppSelector } from "../../../../app/hooks"
-import { disksDataSelector, priceAmountSelector, tyresDataSelector } from "../../cart/cartSlice"
 import { links } from "../../../../consts"
 import { useNavigate } from "react-router-dom"
+import {
+    disksDataSelector,
+    priceAmountSelector,
+    tyresDataSelector
+} from "../../../../app/slices/cartSlice"
 
 interface IProps {
     name: string

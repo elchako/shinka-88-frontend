@@ -2,10 +2,7 @@ import type React from "react"
 import FiltersStyles from '../blocks/filters/FiltersStyles.module.scss'
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import { filterButtons } from "../../../consts"
-import {
-    seasonsSelectOne,
-    seasonsSelectSelector
-} from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice";
+import { seasonsSelectOne, seasonsSelectSelector } from "../../../app/slices/filters/tiresFiltersSlice"
 
 
 export const SeasonFilterMobile: React.FC = () => {

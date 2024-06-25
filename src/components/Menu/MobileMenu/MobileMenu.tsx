@@ -3,7 +3,7 @@ import MobileMenuStyles from './MobileMenu.module.scss'
 import { links } from '../../../consts'
 import { NavLink } from "react-router-dom";
 import { useAppDispatch } from "../../../app/hooks";
-import { mobileMenuReducer } from "../../common/slices/smallActions";
+import { mobileMenuReducer } from "../../../app/slices/common/smallActions";
 
 
 export const MobileMenu: React.FC = () => {

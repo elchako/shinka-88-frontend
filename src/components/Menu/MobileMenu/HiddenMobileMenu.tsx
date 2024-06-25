@@ -5,16 +5,16 @@ import { NavLink } from "react-router-dom";
 import close from '../../../imgs/closeHiddenMenu.png'
 import menuArrow from '../../../imgs/hiddenMenuArrow.png'
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { mobileMenuReducer, mobileMenuSelector } from "../../common/slices/smallActions";
+import { mobileMenuReducer, mobileMenuSelector } from "../../../app/slices/common/smallActions";
 
 export const HiddenMobileMenu: React.FC = () => {
     // открытие/закрытие меню
     const mobileMenuState = useAppSelector(mobileMenuSelector) // закрытие/открытие мобильного меню
     const dispatch = useAppDispatch()
     let menuStyles = MobileMenuStyles.mainHiddenMenuWrapper
-    mobileMenuState ? menuStyles = MobileMenuStyles.mainHiddenMenuWrapper  + ' ' + MobileMenuStyles.closedHiddenMenu
-    : menuStyles = MobileMenuStyles.mainHiddenMenuWrapper
-    
+    mobileMenuState ? menuStyles = MobileMenuStyles.mainHiddenMenuWrapper + ' ' + MobileMenuStyles.closedHiddenMenu
+        : menuStyles = MobileMenuStyles.mainHiddenMenuWrapper
+
     // ссылки меню
     const menuLinks = links.slice(3,)
 
@@ -28,7 +28,7 @@ export const HiddenMobileMenu: React.FC = () => {
         <div className={MobileMenuStyles.hiddenMenuContent}>
             {menuLinks.map((item, index) => {
                 return <NavLink key={index} to={item.link} className={MobileMenuStyles.hiddenMenuItem}
-                onClick={() => dispatch(mobileMenuReducer())}>
+                    onClick={() => dispatch(mobileMenuReducer())}>
                     <p>{item.title}</p>
                     <img src={menuArrow} alt="menu arrow" />
                 </NavLink>

@@ -2,8 +2,8 @@ import type React from "react"
 import FiltersStyles from '../blocks/filters/FiltersStyles.module.scss'
 import Checkbox from "react-custom-checkbox";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
-import { checkboxesSelect, checkboxesSelectSelector } from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import checkedIcon from '../../../imgs/checked.png'
+import { checkboxesSelect, checkboxesSelectSelector } from "../../../app/slices/filters/tiresFiltersSlice";
 
 export const AdditionalFilter: React.FC = () => {
     const checkboxes = useAppSelector(checkboxesSelectSelector)

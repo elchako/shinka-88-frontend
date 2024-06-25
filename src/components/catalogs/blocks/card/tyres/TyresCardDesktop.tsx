@@ -1,9 +1,8 @@
 import type React from "react"
 import CardDesktopStyles from "../CardDesktopStyles.module.scss"
-import gift from '../../../../imgs/tiresCard/gift.png'
 import { OffenButton } from "../../../../common/OffenButton"
-import { amountHandler, type resultsTyresType } from "../../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import { useAppDispatch, useTyresCardData, } from "../../../../../app/hooks"
+import { amountHandler, type resultsTyresType } from "../../../../../app/slices/filters/tiresFiltersSlice"
 
 interface IProps {
     data: resultsTyresType

@@ -1,10 +1,9 @@
 import type React from "react"
 import FiltersStyles from "./FiltersStyles.module.scss"
-import { useState } from "react"
 import { useAppDispatch, useAppSelector, useCatalogDataHook } from "../../../../app/hooks";
-import { mobileFiltersReducer, mobileFiltersSelector } from "../../../common/slices/smallActions";
 import { OffenButton } from "../../../common/OffenButton";
 import { useLocation } from "react-router-dom";
+import { mobileFiltersReducer, mobileFiltersSelector } from "../../../../app/slices/common/smallActions";
 
 export const MobileFiltersModal: React.FC = () => {
     // открытие/закрытие модалки
@@ -12,9 +11,6 @@ export const MobileFiltersModal: React.FC = () => {
 
     const { pathname } = useLocation()
     const catalogData = useCatalogDataHook(pathname)
-
-    // открытие/закрытие меню дополнительно
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
     const dispatch = useAppDispatch()
     const priceStart = catalogData.commonFilters.priceStartNumber

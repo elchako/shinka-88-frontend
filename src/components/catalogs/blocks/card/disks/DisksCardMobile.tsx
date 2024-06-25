@@ -2,7 +2,7 @@ import type React from "react"
 import CardMobileStyles from "../CardDesktopStyles.module.scss"
 import cart from '../../../../../imgs/cart/productMobileCart.png'
 import { useAppDispatch } from "../../../../../app/hooks"
-import { amountHandler, type resultsDisksType } from "../../../../pages/main/blocks/filters/filtersBlocks/filterBlock2Slice"
+import { amountHandler, type resultsDisksType } from "../../../../../app/slices/filters/disksFiltersSlice"
 
 
 interface IProps {

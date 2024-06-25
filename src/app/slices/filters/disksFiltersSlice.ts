@@ -1,83 +1,15 @@
 import { type PayloadAction } from "@reduxjs/toolkit"
-import { createAppSlice } from "../../../../../../app/createAppSlice"
-import { selectsNames2, sorts } from "../../../../../../consts"
-import { filtersApi } from "../../../../../../api/catalog"
-import type { RootState } from "../../../../../../app/store"
+import { selectsNames2, sorts } from "../../../consts"
+import { createAppSlice } from "../../createAppSlice"
+import { filtersApi } from "../../../api/catalog"
+import { type RootState } from "../../store"
+import {
+    type disksCards,
+    type disksAPI,
+    type fieldsDiskType,
+    type IinitialState
+} from "../../../types/disks"
 
-export type disksAPI = {
-    type_disk: Array<string>
-    goodland: Array<string>
-    marka: Array<null>
-    model: Array<string | null>
-    diameter: Array<string>
-    width: Array<string>
-    holesquant: Array<string>
-    pcd: Array<string>
-    wheeloffset: Array<string>
-    dia: Array<string | null>
-    color: Array<string | null>
-    processway: Array<string | null>
-    territory_rn: Array<string>
-    provider: Array<string>
-}
-
-export type resultsDisksType = {
-    id: number,
-    article: string,
-    name: string,
-    name_origin: string,
-    product_type: string,
-    price_purchase: number,
-    price_sale: number,
-    image_url: string,
-    image: string,
-    date_add: string,
-    description: string | null,
-    balance: number,
-    is_active: boolean,
-    type_disk: string
-    goodland: string,
-    marka: string,
-    model: string,
-    diameter: string,
-    width: string,
-    holesquant: string,
-    pcd: string,
-    wheeloffset: string,
-    dia: string,
-    color: string,
-    processway: string,
-    mnfcode: string | null,
-    territory_rn: string,
-    provider: number
-    amount: number
-}
-
-export type disksCards = {
-    count: number | null,
-    next: string | null,
-    previous: string | null,
-    results: Array<resultsDisksType>
-}
-
-export type fieldsDiskType = {
-    diameter?: string | Array<string>
-    pcd?: string | Array<string>
-    type_disk?: string | Array<string>
-    price?: Array<number>
-}
-
-export interface IinitialState {
-    disksAPI: disksAPI
-    selects: Array<{
-        selectName: { apiName: string, displayName: string },
-        value: string | Array<string>,
-    }>
-    disksCardsArr: disksCards
-    sortType: string
-    priceStart: number
-    priceEnd: number
-}
 
 // изначальные значения стейта
 const selects = selectsNames2.map(selectName => {
@@ -87,6 +19,7 @@ const selects = selectsNames2.map(selectName => {
 
 
 const initialState: IinitialState = {
+    // данные для фильтров
     disksAPI: {
         type_disk: [],
         goodland: [],
@@ -103,22 +36,25 @@ const initialState: IinitialState = {
         territory_rn: [],
         provider: [],
     },
-    selects: selects,
+    // данные карточек
     disksCardsArr: {
         count: null,
         next: null,
         previous: null,
         results: []
     },
+    // фильтры
+    selects: selects,
     sortType: sorts[0],
     priceStart: 0,
     priceEnd: 0,
 }
 
 export const filterBlock2Slice = createAppSlice({
-    name: "filterBlock2",
+    name: "disksFilters",
     initialState,
     reducers: create => ({
+        // селекты 
         selectsSelect: create.reducer((state,
             action: PayloadAction<{ selectName: string, value: string, isOneChoice: boolean }>) => {
             let payload = action.payload
@@ -147,9 +83,11 @@ export const filterBlock2Slice = createAppSlice({
             })
             state.selects = newSelects
         }),
+        // сортировка
         sortDisksTypeSelect: create.reducer((state, action: PayloadAction<string>) => {
             state.sortType = action.payload
         }),
+        // плюс/минус количество конкретного товара
         amountHandler: create.reducer((state, action: PayloadAction<{ id: number, isPlus: boolean }>) => {
             for (let i = 0; i < state.disksCardsArr.results.length; i++) {
                 if (state.disksCardsArr.results[i].id === action.payload.id) {
@@ -164,6 +102,7 @@ export const filterBlock2Slice = createAppSlice({
                 }
             }
         }),
+        // установить цену
         setPrice: create.reducer((state, action: PayloadAction<{ number: number, isStartOrEnd: boolean }>) => {
             let number = action.payload.number
             if (action.payload.number > 20000) number = 20000
@@ -171,12 +110,16 @@ export const filterBlock2Slice = createAppSlice({
                 ? state.priceStart = number
                 : state.priceEnd = number
         }),
+        // сбросить фильтры
         resetFilters: create.reducer(state => {
             state.selects = selects
             console.log(selects)
             state.priceStart = 0
             state.priceEnd = 0
         }),
+
+        // Thunks
+        // получить данные для фильтров
         getDisksParametrs: create.asyncThunk(
             async () => {
                 const response = await filtersApi.getDisks()
@@ -195,10 +138,11 @@ export const filterBlock2Slice = createAppSlice({
                 },
             },
         ),
+        // Получение карточек товаров по установленным фильтрам
         getDisksCards: create.asyncThunk(
             async (refresh, thunkAPI) => {
                 const store = thunkAPI.getState() as RootState
-                const state = store.filterBlock2
+                const state = store.disksFilters
 
                 const fields: fieldsDiskType = {}
 
@@ -263,9 +207,11 @@ export const filterBlock2Slice = createAppSlice({
     },
 })
 
+
 // actions
 export const { selectsSelect, getDisksParametrs, sortDisksTypeSelect,
     getDisksCards, amountHandler, setPrice, resetFilters } = filterBlock2Slice.actions
+
 
 // selectors
 export const { selectSelector, disksAPISelector, filteredDisksSelector,

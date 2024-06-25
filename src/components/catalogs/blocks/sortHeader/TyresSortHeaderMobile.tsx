@@ -3,7 +3,10 @@ import SortHeaderStyles from "./SortHeaderStyles.module.scss"
 import { useState } from "react"
 import { sorts } from "../../../../consts"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { sortTyresTypeSelect, sortTyresTypeSelector } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
+import {
+    sortTyresTypeSelect,
+    sortTyresTypeSelector
+} from "../../../../app/slices/filters/tiresFiltersSlice"
 
 
 export const TyresSortHeaderMobile: React.FC = () => {

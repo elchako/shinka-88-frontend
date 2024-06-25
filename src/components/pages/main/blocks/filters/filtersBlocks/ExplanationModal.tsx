@@ -2,24 +2,20 @@ import type React from "react"
 import FilterBlocksStyles from "./FilterBlocks.module.scss"
 import closeModal from '../../../../../../imgs/closeHiddenMenu.png';
 import tires from '../../../../../../imgs/modalTires.png';
-import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks";
-import { explanationToggle, explanationToggleSelector } from "./filterBlock1Slice";
 
 export const ExplanationModal: React.FC = () => {
-    const isModalOpen = useAppSelector(explanationToggleSelector)
-    const dispatch = useAppDispatch()
 
     let openModalStyles = null
-    isModalOpen
-        ? openModalStyles = FilterBlocksStyles.explanationModalWrapper
-        : openModalStyles = FilterBlocksStyles.explanationModalWrapper +
-        ' ' + FilterBlocksStyles.explanationModalHidden
+    // isModalOpen
+    //     ? openModalStyles = FilterBlocksStyles.explanationModalWrapper
+    //     : openModalStyles = FilterBlocksStyles.explanationModalWrapper +
+    //     ' ' + FilterBlocksStyles.explanationModalHidden
     return (
-        <div className={openModalStyles}>
+        <div className={'openModalStyles'}>
             <div className={FilterBlocksStyles.explanationModal}>
                 <div className={FilterBlocksStyles.explanationModalTop}>
                     <p className={FilterBlocksStyles.explanationModalTitle}>АБСОЛЮТНО БЕСПЛАТНЫЙ ШИНОМОНТАЖ</p>
-                    <img src={closeModal} alt="close modal" onClick={() => dispatch(explanationToggle(false))} />
+                    <img src={closeModal} alt="close modal" onClick={() => console.log('')} />
                 </div>
                 <div className={FilterBlocksStyles.explanationModalContent}>
                     <div className={FilterBlocksStyles.explanationModalText}>

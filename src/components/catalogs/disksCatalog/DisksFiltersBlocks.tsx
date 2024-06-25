@@ -1,9 +1,15 @@
 import type React from "react"
 import { SizeFilter } from "./SizeFilter"
 import { useEffect } from "react"
-import { getDisksCards, priceEndSelector, priceStartSelector, selectSelector, sortDisksTypeSelect } from "../../pages/main/blocks/filters/filtersBlocks/filterBlock2Slice"
 import { type IFilterBlockProps, useAppDispatch, useAppSelector } from "../../../app/hooks"
 import { sorts } from "../../../consts"
+import {
+    getDisksCards,
+    priceEndSelector,
+    priceStartSelector,
+    selectSelector,
+    sortDisksTypeSelect
+} from "../../../app/slices/filters/disksFiltersSlice"
 
 
 export const DisksFilterBlocks: React.FC<IFilterBlockProps> = ({ parentRef }) => {

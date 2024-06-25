@@ -3,7 +3,10 @@ import SortHeaderStyles from "./SortHeaderStyles.module.scss"
 import { useState } from "react"
 import { sorts } from "../../../../consts"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { sortDisksTypeSelector, sortDisksTypeSelect } from "../../../pages/main/blocks/filters/filtersBlocks/filterBlock2Slice"
+import {
+    sortDisksTypeSelect,
+    sortDisksTypeSelector
+} from "../../../../app/slices/filters/disksFiltersSlice"
 
 
 export const DisksSortHeaderMobile: React.FC = () => {

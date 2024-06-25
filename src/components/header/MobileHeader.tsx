@@ -5,7 +5,7 @@ import phone from '../../imgs/phone.png';
 import mobileCart from '../../imgs/cart/mobileCart.png'
 import { Logo } from "../common/Logo";
 import { useAppSelector } from "../../app/hooks";
-import { disksDataSelector, tyresDataSelector } from "../pages/cart/cartSlice";
+import { disksDataSelector, tyresDataSelector } from "../../app/slices/cartSlice";
 
 
 export const MobileHeader: React.FC = () => {

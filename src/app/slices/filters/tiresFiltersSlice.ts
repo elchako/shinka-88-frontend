@@ -1,93 +1,14 @@
-import { type PayloadAction } from "@reduxjs/toolkit"
-import { createAppSlice } from "../../../../../../app/createAppSlice"
-import { selectsNames1, checkboxesNames, typeSelectsValues, sorts } from "../../../../../../consts"
-import { filtersApi } from "../../../../../../api/catalog"
-import type { RootState } from "../../../../../../app/store"
-
-export type tiresAPI = {
-    diameter: Array<string>
-    goodland: Array<string | null>
-    height: Array<string>
-    load: Array<string>
-    marka: Array<string>
-    model: Array<string>
-    powerload: Array<string | null>
-    runflat: Array<string | null>
-    seazon: Array<string>
-    speed: Array<string | null>
-    territory_rn: Array<string>
-    thorning: Array<string>
-    thorntype: Array<string | null>
-    width: Array<string>
-}
-
-export type resultsTyresType = {
-    id: number,
-    article: string,
-    name: string,
-    name_origin: string,
-    product_type: string,
-    price_purchase: number,
-    price_sale: number,
-    image_url: string,
-    image: string,
-    date_add: string,
-    description: string | null,
-    balance: number,
-    is_active: boolean,
-    goodland: string,
-    marka: string,
-    model: string,
-    seazon: string,
-    diameter: string,
-    width: string,
-    height: string,
-    thorning: string,
-    speed: string,
-    load: string,
-    thorntype: string,
-    mnfcode: string | null,
-    runflat: string | null,
-    powerload: string | null,
-    territory_rn: string,
-    provider: number
-    amount: number
-}
-
-export type tyresCards = {
-    count: number | null,
-    next: string | null,
-    previous: string | null,
-    results: Array<resultsTyresType>
-}
-
-
-export type fieldsTyresType = {
-    width?: Array<string> | string
-    height?: Array<string> | string
-    diameter?: Array<string> | string
-    seazon?: Array<string>
-    thorning?: Array<string>
-    runflat?: Array<string | null>
-    powerload?: Array<string | null>
-    price?: Array<number>
-}
-
-export interface IinitialState {
-    tiresAPI: tiresAPI
-    typeSelect: string
-    selects: Array<{
-        selectName: { apiName: string, displayName: string },
-        value: string | Array<string>,
-    }>
-    season: Array<{ name: string, value1: string, value2: string }>
-    checkboxes: Array<{ checkboxName: string, checked: boolean, value: Array<null | string> }>
-    priceStart: number
-    priceEnd: number
-    explanationOpenToggle: boolean
-    tyresCardsArr: tyresCards
-    sortType: string
-}
+import { type PayloadAction, } from "@reduxjs/toolkit"
+import { checkboxesNames, selectsNames1, sorts } from "../../../consts"
+import { createAppSlice } from "../../createAppSlice"
+import { filtersApi } from "../../../api/catalog"
+import { type RootState } from "../../store"
+import {
+    type tyresCards,
+    type tiresAPI,
+    type fieldsTyresType,
+    type IinitialState
+} from "../../../types/tires"
 
 // изначальные значения стейта
 const selects = selectsNames1.map((selectName, index) => {
@@ -99,6 +20,7 @@ const checkboxes = checkboxesNames.map(checkboxName => ({ checkboxName, checked:
 
 
 export const initialState: IinitialState = {
+    // данные для фильтров
     tiresAPI: {
         diameter: [],
         goodland: [],
@@ -115,31 +37,26 @@ export const initialState: IinitialState = {
         thorntype: [],
         width: [],
     },
-    typeSelect: typeSelectsValues[0],
-    selects: selects,
-    season: [],
-    checkboxes: checkboxes,
-    priceStart: 0,
-    priceEnd: 0,
-    explanationOpenToggle: false,
+    // данные карточек
     tyresCardsArr: {
         count: null,
         next: null,
         previous: null,
         results: []
     },
+    // фильтры
+    selects: selects,
+    season: [],
+    checkboxes: checkboxes,
+    priceStart: 0,
+    priceEnd: 0,
     sortType: sorts[0],
 }
 
 export const filterBlock1Slice = createAppSlice({
-    name: "filterBlock1",
+    name: "tiresFilters",
     initialState,
     reducers: create => ({
-        // типы параметров (по параметрам, по автомобилю)
-        // typesSelect: create.reducer((state, action: PayloadAction<string>) => {
-        //     state.typeSelect = action.payload
-        //     state.selects = selects
-        // }),
         // селекты 
         selectsSelect: create.reducer((state,
             action: PayloadAction<{ selectName: string, value: string, isOneChoice: boolean }>) => {
@@ -196,9 +113,7 @@ export const filterBlock1Slice = createAppSlice({
             })
             state.checkboxes = newCheckboxes
         }),
-        explanationToggle: create.reducer((state, action: PayloadAction<boolean>) => {
-            state.explanationOpenToggle = action.payload
-        }),
+        // сбросить фильтры
         resetFilters: create.reducer(state => {
             state.season = []
             state.selects = selects
@@ -209,6 +124,7 @@ export const filterBlock1Slice = createAppSlice({
             state.priceStart = 0
             state.priceEnd = 0
         }),
+        // установить цену
         setPrice: create.reducer((state, action: PayloadAction<{ number: number, isStartOrEnd: boolean }>) => {
             let number = action.payload.number
             if (action.payload.number > 20000) number = 20000
@@ -216,6 +132,7 @@ export const filterBlock1Slice = createAppSlice({
                 ? state.priceStart = number
                 : state.priceEnd = number
         }),
+        // плюс/минус количество конкретного товара
         amountHandler: create.reducer((state, action: PayloadAction<{ id: number, isPlus: boolean }>) => {
             for (let i = 0; i < state.tyresCardsArr.results.length; i++) {
                 if (state.tyresCardsArr.results[i].id === action.payload.id) {
@@ -229,9 +146,13 @@ export const filterBlock1Slice = createAppSlice({
                 }
             }
         }),
+        // сортировка
         sortTyresTypeSelect: create.reducer((state, action: PayloadAction<string>) => {
             state.sortType = action.payload
         }),
+
+        // Thunks
+        // получить данные для фильтров
         getTyresParametrs: create.asyncThunk(
             async () => {
                 const response = await filtersApi.getTyres()
@@ -254,10 +175,11 @@ export const filterBlock1Slice = createAppSlice({
                 },
             },
         ),
+        // Получение карточек товаров по установленным фильтрам
         getTyresCards: create.asyncThunk(
             async (refresh, thunkAPI) => {
                 const store = thunkAPI.getState() as RootState
-                const state = store.filterBlock1
+                const state = store.tiresFilters
                 const fields: fieldsTyresType = {}
 
                 if (state.selects[0].value.length !== 0) fields.width = state.selects[0].value
@@ -327,11 +249,9 @@ export const filterBlock1Slice = createAppSlice({
     }),
     selectors: {
         tiresAPISelector: state => state.tiresAPI,
-        typesSelectSelector: state => state.typeSelect,
         selectSelector: state => state.selects,
         seasonsSelectSelector: state => state.season,
         checkboxesSelectSelector: state => state.checkboxes,
-        explanationToggleSelector: state => state.explanationOpenToggle,
         filteredTyresSelector: state => state.tyresCardsArr,
         priceStartSelector: state => state.priceStart,
         priceEndSelector: state => state.priceEnd,
@@ -339,16 +259,18 @@ export const filterBlock1Slice = createAppSlice({
     },
 })
 
+
 // actions
 export const { seasonsSelectOne, selectsSelect, checkboxesSelect,
-    seasonsSelectMany, explanationToggle, getTyresParametrs,
+    seasonsSelectMany, getTyresParametrs, sortTyresTypeSelect,
     getTyresCards, resetFilters, setPrice, amountHandler,
-    sortTyresTypeSelect } =
+} =
     filterBlock1Slice.actions
 
+
 // selectors
-export const { typesSelectSelector, selectSelector, seasonsSelectSelector,
+export const { selectSelector, seasonsSelectSelector, priceEndSelector,
     checkboxesSelectSelector, tiresAPISelector, sortTyresTypeSelector,
-    explanationToggleSelector, filteredTyresSelector, priceStartSelector,
-    priceEndSelector } =
+    filteredTyresSelector, priceStartSelector,
+} =
     filterBlock1Slice.selectors

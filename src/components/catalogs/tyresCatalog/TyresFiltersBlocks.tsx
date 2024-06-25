@@ -3,12 +3,9 @@ import { SizeFilter } from "./SizeFilter"
 import { SeasonFilter } from "./SeasonFilter"
 import { AdditionalFilter } from "./AdditionalFilter"
 import { type IFilterBlockProps, useAppDispatch, useAppSelector } from "../../../app/hooks"
-import {
-    checkboxesSelectSelector, priceStartSelector, seasonsSelectSelector,
-    getTyresCards, priceEndSelector, selectSelector, sortTyresTypeSelect
-} from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import { useEffect } from "react"
 import { sorts } from "../../../consts"
+import { checkboxesSelectSelector, getTyresCards, priceEndSelector, priceStartSelector, seasonsSelectSelector, selectSelector, sortTyresTypeSelect } from "../../../app/slices/filters/tiresFiltersSlice"
 
 export const TyresFilterBlocks: React.FC<IFilterBlockProps> = ({ parentRef }) => {
     const dispatch = useAppDispatch()

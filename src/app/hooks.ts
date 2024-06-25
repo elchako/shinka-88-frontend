@@ -19,7 +19,7 @@ import {
     priceEndSelector as priceEnd1,
     setPrice as setPrice1,
     resetFilters as resetFilters1,
-} from '../components/pages/main/blocks/filters/filtersBlocks/filterBlock1Slice'
+} from './slices/filters/tiresFiltersSlice'
 import summer from '../imgs/tiresCard/summer.png'
 import winter from '../imgs/tiresCard/winter.png'
 import allSeasons from '../imgs/tiresCard/all-seasons.png'
@@ -32,7 +32,7 @@ import {
     setPrice as setPrice2,
     resetFilters as resetFilters2,
     sortDisksTypeSelect, sortDisksTypeSelector
-} from '../components/pages/main/blocks/filters/filtersBlocks/filterBlock2Slice'
+} from './slices/filters/disksFiltersSlice'
 
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`

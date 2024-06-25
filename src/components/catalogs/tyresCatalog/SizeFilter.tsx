@@ -1,9 +1,8 @@
 import type React from "react"
-import type { tiresAPI } from '../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice'
 import FiltersStyles from '../blocks/filters/FiltersStyles.module.scss'
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
-import { getTyresParametrs, selectSelector, selectsSelect, tiresAPISelector } from "../../pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
 import { useEffect } from "react"
+import { getTyresParametrs, selectSelector, selectsSelect, type tiresAPI, tiresAPISelector } from "../../../app/slices/filters/tiresFiltersSlice"
 
 
 export const SizeFilter: React.FC = () => {

@@ -1,19 +1,19 @@
 import type React from "react"
 import FilterBlocksStyles from "./FilterBlocks.module.scss"
-import { links, selectsNames2, tabsButtons } from '../../../../../../consts'
-import explanation from '../../../../../../imgs/explanation.png'
+import { links, tabsButtons } from '../../../../../../consts'
 import { MainFiltersButton } from "../MainFiltersButton"
-import { ExplanationModal } from "./ExplanationModal"
-import type { ITabsProps } from "../MainFilters"
-import Checkbox from "react-custom-checkbox";
-import checkedIcon from '../../../../../../imgs/checked.png'
 import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks"
-import { disksAPISelector, getDisksParametrs, selectSelector, selectsSelect } from "./filterBlock2Slice"
 import { useEffect } from "react"
-import type { disksAPI } from "./filterBlock2Slice"
 import { useNavigate } from "react-router-dom"
+import {
+    type disksAPI,
+    disksAPISelector,
+    getDisksParametrs,
+    selectSelector,
+    selectsSelect
+} from "../../../../../../app/slices/filters/disksFiltersSlice"
 
-export const FilterBlock2: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen }) => {
+export const FilterBlock2: React.FC = () => {
     const selects = useAppSelector(selectSelector)
     const disksAPI = useAppSelector(disksAPISelector)
 
@@ -37,6 +37,7 @@ export const FilterBlock2: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
                             onChange={e => dispatch(selectsSelect({
                                 selectName: item.selectName.apiName,
                                 value: e.currentTarget.value,
+                                isOneChoice: true
                             }))}>
                             <option value='' disabled>-</option>
                             {values.map((item, index) => {
@@ -48,16 +49,6 @@ export const FilterBlock2: React.FC<ITabsProps> = ({ isModalOpen, setIsModalOpen
             </div>
             <div className={FilterBlocksStyles.bottomBlock}>
                 <div className={FilterBlocksStyles.checkboxes}>
-                    {/* <div className={FilterBlocksStyles.checkboxesMinHeight}>
-                        <Checkbox
-                            icon={<img src={checkedIcon} alt="checked" className="checkboxesImg" />}
-                            label="Бесплатный шиномонтаж"
-                            className='checkboxesInput'
-                            labelClassName='checkboxesLabel'
-                        />
-                        <img src={explanation} alt="explanation" onClick={() => setIsModalOpen(true)} />
-                        <ExplanationModal />
-                    </div> */}
                 </div>
                 <MainFiltersButton handler={() => navigate(links[4].link)} title={tabsButtons[1]} />
             </div>

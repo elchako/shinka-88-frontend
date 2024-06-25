@@ -1,16 +1,15 @@
 import type { Action, ThunkAction } from "@reduxjs/toolkit"
 import { combineSlices, configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
-import { filterBlock1Slice } from "../components/pages/main/blocks/filters/filtersBlocks/filterBlock1Slice"
-import { smallActions } from "../components/common/slices/smallActions"
-import { filterBlock2Slice } from "../components/pages/main/blocks/filters/filtersBlocks/filterBlock2Slice"
-import { cartSlice } from "../components/pages/cart/cartSlice"
+import { filterBlock1Slice } from "./slices/filters/tiresFiltersSlice"
+import { filterBlock2Slice } from "./slices/filters/disksFiltersSlice"
+import { smallActions } from "./slices/common/smallActions"
+import { cartSlice } from "./slices/cartSlice"
 
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
 const rootReducer = combineSlices(filterBlock1Slice, filterBlock2Slice, smallActions,
-  cartSlice
-)
+  cartSlice)
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>
 

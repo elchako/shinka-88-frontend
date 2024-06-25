@@ -6,21 +6,21 @@ import { Header } from "./components/header/Header"
 import { MobileMenu } from "./components/Menu/MobileMenu/MobileMenu"
 import { HiddenMobileMenu } from "./components/Menu/MobileMenu/HiddenMobileMenu"
 import { useAppDispatch, useAppSelector } from "./app/hooks"
-import { mobileFiltersSelector } from "./components/common/slices/smallActions"
 import { Cart } from "./components/pages/cart/Cart"
 import { PlacingOrder } from "./components/pages/placingOrder/PlacingOrder"
 import { AutoParts } from "./components/pages/autoParts/AutoParts"
 import { Payment } from "./components/pages/payment/Payment"
 import { AboutUs } from "./components/pages/aboutUs/AboutUs"
 import { Guarantees } from "./components/pages/guarantees/Guarantees"
-import { ExplanationModal } from "./components/pages/main/blocks/filters/filtersBlocks/ExplanationModal"
 import { Catalogs } from "./components/catalogs/Catalogs"
 import { MobileFiltersModal } from "./components/catalogs/blocks/filters/MobileFiltersModal"
 import { useEffect } from "react"
-import { pullLocalStorageData } from "./components/pages/cart/cartSlice"
+import { mobileFiltersSelector } from "./app/slices/common/smallActions"
+import { pullLocalStorageData } from "./app/slices/cartSlice"
 
 export const App = () => {
-  const mobileFiltersState = useAppSelector(mobileFiltersSelector) // закрытие/открытие мобильных параметров в каталоге меню
+  // закрытие/открытие мобильных параметров в каталоге меню
+  const mobileFiltersState = useAppSelector(mobileFiltersSelector)
   const dispatch = useAppDispatch()
   let modalStyle = {
     overflow: 'auto',
@@ -34,6 +34,7 @@ export const App = () => {
     modalStyle.height = '100vh'
   }
 
+  // восстановление корзины из localtorage
   useEffect(() => {
     dispatch(pullLocalStorageData())
   }, [dispatch])
@@ -48,7 +49,6 @@ export const App = () => {
         <Header />
         <HiddenMobileMenu />
         <MobileFiltersModal />
-        <ExplanationModal />
         <Routes>
           <Route path={links[0].link} element={<MainPage />} />
           <Route path={links[3].link} element={<Catalogs />} />

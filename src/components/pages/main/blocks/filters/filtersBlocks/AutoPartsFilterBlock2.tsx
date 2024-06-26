@@ -3,7 +3,7 @@ import FilterBlocksStyles from "./FilterBlocks.module.scss"
 import { tabsButtons } from '../../../../../../consts'
 import { MainFiltersButton } from "../MainFiltersButton"
 
-export const FilterBlock5: React.FC = () => {
+export const AutoPartsFilterBlock2: React.FC = () => {
 
     return (
         <div className={FilterBlocksStyles.mainWrapper}>
@@ -14,7 +14,7 @@ export const FilterBlock5: React.FC = () => {
                 </div>
             </div>
             <div className={FilterBlocksStyles.bottomBlock + ' ' + FilterBlocksStyles.bottomBlockJustButton}>
-                <MainFiltersButton title={tabsButtons[4]} />
+                <MainFiltersButton handler={() => console.log('')} title={tabsButtons[4]} />
             </div>
         </div>
     )

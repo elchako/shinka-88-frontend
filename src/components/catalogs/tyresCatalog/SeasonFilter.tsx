@@ -7,9 +7,10 @@ import checkedIcon from '../../../imgs/checked.png'
 import { seasonsSelectMany, seasonsSelectSelector } from "../../../app/slices/filters/tiresFiltersSlice";
 
 
+// сезоны фильтр
 export const SeasonFilter: React.FC = () => {
-    const season = useAppSelector(seasonsSelectSelector)
     const dispatch = useAppDispatch()
+    const season = useAppSelector(seasonsSelectSelector)
 
     return (
         <div className={FiltersStyles.season}>

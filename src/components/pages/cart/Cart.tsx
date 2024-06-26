@@ -8,33 +8,44 @@ import { OrderInfo } from "../blocks/orderInfo/OrderInfo";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { tabs } from "../../../consts";
 import { CartDisksCards } from "./blocks/cards/CartDisksCards";
-import { type resultsTyresType } from "../../../app/slices/filters/tiresFiltersSlice";
-import { type resultsDisksType } from "../../../app/slices/filters/disksFiltersSlice";
 import {
     disksDataSelector,
     resetCart,
     selectAllHandler,
     selectAllSelector,
-    type selectedType,
     tyresDataSelector
 } from "../../../app/slices/cartSlice";
+import { type resultsTyresType } from "../../../types/tires";
+import { type resultsDisksType } from "../../../types/disks";
+import { type selectedType } from "../../../types/cart";
+
+
+type commonArray = Array<(selectedType & resultsTyresType) | (selectedType & resultsDisksType)>
+type tiresData = selectedType & resultsTyresType
+type disksData = selectedType & resultsDisksType
 
 export const Cart: React.FC = () => {
     const dispatch = useAppDispatch()
+    const selectAll = useAppSelector(selectAllSelector)
     const tyres = useAppSelector(tyresDataSelector)
     const disks = useAppSelector(disksDataSelector)
-    const cardData: Array<(selectedType & resultsTyresType) | (selectedType & resultsDisksType)>
-        = [...tyres, ...disks].sort((a, b) => a.queue - b.queue)
-    const selectAll = useAppSelector(selectAllSelector)
+
+    // формирование массива всех товаров в корзине
+    const cardData: commonArray = [...tyres, ...disks].sort((a, b) => a.queue - b.queue)
+
+    // регулировка ширины в зависимости от наполненности корзины
     let wrapperStyle = cardData.length === 0
         ? CartStyles.contentWrapper + ' ' + CartStyles.contentWrapperAnotherWidth
         : CartStyles.contentWrapper
+
     return (
         <div className={CartStyles.mainWrapper}>
             <div className={wrapperStyle}>
                 <p className="pageTitle">Корзина</p>
                 <div className={CartStyles.content}>
                     <div className={CartStyles.leftBlock}>
+
+                        {/* управление всеми элементами корзины */}
                         <div className={CartStyles.actionForAll}>
                             {<Checkbox
                                 icon={<div className={CartStyles.icon}></div>}
@@ -45,19 +56,33 @@ export const Cart: React.FC = () => {
                                 borderColor={'#000'}
                                 checked={selectAll}
                                 onChange={() => dispatch(selectAllHandler())}
-                            // onChange={() => dispatch(checkboxesSelect(checkboxesNames[0]))}
                             />}
-                            <p onClick={() => dispatch(resetCart())} className={CartStyles.clearCart}>Очистить корзину</p>
+                            <p
+                                onClick={() => dispatch(resetCart())}
+                                className={CartStyles.clearCart}>Очистить корзину</p>
                         </div>
+
+                        {/* карточки товаров */}
                         <div className={CartStyles.cards}>
                             {cardData.map((item, index) => {
+                                // шины
                                 if (item.product_type === tabs[0]) {
-                                    return <CartTyresCards data={item as selectedType & resultsTyresType} key={`${item} - ${index}`} />
+                                    return <CartTyresCards
+                                        data={item as tiresData}
+                                        key={`${item} - ${index}`} />
                                 }
-                                return <CartDisksCards data={item as selectedType & resultsDisksType} key={`${item} - ${index}`} />
+                                // диски
+                                if (item.product_type === tabs[1]) {
+                                    return <CartDisksCards
+                                        data={item as disksData}
+                                        key={`${item} - ${index}`} />
+                                }
+                                return null
                             })}
                         </div>
                     </div>
+
+                    {/* кнопка оформления заказа */}
                     <OrderInfo nameButton='ОФОРМИТЬ ЗАКАЗ' name='В корзине' />
                 </div>
             </div>

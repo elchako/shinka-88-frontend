@@ -1,14 +1,20 @@
 import type React from "react"
 import FiltersStyles from '../blocks/filters/FiltersStyles.module.scss'
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
-import { selectSelector, selectsSelect, type tiresAPI, tiresAPISelector } from "../../../app/slices/filters/tiresFiltersSlice"
+import {
+    selectSelector,
+    selectsSelect,
+    tiresAPISelector
+} from "../../../app/slices/filters/tiresFiltersSlice"
+import { type tiresAPI } from "../../../types/tires"
 
 
+// селекты фильтр мобильные
 export const SizeFilterMobile: React.FC = () => {
+    const dispatch = useAppDispatch()
+
     const selects = useAppSelector(selectSelector)
     const tiresAPI = useAppSelector(tiresAPISelector)
-
-    const dispatch = useAppDispatch()
     return (
         <>
             {selects.map((item, index) => {

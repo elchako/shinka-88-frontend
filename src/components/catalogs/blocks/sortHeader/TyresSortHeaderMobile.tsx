@@ -21,9 +21,11 @@ export const TyresSortHeaderMobile: React.FC = () => {
         dispatch(sortTyresTypeSelect(type))
         setIsOpen(!isOpen)
     }
+
     const styles = isOpen
         ? SortHeaderStyles.mainWrapperMobile + ' ' + SortHeaderStyles.sortsOpen
         : SortHeaderStyles.mainWrapperMobile
+
     return (
         <div className={styles}>
             <div className={SortHeaderStyles.sortImg}>&#8646;</div>

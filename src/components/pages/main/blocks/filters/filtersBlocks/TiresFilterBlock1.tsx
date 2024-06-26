@@ -19,13 +19,13 @@ import {
     seasonsSelectSelector,
     selectSelector,
     selectsSelect,
-    type tiresAPI,
     tiresAPISelector
 } from "../../../../../../app/slices/filters/tiresFiltersSlice"
+import { type tiresAPI } from "../../../../../../types/tires"
 
-export const FilterBlock1: React.FC = () => {
+export const TiresFilterBlock1: React.FC = () => {
+    const dispatch = useAppDispatch()
 
-    //выбор типа параметров
     const tiresAPI = useAppSelector(tiresAPISelector)
     const checkboxesSelects = useAppSelector(checkboxesSelectSelector)
     const selects = useAppSelector(selectSelector)
@@ -33,11 +33,9 @@ export const FilterBlock1: React.FC = () => {
 
     const navigate = useNavigate()
 
-    const dispatch = useAppDispatch()
-
-    //дефолтные значения для селектов
-
     useEffect(() => {
+        // подгрузка данных для фильтров 
+        // и сброс фильтров при переходе на страницу
         dispatch(getTyresParametrs(''))
         dispatch(resetFilters())
     }, [dispatch])
@@ -45,6 +43,7 @@ export const FilterBlock1: React.FC = () => {
     return (
         <div className={FilterBlocksStyles.mainWrapper}>
             <div className={FilterBlocksStyles.selects}>
+                {/* селекты */}
                 {selects.map((item, index) => {
                     let values = [...tiresAPI[item.selectName.apiName as keyof tiresAPI]]
                     values.sort()

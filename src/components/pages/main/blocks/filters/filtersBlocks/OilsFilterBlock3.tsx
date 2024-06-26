@@ -2,7 +2,9 @@ import type React from "react"
 import FilterBlocksStyles from "./FilterBlocks.module.scss"
 import { selectsNames3, tabsButtons } from '../../../../../../consts'
 import { MainFiltersButton } from "../MainFiltersButton"
-export const FilterBlock3: React.FC = () => {
+
+
+export const OilsFilterBlock3: React.FC = () => {
     // эти данные будут поступать с апи
     const select1 = [150, 155, 160, 165]
     const select2 = [45, 50, 55, 60]

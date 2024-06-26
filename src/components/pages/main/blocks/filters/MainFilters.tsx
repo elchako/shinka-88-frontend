@@ -2,13 +2,13 @@ import type React from "react"
 import * as R from "react"
 import MainFiltersStyles from "./MainFilters.module.scss"
 import { useState } from "react"
-import { FilterBlock1 } from "./filtersBlocks/FilterBlock1"
 import { tabs } from '../../../../../consts'
 import arrow from '../../../../../imgs/filtersMobileMenu.png'
-import { FilterBlock2 } from "./filtersBlocks/FilterBlock2"
-import { FilterBlock3 } from "./filtersBlocks/FilterBlock3"
-import { FilterBlock4 } from "./filtersBlocks/FilterBlock4"
-import { FilterBlock5 } from "./filtersBlocks/FilterBlock5"
+import { AutoPartsFilterBlock2 } from "./filtersBlocks/AutoPartsFilterBlock2"
+import { TiresFilterBlock1 } from "./filtersBlocks/tiresFilterBlock1"
+import { DisksFilterBlock2 } from "./filtersBlocks/disksFilterBlock2"
+import { OilsFilterBlock3 } from "./filtersBlocks/oilsFilterBlock3"
+import { AKBFilterBlock4 } from "./filtersBlocks/akbFilterBlock4"
 
 export interface ITabsProps {
     isModalOpen: boolean
@@ -29,9 +29,9 @@ export const MainFilters: React.FC = () => {
     }
 
     // контент табов
-    const tabsContent = [<FilterBlock1 />,
-    <FilterBlock2 />, <FilterBlock3 />,
-    <FilterBlock4 />, <FilterBlock5 />]
+    const tabsContent = [<TiresFilterBlock1 />,
+    <DisksFilterBlock2 />, <OilsFilterBlock3 />,
+    <AKBFilterBlock4 />, <AutoPartsFilterBlock2 />]
     return (
         <div className={MainFiltersStyles.mainWrapper}>
             <div className={MainFiltersStyles.header}>

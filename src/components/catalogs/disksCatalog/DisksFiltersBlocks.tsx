@@ -18,6 +18,7 @@ export const DisksFilterBlocks: React.FC<IFilterBlockProps> = ({ parentRef }) =>
     const statePriceStart = useAppSelector(priceStartSelector)
     const statePriceEnd = useAppSelector(priceEndSelector)
 
+    // запрос на сервер при изменении фильтров
     useEffect(() => {
         dispatch(getDisksCards(true)).then(res => {
             dispatch(sortDisksTypeSelect(sorts[0]))

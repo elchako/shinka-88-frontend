@@ -2,14 +2,23 @@ import type React from "react"
 import FiltersStyles from '../blocks/filters/FiltersStyles.module.scss'
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import { useEffect } from "react"
-import { type disksAPI, disksAPISelector, getDisksParametrs, selectSelector, selectsSelect } from "../../../app/slices/filters/disksFiltersSlice"
+import {
+    disksAPISelector,
+    getDisksParametrs,
+    selectSelector,
+    selectsSelect
+} from "../../../app/slices/filters/disksFiltersSlice"
+import { type disksAPI } from "../../../types/disks"
 
+
+// селекты фильтр
 export const SizeFilter: React.FC = () => {
+    const dispatch = useAppDispatch()
+
     const selects = useAppSelector(selectSelector)
     const disksAPI = useAppSelector(disksAPISelector)
 
-    const dispatch = useAppDispatch()
-
+    // получаем данные для фильтров из API если данные в стейте пустые
     useEffect(() => {
         let dataIsEmpty = true
         for (const key in disksAPI) {
@@ -18,9 +27,9 @@ export const SizeFilter: React.FC = () => {
                 break
             }
         }
-
         if (!dataIsEmpty) dispatch(getDisksParametrs(''))
     }, [dispatch, disksAPI])
+
     return (
         <div className={FiltersStyles.size}>
             <p className={FiltersStyles.filterTitle}>Размер</p>

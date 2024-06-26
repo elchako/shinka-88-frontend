@@ -5,10 +5,11 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import checkedIcon from '../../../imgs/checked.png'
 import { checkboxesSelect, checkboxesSelectSelector } from "../../../app/slices/filters/tiresFiltersSlice";
 
+// дополнительные фильтры
 export const AdditionalFilter: React.FC = () => {
+    const dispatch = useAppDispatch()
     const checkboxes = useAppSelector(checkboxesSelectSelector)
 
-    const dispatch = useAppDispatch()
     return (
         <div className={FiltersStyles.additionally}>
             <p className={FiltersStyles.filterTitle}>Дополнительно</p>

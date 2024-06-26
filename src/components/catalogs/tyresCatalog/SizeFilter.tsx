@@ -2,15 +2,23 @@ import type React from "react"
 import FiltersStyles from '../blocks/filters/FiltersStyles.module.scss'
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import { useEffect } from "react"
-import { getTyresParametrs, selectSelector, selectsSelect, type tiresAPI, tiresAPISelector } from "../../../app/slices/filters/tiresFiltersSlice"
+import {
+    getTyresParametrs,
+    selectSelector,
+    selectsSelect,
+    tiresAPISelector
+} from "../../../app/slices/filters/tiresFiltersSlice"
+import { type tiresAPI } from "../../../types/tires"
 
 
+// селекты фильтр
 export const SizeFilter: React.FC = () => {
+    const dispatch = useAppDispatch()
+
     const selects = useAppSelector(selectSelector)
     const tiresAPI = useAppSelector(tiresAPISelector)
 
-    const dispatch = useAppDispatch()
-
+    // получаем данные для фильтров из API если данные в стейте пустые
     useEffect(() => {
         let dataIsEmpty = true
         for (const key in tiresAPI) {
@@ -19,9 +27,9 @@ export const SizeFilter: React.FC = () => {
                 break
             }
         }
-
         if (!dataIsEmpty) dispatch(getTyresParametrs(''))
     }, [dispatch, tiresAPI])
+
     return (
         <div className={FiltersStyles.size}>
             <p className={FiltersStyles.filterTitle}>Размер</p>

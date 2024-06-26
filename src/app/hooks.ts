@@ -14,7 +14,6 @@ import { DisksFilterBlocks } from '../components/catalogs/disksCatalog/DisksFilt
 import { DisksFilterBlocksMobileModal } from '../components/catalogs/disksCatalog/DisksFiltersBlocksMobileModal'
 import {
     filteredTyresSelector, getTyresCards, sortTyresTypeSelect, sortTyresTypeSelector,
-    type tyresCards, type resultsTyresType,
     priceStartSelector as priceStart1,
     priceEndSelector as priceEnd1,
     setPrice as setPrice1,
@@ -26,13 +25,15 @@ import allSeasons from '../imgs/tiresCard/all-seasons.png'
 import runflat from '../imgs/tiresCard/runflat.png'
 import strong from '../imgs/tiresCard/strong.png'
 import {
-    type disksCards, filteredDisksSelector, getDisksCards,
+    filteredDisksSelector, getDisksCards,
     priceStartSelector as priceStart2,
     priceEndSelector as priceEnd2,
     setPrice as setPrice2,
     resetFilters as resetFilters2,
     sortDisksTypeSelect, sortDisksTypeSelector
 } from './slices/filters/disksFiltersSlice'
+import { type resultsTyresType, type tyresCards } from '../types/tires'
+import { type disksCards } from '../types/disks'
 
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`

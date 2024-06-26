@@ -6,28 +6,32 @@ import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import {
-    type disksAPI,
     disksAPISelector,
     getDisksParametrs,
+    resetFilters,
     selectSelector,
     selectsSelect
 } from "../../../../../../app/slices/filters/disksFiltersSlice"
+import { type disksAPI } from "../../../../../../types/disks"
 
-export const FilterBlock2: React.FC = () => {
+export const DisksFilterBlock2: React.FC = () => {
+    const dispatch = useAppDispatch()
     const selects = useAppSelector(selectSelector)
     const disksAPI = useAppSelector(disksAPISelector)
 
     const navigate = useNavigate()
-    const dispatch = useAppDispatch()
-
 
     useEffect(() => {
+        // подгрузка данных для фильтров 
+        // и сброс фильтров при переходе на страницу
         dispatch(getDisksParametrs(''))
+        dispatch(resetFilters())
     }, [dispatch])
 
     return (
         <div className={FilterBlocksStyles.mainWrapper}>
             <div className={FilterBlocksStyles.selects}>
+                {/* селекты */}
                 {selects.map((item, index) => {
                     let values = [...disksAPI[item.selectName.apiName as keyof disksAPI]]
                     values.sort()
@@ -50,6 +54,8 @@ export const FilterBlock2: React.FC = () => {
             <div className={FilterBlocksStyles.bottomBlock}>
                 <div className={FilterBlocksStyles.checkboxes}>
                 </div>
+
+                {/* кнопка применения фильтра */}
                 <MainFiltersButton handler={() => navigate(links[4].link)} title={tabsButtons[1]} />
             </div>
         </div>

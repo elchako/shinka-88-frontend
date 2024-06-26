@@ -9,9 +9,10 @@ interface IProps {
     sortData: { sortType: unknown; sortTypeAction: any; newDataReq: any; }
 }
 
+
 export const SortHeader: React.FC<IProps> = ({ sortData }) => {
-    const sortType = sortData.sortType
     const dispatch = useAppDispatch()
+    const sortType = sortData.sortType
 
     useEffect(() => {
         dispatch(sortData.newDataReq(true))

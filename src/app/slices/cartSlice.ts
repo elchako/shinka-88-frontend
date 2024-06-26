@@ -1,22 +1,12 @@
 import { type PayloadAction } from "@reduxjs/toolkit"
-import { type resultsTyresType } from "./filters/tiresFiltersSlice"
-import { type resultsDisksType } from "./filters/disksFiltersSlice"
 import { createAppSlice } from "../createAppSlice"
+import {
+    type commonArrDataType,
+    type IinitialState
+} from "../../types/cart"
+import { type resultsTyresType } from "../../types/tires"
+import { type resultsDisksType } from "../../types/disks"
 
-export type selectedType = {
-    canceled: boolean
-    queue: number
-}
-
-interface IinitialState {
-    priceAmount: number
-    queueCounter: number
-    selectAll: boolean
-    tyres: Array<selectedType & resultsTyresType>
-    disks: Array<selectedType & resultsDisksType>
-}
-
-type commonArrDataType = ((selectedType & resultsTyresType) | (selectedType & resultsDisksType))[]
 
 const initialState: IinitialState = {
     priceAmount: 0,
@@ -27,6 +17,7 @@ const initialState: IinitialState = {
 }
 
 
+// пересчёт общей цены за все товары
 const recalcPriceAmount = (arr: commonArrDataType): number => {
     return arr.reduce((sum, item) => {
         if (!item.canceled) {
@@ -37,10 +28,15 @@ const recalcPriceAmount = (arr: commonArrDataType): number => {
     }, 0)
 }
 
+
+// сортировка товаров в корзине
+// в том же порядке, в котором они были добавлены
 const sortAllProducts = (state: IinitialState): commonArrDataType => {
     return [...state.tyres, ...state.disks].sort((a, b) => a.queue - b.queue)
 }
 
+
+// поиск и отмена товара в корзине
 const cancelProduct = (arr: commonArrDataType, id: number): { index: number; value: boolean; } => {
     let result = { index: 0, value: false }
     for (let i = 0; i < arr.length; i++) {
@@ -52,10 +48,12 @@ const cancelProduct = (arr: commonArrDataType, id: number): { index: number; val
     return result
 }
 
+
 export const cartSlice = createAppSlice({
     name: "cart",
     initialState,
     reducers: create => ({
+        // добавление шин в корзину
         addTyresToCart: create.reducer((state,
             action: PayloadAction<resultsTyresType>) => {
             let founded = false
@@ -71,6 +69,7 @@ export const cartSlice = createAppSlice({
             state.priceAmount = recalcPriceAmount([...state.tyres, ...state.disks])
             localStorage.setItem('cartData', JSON.stringify(state))
         }),
+        // добавление дисков в корзину
         addDisksToCart: create.reducer((state,
             action: PayloadAction<resultsDisksType>) => {
             let founded = false
@@ -86,6 +85,7 @@ export const cartSlice = createAppSlice({
             state.priceAmount = recalcPriceAmount([...state.tyres, ...state.disks])
             localStorage.setItem('cartData', JSON.stringify(state))
         }),
+        // выбрать/отменить все товары в корзине
         selectAllHandler: create.reducer(state => {
             state.selectAll = !state.selectAll
             state.tyres.forEach(item => item.canceled = !state.selectAll)
@@ -93,6 +93,7 @@ export const cartSlice = createAppSlice({
             state.priceAmount = recalcPriceAmount(sortAllProducts(state))
             localStorage.setItem('cartData', JSON.stringify(state))
         }),
+        // выбрать/отменить товар в корзине
         selectProductHandler: create.reducer((state,
             action: PayloadAction<{ productType: string, id: number }>) => {
             if (action.payload.productType === 'Шины') {
@@ -107,6 +108,7 @@ export const cartSlice = createAppSlice({
             state.priceAmount = recalcPriceAmount(sortAllProducts(state))
             localStorage.setItem('cartData', JSON.stringify(state))
         }),
+        // удаление всех товаров из корзины
         resetCart: create.reducer(state => {
             state.tyres = state.tyres.filter(item => item.canceled)
             state.disks = state.disks.filter(item => item.canceled)
@@ -118,6 +120,7 @@ export const cartSlice = createAppSlice({
             }
             localStorage.removeItem('cartData')
         }),
+        // удаление одного товара из корзины
         delOneTypeProduct: create.reducer((state,
             action: PayloadAction<{ productType: string, id: number }>) => {
             if (action.payload.productType === 'Шины') {
@@ -137,6 +140,7 @@ export const cartSlice = createAppSlice({
             localStorage.setItem('cartData', JSON.stringify(state))
 
         }),
+        // плюс/минус количества товара в конкретной карточке
         changeAmount: create.reducer((state,
             action: PayloadAction<{ type: string, id: number, isPlus: boolean }>) => {
             let arrData: commonArrDataType = []
@@ -156,6 +160,7 @@ export const cartSlice = createAppSlice({
             state.priceAmount = recalcPriceAmount(sortAllProducts(state))
             localStorage.setItem('cartData', JSON.stringify(state))
         }),
+        // загрузка данных из localStorage
         pullLocalStorageData: create.reducer(state => {
             const localData = localStorage.getItem('cartData')
             if (localData) {

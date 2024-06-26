@@ -7,6 +7,7 @@ import { useEffect } from "react"
 import { sorts } from "../../../consts"
 import { checkboxesSelectSelector, getTyresCards, priceEndSelector, priceStartSelector, seasonsSelectSelector, selectSelector, sortTyresTypeSelect } from "../../../app/slices/filters/tiresFiltersSlice"
 
+
 export const TyresFilterBlocks: React.FC<IFilterBlockProps> = ({ parentRef }) => {
     const dispatch = useAppDispatch()
     const stateSelects = useAppSelector(selectSelector)
@@ -14,6 +15,8 @@ export const TyresFilterBlocks: React.FC<IFilterBlockProps> = ({ parentRef }) =>
     const stateCheckboxes = useAppSelector(checkboxesSelectSelector)
     const statePriceStart = useAppSelector(priceStartSelector)
     const statePriceEnd = useAppSelector(priceEndSelector)
+
+    // запрос на сервер при изменении фильтров
     useEffect(() => {
         dispatch(getTyresCards(true)).then(res => {
             dispatch(sortTyresTypeSelect(sorts[0]))

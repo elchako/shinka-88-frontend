@@ -5,10 +5,11 @@ import { filterButtons } from "../../../consts"
 import { seasonsSelectOne, seasonsSelectSelector } from "../../../app/slices/filters/tiresFiltersSlice"
 
 
+// сезоны фильтр мобильный
 export const SeasonFilterMobile: React.FC = () => {
+    const dispatch = useAppDispatch()
     const season = useAppSelector(seasonsSelectSelector)
 
-    const dispatch = useAppDispatch()
     return (
         <div className={FiltersStyles.modalMobileFilterButtons}>
             {filterButtons.map((item, index) =>

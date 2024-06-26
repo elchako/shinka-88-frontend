@@ -24,6 +24,7 @@ export const DisksSortHeaderMobile: React.FC = () => {
     const styles = isOpen
         ? SortHeaderStyles.mainWrapperMobile + ' ' + SortHeaderStyles.sortsOpen
         : SortHeaderStyles.mainWrapperMobile
+
     return (
         <div className={styles}>
             <div className={SortHeaderStyles.sortImg}>&#8646;</div>

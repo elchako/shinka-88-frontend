@@ -2,17 +2,19 @@ import type React from "react"
 import FiltersStyles from '../blocks/filters/FiltersStyles.module.scss'
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import {
-    type disksAPI,
     disksAPISelector,
     selectSelector,
     selectsSelect
 } from "../../../app/slices/filters/disksFiltersSlice"
+import { type disksAPI } from "../../../types/disks"
+
 
 export const SizeFilterMobile: React.FC = () => {
+    const dispatch = useAppDispatch()
+
     const selects = useAppSelector(selectSelector)
     const disksAPI = useAppSelector(disksAPISelector)
 
-    const dispatch = useAppDispatch()
     return (
         <>
             {selects.map((item, index) => {

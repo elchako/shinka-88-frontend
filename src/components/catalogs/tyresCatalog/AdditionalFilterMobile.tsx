@@ -6,10 +6,12 @@ import checkedIcon from '../../../imgs/checked.png'
 import { checkboxesNames } from "../../../consts";
 import { checkboxesSelect, checkboxesSelectSelector } from "../../../app/slices/filters/tiresFiltersSlice";
 
+
+// дополнительные фильтры мобильные
 export const AdditionalFilterMobile: React.FC = () => {
+    const dispatch = useAppDispatch()
     const checkboxesSelects = useAppSelector(checkboxesSelectSelector)
 
-    const dispatch = useAppDispatch()
     return (
         <div className={FiltersStyles.checkboxesMobile}>
             <Checkbox

@@ -15,30 +15,45 @@ import { useRef } from "react"
 import { DisksCardMobile } from "./blocks/card/disks/DisksCardMobile"
 import { MobileDisksFilters } from "./blocks/filters/MobileDisksFilters"
 import { DisksSortHeaderMobile } from "./blocks/sortHeader/DisksSortHeaderMobile"
-import { type resultsTyresType } from "../../app/slices/filters/tiresFiltersSlice"
-import { type resultsDisksType } from "../../app/slices/filters/disksFiltersSlice"
 import { addDisksToCart, addTyresToCart } from "../../app/slices/cartSlice"
+import { type resultsTyresType } from "../../types/tires"
+import { type resultsDisksType } from "../../types/disks"
+
 
 export const Catalogs: React.FC = () => {
+    const dispatch = useAppDispatch()
+
+    // данные для каталога
+    // в зависимости от страницы
     const { pathname } = useLocation()
     const catalogData = useCatalogDataHook(pathname)
-    const dispatch = useAppDispatch()
+
+    // элемент бесконечной прокрутки
     const scrollableElement = useRef<HTMLDivElement>(null)
 
+    // добавление шин в корзину
     const addToCartTiresHandler = (data: resultsTyresType): void => {
         dispatch(addTyresToCart(data))
     }
+
+    // добавление дисков в корзину
     const addToCartDisksHandler = (data: resultsDisksType): void => {
         dispatch(addDisksToCart(data))
     }
+
     return (
         <div className={CatalogStyles.mainWrapper}>
             <p className="pageTitle">{catalogData.title}</p>
+
+            {/* сортировка */}
             <SortHeader sortData={catalogData.sortData} />
             <div className={CatalogStyles.content}>
+
+                {/* десктопные фильтры */}
                 <DesktopFilters
                     filterBlocks={<catalogData.filtersBlocks parentRef={scrollableElement} />}
                     commonFilters={catalogData.commonFilters} />
+                {/* карточки с бесконечной прокруткой */}
                 <div className={CatalogStyles.cards} id='scrollableDiv'
                     ref={scrollableElement}>
                     <InfiniteScroll
@@ -48,6 +63,8 @@ export const Catalogs: React.FC = () => {
                         loader={'Загрузка...'}
                         scrollableTarget='scrollableDiv'
                     >
+
+                        {/* карточки товаров в зависимости от страницы */}
                         {catalogData.cardsData.results.map((item, index) => {
                             if (catalogData.title === 'Каталог шин') {
                                 return <TyresCardDesktop
@@ -67,6 +84,8 @@ export const Catalogs: React.FC = () => {
                 </div>
             </div>
             <div className={CatalogStyles.contentMobile}>
+
+                {/* мобильная сортировка и фильтры */}
                 <div className={CatalogStyles.sortFilter}>
                     {catalogData.title === 'Каталог шин'
                         ? <TyresSortHeaderMobile />
@@ -76,12 +95,12 @@ export const Catalogs: React.FC = () => {
                         : <MobileDisksFilters />}
                 </div>
                 <div className={CatalogStyles.cardsMobile}>
+                    {/* мобильные карточки товаров в зависимости от страницы */}
                     {catalogData.cardsData.results.map((item, index) => {
                         if (catalogData.title === 'Каталог шин') {
                             return <TyresCardMobile handler={addToCartTiresHandler}
                                 data={item as resultsTyresType} key={`${item} - ${index}`} />
                         }
-
                         if (catalogData.title === 'Каталог дисков') {
                             return <DisksCardMobile handler={addToCartDisksHandler}
                                 data={item as resultsDisksType} key={`${item} - ${index}`} />

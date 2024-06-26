@@ -3,7 +3,8 @@ import FilterBlocksStyles from "./FilterBlocks.module.scss"
 import { selectsNames4, tabsButtons } from '../../../../../../consts'
 import { MainFiltersButton } from "../MainFiltersButton"
 
-export const FilterBlock4: React.FC = () => {
+
+export const AKBFilterBlock4: React.FC = () => {
     // эти данные будут поступать с апи
     const select1 = [150, 155, 160, 165]
     const select2 = [45, 50, 55, 60]
@@ -27,7 +28,7 @@ export const FilterBlock4: React.FC = () => {
                 })}
             </div>
             <div className={FilterBlocksStyles.bottomBlock + ' ' + FilterBlocksStyles.bottomBlockJustButton}>
-                <MainFiltersButton title={tabsButtons[3]} />
+                <MainFiltersButton handler={() => console.log('')} title={tabsButtons[3]} />
             </div>
         </div>
     )

@@ -1,19 +1,23 @@
 // данные для фильтров
 export type disksAPI = {
-    type_disk: Array<string>
-    goodland: Array<string>
-    marka: Array<null>
-    model: Array<string | null>
-    diameter: Array<string>
-    width: Array<string>
-    holesquant: Array<string>
-    pcd: Array<string>
-    wheeloffset: Array<string>
-    dia: Array<string | null>
-    color: Array<string | null>
-    processway: Array<string | null>
-    territory_rn: Array<string>
-    provider: Array<string>
+    max_price: number
+    min_price: number
+    response_data: {
+        type_disk: Array<string>
+        goodland: Array<string>
+        marka: Array<null>
+        model: Array<string | null>
+        diameter: Array<string>
+        width: Array<string>
+        holesquant: Array<string>
+        pcd: Array<string>
+        wheeloffset: Array<string>
+        dia: Array<string | null>
+        color: Array<string | null>
+        processway: Array<string | null>
+        territory_rn: Array<string>
+        provider: Array<string>
+    }
 }
 
 
@@ -81,4 +85,6 @@ export interface IinitialState {
     sortType: string
     priceStart: number
     priceEnd: number
+    priceMin: number
+    priceMax: number
 }

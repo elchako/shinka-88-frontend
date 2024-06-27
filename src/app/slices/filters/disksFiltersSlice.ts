@@ -21,20 +21,24 @@ const selects = selectsNames2.map(selectName => {
 const initialState: IinitialState = {
     // данные для фильтров
     disksAPI: {
-        type_disk: [],
-        goodland: [],
-        marka: [],
-        model: [],
-        diameter: [],
-        width: [],
-        holesquant: [],
-        pcd: [],
-        wheeloffset: [],
-        dia: [],
-        color: [],
-        processway: [],
-        territory_rn: [],
-        provider: [],
+        max_price: 0,
+        min_price: 0,
+        response_data: {
+            type_disk: [],
+            goodland: [],
+            marka: [],
+            model: [],
+            diameter: [],
+            width: [],
+            holesquant: [],
+            pcd: [],
+            wheeloffset: [],
+            dia: [],
+            color: [],
+            processway: [],
+            territory_rn: [],
+            provider: [],
+        }
     },
     // данные карточек
     disksCardsArr: {
@@ -48,6 +52,8 @@ const initialState: IinitialState = {
     sortType: sorts[0],
     priceStart: 0,
     priceEnd: 0,
+    priceMin: 0,
+    priceMax: 0,
 }
 
 export const filterBlock2Slice = createAppSlice({
@@ -104,8 +110,9 @@ export const filterBlock2Slice = createAppSlice({
         }),
         // установить цену
         setPrice: create.reducer((state, action: PayloadAction<{ number: number, isStartOrEnd: boolean }>) => {
+            if (Number.isNaN(action.payload.number)) return
             let number = action.payload.number
-            if (action.payload.number > 20000) number = 20000
+            if (action.payload.number > state.priceMax) number = state.priceMax
             action.payload.isStartOrEnd
                 ? state.priceStart = number
                 : state.priceEnd = number
@@ -132,6 +139,8 @@ export const filterBlock2Slice = createAppSlice({
                 },
                 fulfilled: (state, action: PayloadAction<disksAPI>) => {
                     state.disksAPI = { ...state.disksAPI, ...action.payload }
+                    state.priceMin = action.payload.min_price
+                    state.priceMax = action.payload.max_price
                 },
                 rejected: () => {
                     console.log('error')
@@ -198,12 +207,14 @@ export const filterBlock2Slice = createAppSlice({
         ),
     }),
     selectors: {
-        disksAPISelector: state => state.disksAPI,
+        disksAPISelector: state => state.disksAPI.response_data,
         selectSelector: state => state.selects,
         filteredDisksSelector: state => state.disksCardsArr,
         sortDisksTypeSelector: state => state.sortType,
         priceStartSelector: state => state.priceStart,
         priceEndSelector: state => state.priceEnd,
+        priceMinSelector: state => state.priceMin,
+        priceMaxSelector: state => state.priceMax,
     },
 })
 
@@ -215,5 +226,6 @@ export const { selectsSelect, getDisksParametrs, sortDisksTypeSelect,
 
 // selectors
 export const { selectSelector, disksAPISelector, filteredDisksSelector,
-    sortDisksTypeSelector, priceStartSelector, priceEndSelector
+    sortDisksTypeSelector, priceStartSelector, priceEndSelector,
+    priceMinSelector, priceMaxSelector
 } = filterBlock2Slice.selectors

@@ -22,20 +22,24 @@ const checkboxes = checkboxesNames.map(checkboxName => ({ checkboxName, checked:
 export const initialState: IinitialState = {
     // данные для фильтров
     tiresAPI: {
-        diameter: [],
-        goodland: [],
-        height: [],
-        load: [],
-        marka: [],
-        model: [],
-        powerload: [],
-        runflat: [],
-        seazon: [],
-        speed: [],
-        territory_rn: [],
-        thorning: [],
-        thorntype: [],
-        width: [],
+        max_price: 0,
+        min_price: 0,
+        response_data: {
+            diameter: [],
+            goodland: [],
+            height: [],
+            load: [],
+            marka: [],
+            model: [],
+            powerload: [],
+            runflat: [],
+            seazon: [],
+            speed: [],
+            territory_rn: [],
+            thorning: [],
+            thorntype: [],
+            width: [],
+        }
     },
     // данные карточек
     tyresCardsArr: {
@@ -50,6 +54,8 @@ export const initialState: IinitialState = {
     checkboxes: checkboxes,
     priceStart: 0,
     priceEnd: 0,
+    priceMin: 0,
+    priceMax: 0,
     sortType: sorts[0],
 }
 
@@ -125,9 +131,10 @@ export const filterBlock1Slice = createAppSlice({
             state.priceEnd = 0
         }),
         // установить цену
-        setPrice: create.reducer((state, action: PayloadAction<{ number: number, isStartOrEnd: boolean }>) => {
-            let number = action.payload.number
-            if (action.payload.number > 20000) number = 20000
+        setPrice: create.reducer((state, action: PayloadAction<{ number: string, isStartOrEnd: boolean }>) => {
+            if (Number.isNaN(action.payload.number)) return
+            let number = Number(action.payload.number)
+            if (number > state.priceMax) number = state.priceMax
             action.payload.isStartOrEnd
                 ? state.priceStart = number
                 : state.priceEnd = number
@@ -165,10 +172,12 @@ export const filterBlock1Slice = createAppSlice({
                 },
                 fulfilled: (state, action: PayloadAction<tiresAPI>) => {
                     state.tiresAPI = { ...state.tiresAPI, ...action.payload }
-                    action.payload.runflat.splice(action.payload.runflat.indexOf(null), 1)
-                    action.payload.powerload.splice(action.payload.powerload.indexOf(null), 1)
-                    state.checkboxes[0].value = action.payload.runflat
-                    state.checkboxes[1].value = action.payload.powerload
+                    action.payload.response_data.runflat.splice(action.payload.response_data.runflat.indexOf(null), 1)
+                    action.payload.response_data.powerload.splice(action.payload.response_data.powerload.indexOf(null), 1)
+                    state.checkboxes[0].value = action.payload.response_data.runflat
+                    state.checkboxes[1].value = action.payload.response_data.powerload
+                    state.priceMin = action.payload.min_price
+                    state.priceMax = action.payload.max_price
                 },
                 rejected: () => {
                     console.log('error')
@@ -248,13 +257,15 @@ export const filterBlock1Slice = createAppSlice({
         ),
     }),
     selectors: {
-        tiresAPISelector: state => state.tiresAPI,
+        tiresAPISelector: state => state.tiresAPI.response_data,
         selectSelector: state => state.selects,
         seasonsSelectSelector: state => state.season,
         checkboxesSelectSelector: state => state.checkboxes,
         filteredTyresSelector: state => state.tyresCardsArr,
         priceStartSelector: state => state.priceStart,
         priceEndSelector: state => state.priceEnd,
+        priceMinSelector: state => state.priceMin,
+        priceMaxSelector: state => state.priceMax,
         sortTyresTypeSelector: state => state.sortType,
     },
 })
@@ -271,6 +282,7 @@ export const { seasonsSelectOne, selectsSelect, checkboxesSelect,
 // selectors
 export const { selectSelector, seasonsSelectSelector, priceEndSelector,
     checkboxesSelectSelector, tiresAPISelector, sortTyresTypeSelector,
-    filteredTyresSelector, priceStartSelector,
+    filteredTyresSelector, priceStartSelector, priceMinSelector,
+    priceMaxSelector,
 } =
     filterBlock1Slice.selectors

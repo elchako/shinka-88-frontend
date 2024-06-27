@@ -7,10 +7,12 @@ import { useAppDispatch } from "../../../../app/hooks"
 interface IProps {
     filterBlocks: ReactElement
     commonFilters: {
-        resetFiltersAction: any;
-        priceStartNumber: number;
-        priceEndNumber: number;
-        priceSetter: any;
+        resetFiltersAction: any
+        priceStartNumber: number
+        priceEndNumber: number
+        priceMinNumber: number
+        priceMaxNumber: number
+        priceSetter: any
     }
 }
 
@@ -18,38 +20,19 @@ export const DesktopFilters: React.FC<IProps> = ({ filterBlocks, commonFilters }
     const dispatch = useAppDispatch()
     const priceStart = commonFilters.priceStartNumber
     const priceEnd = commonFilters.priceEndNumber
+    const priceMin = commonFilters.priceMinNumber
+    const priceMax = commonFilters.priceMaxNumber
 
     return (
         <div className={FiltersStyles.mainWrapper}>
             <p className={FiltersStyles.title}>ПАРАМЕТРЫ</p>
             <div className={FiltersStyles.filters}>
                 {filterBlocks}
-                {/* <div className={FiltersStyles.manufacturer}>
-                    <p className={FiltersStyles.filterTitle}>Производитель</p>
-                    <div className={FiltersStyles.manContent}>
-                        {manufacturersAPI.map((item, index) => {
-                            return <div key={`${index} ${item}`} className={FiltersStyles.seasonBlock}>
-                                <Checkbox
-                                    icon={<img src={checkedIcon} alt="checked" className="checkboxesImg" />}
-                                    label={item.name}
-                                    className='checkboxesInput'
-                                    labelClassName={FiltersStyles.inputLabel}
-                                    checked={selectedManufacturers.includes(item.value)}
-                                    onChange={() => dispatch(selectsSelect({
-                                        selectName: selectsNames1[0],
-                                        value: item.value,
-                                        isMainPage: false
-                                    }))}
-                                />
-                            </div>
-                        })}
-                    </div>
-                </div> */}
                 <div className={FiltersStyles.price}>
                     <p className={FiltersStyles.filterTitle}>Цена</p>
                     <div className={FiltersStyles.priceContent}>
                         <div className={FiltersStyles.priceFrom}>
-                            <input type="text" placeholder="3 500"
+                            <input type="text" placeholder={String(priceMin)}
                                 value={priceStart === 0 ? '' : priceStart}
                                 onChange={e =>
                                     dispatch(commonFilters.priceSetter({
@@ -59,7 +42,7 @@ export const DesktopFilters: React.FC<IProps> = ({ filterBlocks, commonFilters }
                         </div>
                         <div className={FiltersStyles.priceLine}></div>
                         <div className={FiltersStyles.priceTo}>
-                            <input type="text" placeholder="20 000"
+                            <input type="text" placeholder={String(priceMax)}
                                 value={priceEnd === 0 ? '' : priceEnd}
                                 onChange={e =>
                                     dispatch(commonFilters.priceSetter({

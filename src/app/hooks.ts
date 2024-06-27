@@ -18,6 +18,8 @@ import {
     priceEndSelector as priceEnd1,
     setPrice as setPrice1,
     resetFilters as resetFilters1,
+    priceMinSelector as priceMin1,
+    priceMaxSelector as priceMax1,
 } from './slices/filters/tiresFiltersSlice'
 import summer from '../imgs/tiresCard/summer.png'
 import winter from '../imgs/tiresCard/winter.png'
@@ -30,7 +32,9 @@ import {
     priceEndSelector as priceEnd2,
     setPrice as setPrice2,
     resetFilters as resetFilters2,
-    sortDisksTypeSelect, sortDisksTypeSelector
+    sortDisksTypeSelect, sortDisksTypeSelector,
+    priceMinSelector as priceMin2,
+    priceMaxSelector as priceMax2,
 } from './slices/filters/disksFiltersSlice'
 import { type resultsTyresType, type tyresCards } from '../types/tires'
 import { type disksCards } from '../types/disks'
@@ -50,6 +54,8 @@ export const useCatalogDataHook = (page: string) => {
     let filtersBlocksMobile: React.FC<{}> = TyresFilterBlocksMobileModal
     let priceStart: any = priceStart1
     let priceEnd: any = priceEnd1
+    let priceMin: any = priceMin1
+    let priceMax: any = priceMax1
     let priceSetter: any = setPrice1
     let resetFiltersAction: any = resetFilters1
     let selectSelector: any = filteredTyresSelector
@@ -64,6 +70,8 @@ export const useCatalogDataHook = (page: string) => {
             filtersBlocksMobile = DisksFilterBlocksMobileModal
             priceStart = priceStart2
             priceEnd = priceEnd2
+            priceMin = priceMin2
+            priceMax = priceMax2
             priceSetter = setPrice2
             resetFiltersAction = resetFilters2
             selectSelector = filteredDisksSelector
@@ -75,11 +83,15 @@ export const useCatalogDataHook = (page: string) => {
 
     const priceStartNumber: number = useAppSelector(priceStart)
     const priceEndNumber: number = useAppSelector(priceEnd)
+    const priceMinNumber: number = useAppSelector(priceMin)
+    const priceMaxNumber: number = useAppSelector(priceMax)
 
     let commonFilters = {
         resetFiltersAction,
         priceStartNumber,
         priceEndNumber,
+        priceMinNumber,
+        priceMaxNumber,
         priceSetter,
     }
 

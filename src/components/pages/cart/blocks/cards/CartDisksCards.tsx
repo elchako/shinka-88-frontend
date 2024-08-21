@@ -4,8 +4,10 @@ import CartStyles from '../../CartStyles.module.scss'
 import delElement from '../../../../../imgs/cart/del_from_cart.png'
 import Checkbox from "react-custom-checkbox";
 import { useAppDispatch } from "../../../../../app/hooks"
-import { changeAmount, delOneTypeProduct, selectProductHandler, type selectedType } from "../../../../../app/slices/cartSlice";
-import { type resultsDisksType } from "../../../../../app/slices/filters/disksFiltersSlice";
+import { changeAmount, delOneTypeProduct, selectProductHandler } from "../../../../../app/slices/cartSlice";
+import { type selectedType } from "../../../../../types/cart";
+import { type resultsDisksType } from "../../../../../types/disks";
+
 
 interface IProps {
     data: selectedType & resultsDisksType

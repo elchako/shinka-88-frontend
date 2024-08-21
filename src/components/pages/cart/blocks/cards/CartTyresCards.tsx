@@ -8,9 +8,9 @@ import {
     changeAmount,
     delOneTypeProduct,
     selectProductHandler,
-    type selectedType
 } from "../../../../../app/slices/cartSlice";
-import { type resultsTyresType } from "../../../../../app/slices/filters/tiresFiltersSlice";
+import { type resultsTyresType } from "../../../../../types/tires";
+import { type selectedType } from "../../../../../types/cart";
 
 interface IProps {
     data: selectedType & resultsTyresType

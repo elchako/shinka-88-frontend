@@ -1,8 +1,8 @@
 import type { AxiosInstance } from "axios"
 import axios from "axios"
 import { URLs } from './config'
-import { type fieldsTyresType } from "../components/pages/main/blocks/filters/filtersBlocks/filterBlock1Slice";
-import { type fieldsDiskType } from "../components/pages/main/blocks/filters/filtersBlocks/filterBlock2Slice";
+import { type fieldsTyresType } from "../types/tires";
+import { type fieldsDiskType } from "../types/disks";
 
 class FiltersAPI {
     instance: AxiosInstance;

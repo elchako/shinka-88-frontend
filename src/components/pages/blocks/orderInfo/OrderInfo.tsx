@@ -14,22 +14,15 @@ import {
 interface IProps {
     name: string
     nameButton: string
+    handler: () => void
 }
 
-export const OrderInfo: React.FC<IProps> = ({ nameButton, name }) => {
+export const OrderInfo: React.FC<IProps> = ({ nameButton, name, handler }) => {
     const tyres = useAppSelector(tyresDataSelector)
     const disks = useAppSelector(disksDataSelector)
     const products = [...tyres, ...disks].sort((a, b) => a.queue - b.queue)
     const productsData: Array<{ type: string, amount: number, price: number }> = []
     const priceAmount = useAppSelector(priceAmountSelector)
-    const navigate = useNavigate()
-    const toOrderHandle = () => {
-        if (priceAmount === 0) {
-            alert('Нет выбранных товаров')
-        } else {
-            navigate('/' + links[10].link)
-        }
-    }
 
     products.forEach(item => {
         if (item.canceled) return
@@ -60,7 +53,7 @@ export const OrderInfo: React.FC<IProps> = ({ nameButton, name }) => {
                 })}
             </div>
             <p className={OrderInfoStyles.price}>{`Итого ${priceAmount} р`}</p>
-            <OffenButton name={nameButton} handler={toOrderHandle} />
+            <OffenButton name={nameButton} handler={handler} />
         </div>
     )
 }

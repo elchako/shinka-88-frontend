@@ -6,10 +6,11 @@ import Checkbox from "react-custom-checkbox";
 import { CartTyresCards } from "./blocks/cards/CartTyresCards";
 import { OrderInfo } from "../blocks/orderInfo/OrderInfo";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { tabs } from "../../../consts";
+import { links, tabs } from "../../../consts";
 import { CartDisksCards } from "./blocks/cards/CartDisksCards";
 import {
     disksDataSelector,
+    priceAmountSelector,
     resetCart,
     selectAllHandler,
     selectAllSelector,
@@ -18,6 +19,7 @@ import {
 import { type resultsTyresType } from "../../../types/tires";
 import { type resultsDisksType } from "../../../types/disks";
 import { type selectedType } from "../../../types/cart";
+import { useNavigate } from "react-router-dom";
 
 
 type commonArray = Array<(selectedType & resultsTyresType) | (selectedType & resultsDisksType)>
@@ -32,6 +34,17 @@ export const Cart: React.FC = () => {
 
     // формирование массива всех товаров в корзине
     const cardData: commonArray = [...tyres, ...disks].sort((a, b) => a.queue - b.queue)
+
+    // обработчик кнопки и общая цена для общей информации заказа
+    const priceAmount = useAppSelector(priceAmountSelector)
+    const navigate = useNavigate()
+    const buttonHandler = () => {
+        if (priceAmount === 0) {
+            alert('Нет выбранных товаров')
+        } else {
+            navigate('/' + links[10].link)
+        }
+    }
 
     // регулировка ширины в зависимости от наполненности корзины
     let wrapperStyle = cardData.length === 0
@@ -83,7 +96,8 @@ export const Cart: React.FC = () => {
                     </div>
 
                     {/* кнопка оформления заказа */}
-                    <OrderInfo nameButton='ОФОРМИТЬ ЗАКАЗ' name='В корзине' />
+                    <OrderInfo nameButton='ОФОРМИТЬ ЗАКАЗ' name='В корзине'
+                        handler={buttonHandler} />
                 </div>
             </div>
             <Footer />

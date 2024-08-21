@@ -5,11 +5,12 @@ import { filterBlock1Slice } from "./slices/filters/tiresFiltersSlice"
 import { filterBlock2Slice } from "./slices/filters/disksFiltersSlice"
 import { smallActions } from "./slices/common/smallActions"
 import { cartSlice } from "./slices/cartSlice"
+import { authSlice } from "./slices/authSlice"
 
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
 const rootReducer = combineSlices(filterBlock1Slice, filterBlock2Slice, smallActions,
-  cartSlice)
+  cartSlice, authSlice)
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>
 

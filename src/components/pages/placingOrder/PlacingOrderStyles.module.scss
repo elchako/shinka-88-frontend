@@ -131,6 +131,13 @@
     line-height: 24px;
 }
 
+@media screen and (max-width: 1120px) {
+    .contactsInfo {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
 @media screen and (max-width: 1000px) {
     .content {
         flex-direction: column;

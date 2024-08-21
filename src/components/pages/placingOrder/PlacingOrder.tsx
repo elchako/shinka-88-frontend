@@ -3,9 +3,45 @@ import PlacingOrderStyles from "./PlacingOrderStyles.module.scss"
 import '../../../common.scss'
 import { Footer } from "../../footer/Footer"
 import { OrderInfo } from "../blocks/orderInfo/OrderInfo";
+import { useEffect, useState } from "react";
+import Cookies from 'js-cookie';
+import { authApi } from "../../../api/auth";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { getToken, smsCodeSelector } from "../../../app/slices/authSlice";
 
 
 export const PlacingOrder: React.FC = () => {
+    const dispatch = useAppDispatch()
+    const smsCode = useAppSelector(smsCodeSelector)
+    const [name, setName] = useState<string>('')
+    const [number, setNumber] = useState<string>('')
+
+    const buttonHandler = (): void => {
+        const phoneRegex = /^(?:\+7|7)\d{10}$/
+        if (name === '' || number === '') {
+            alert('Заполните все поля')
+            return
+        } else if (!number.match(phoneRegex)) {
+            alert('Неверный номер телефона')
+            return
+        } else {
+            const token = Cookies.get('token')
+            if (!token) {
+                dispatch(getToken({ name, number }))
+                // Cookies.set('token', token)
+            }
+        }
+    }
+
+    useEffect(() => {
+        const customerLocalData: string | null = localStorage.getItem('customerLocalData')
+        if (customerLocalData) {
+            let data = JSON.parse(customerLocalData)
+            setName(data.name)
+            setNumber(data.phone)
+        }
+    }, [])
+
     return (
         <div className={PlacingOrderStyles.mainWrapper}>
             <div className={PlacingOrderStyles.contentWrapper}>
@@ -17,14 +53,18 @@ export const PlacingOrder: React.FC = () => {
                             <div className={PlacingOrderStyles.field}>
                                 <p className={PlacingOrderStyles.fieldTitle}>Имя *</p>
                                 <input type="text" className={PlacingOrderStyles.fieldInput}
-                                    placeholder="Александр" />
+                                    placeholder="Александр"
+                                    onChange={(e) => setName(e.target.value)}
+                                    value={name} />
                             </div>
                             <div className={PlacingOrderStyles.field}>
                                 <p className={PlacingOrderStyles.fieldTitle}>Телефон *</p>
                                 <input type="text" className={PlacingOrderStyles.fieldInput}
-                                    placeholder="+7 999 999 99 99" />
+                                    placeholder="+7 999 999 99 99"
+                                    onChange={(e) => setNumber(e.target.value)}
+                                    value={number} />
                             </div>
-                            <div className={PlacingOrderStyles.field}>
+                            {/* <div className={PlacingOrderStyles.field}>
                                 <p className={PlacingOrderStyles.fieldTitle}>Почта</p>
                                 <div>
                                     <input type="text" className={PlacingOrderStyles.fieldInput}
@@ -33,7 +73,7 @@ export const PlacingOrder: React.FC = () => {
                                         на этот адрес будут приходить уведомления об изменении статуса заказа
                                     </p>
                                 </div>
-                            </div>
+                            </div> */}
                             <p className={PlacingOrderStyles.formText}>
                                 Наш менеджер свяжется с Вами для подтверждения заказа</p>
                         </div>
@@ -68,7 +108,8 @@ export const PlacingOrder: React.FC = () => {
                         </div>
 
                     </div>
-                    <OrderInfo nameButton='ОТПРАВИТЬ' name='Ваш заказ' />
+                    <OrderInfo nameButton='ОТПРАВИТЬ' name='Ваш заказ'
+                        handler={buttonHandler} />
                 </div>
             </div>
             <Footer />

@@ -73,6 +73,10 @@ $orangeTextColor: rgb(241, 116, 0);
 }
 
 @media screen and (max-width: 515px) {
+    .pageTitle {
+        font-size: 25px;
+    }
+
     .checkboxesInput {
         width: 20px !important;
         height: 20px !important;

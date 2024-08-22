@@ -17,6 +17,7 @@ import { MobileFiltersModal } from "./components/catalogs/blocks/filters/MobileF
 import { useEffect } from "react"
 import { mobileFiltersSelector } from "./app/slices/common/smallActions"
 import { pullLocalStorageData } from "./app/slices/cartSlice"
+import { RegModal } from "./components/common/regModal"
 
 export const App = () => {
   // закрытие/открытие мобильных параметров в каталоге меню
@@ -49,6 +50,7 @@ export const App = () => {
         <Header />
         <HiddenMobileMenu />
         <MobileFiltersModal />
+        <RegModal />
         <Routes>
           <Route path={links[0].link} element={<MainPage />} />
           <Route path={links[3].link} element={<Catalogs />} />

@@ -3,44 +3,45 @@ import PlacingOrderStyles from "./PlacingOrderStyles.module.scss"
 import '../../../common.scss'
 import { Footer } from "../../footer/Footer"
 import { OrderInfo } from "../blocks/orderInfo/OrderInfo";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Cookies from 'js-cookie';
-import { authApi } from "../../../api/auth";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { getToken, smsCodeSelector } from "../../../app/slices/authSlice";
+import { nameSelector, phoneSelector, setName, setPhone, toogleModal } from "../../../app/slices/authSlice";
 
 
 export const PlacingOrder: React.FC = () => {
     const dispatch = useAppDispatch()
-    const smsCode = useAppSelector(smsCodeSelector)
-    const [name, setName] = useState<string>('')
-    const [number, setNumber] = useState<string>('')
+    const name = useAppSelector(nameSelector)
+    const phone = useAppSelector(phoneSelector)
 
     const buttonHandler = (): void => {
         const phoneRegex = /^(?:\+7|7)\d{10}$/
-        if (name === '' || number === '') {
+        if (name === '' || phone === '') {
             alert('Заполните все поля')
             return
-        } else if (!number.match(phoneRegex)) {
+        } else if (!phone.match(phoneRegex)) {
             alert('Неверный номер телефона')
             return
         } else {
             const token = Cookies.get('token')
             if (!token) {
-                dispatch(getToken({ name, number }))
-                // Cookies.set('token', token)
+                dispatch(toogleModal())
+            } else {
+                localStorage.setItem('customerLocalData', JSON.stringify({ name, phone }))
+                console.log('отправка заказа и не забыть очистить корзину и сделать модалку с номером заказа и телефоном, чтобы туда звонить если чё')
             }
         }
     }
 
     useEffect(() => {
-        const customerLocalData: string | null = localStorage.getItem('customerLocalData')
-        if (customerLocalData) {
-            let data = JSON.parse(customerLocalData)
-            setName(data.name)
-            setNumber(data.phone)
+        const token = Cookies.get('token')
+        if (token) {
+            const customerLocalData: string | null = localStorage.getItem('customerLocalData')
+            let data = JSON.parse(customerLocalData as string)
+            dispatch(setName(data.name))
+            dispatch(setPhone(data.phone))
         }
-    }, [])
+    }, [dispatch])
 
     return (
         <div className={PlacingOrderStyles.mainWrapper}>
@@ -54,15 +55,15 @@ export const PlacingOrder: React.FC = () => {
                                 <p className={PlacingOrderStyles.fieldTitle}>Имя *</p>
                                 <input type="text" className={PlacingOrderStyles.fieldInput}
                                     placeholder="Александр"
-                                    onChange={(e) => setName(e.target.value)}
+                                    onChange={(e) => dispatch(setName(e.target.value))}
                                     value={name} />
                             </div>
                             <div className={PlacingOrderStyles.field}>
                                 <p className={PlacingOrderStyles.fieldTitle}>Телефон *</p>
                                 <input type="text" className={PlacingOrderStyles.fieldInput}
                                     placeholder="+7 999 999 99 99"
-                                    onChange={(e) => setNumber(e.target.value)}
-                                    value={number} />
+                                    onChange={(e) => dispatch(setPhone(e.target.value))}
+                                    value={phone} />
                             </div>
                             {/* <div className={PlacingOrderStyles.field}>
                                 <p className={PlacingOrderStyles.fieldTitle}>Почта</p>

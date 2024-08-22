@@ -9,16 +9,18 @@ class AuthAPI {
         this.instance = axios.create({ baseURL })
     }
 
-    async getToken(name: string, phone_number: string) {
-        const response = await this.instance.post(URLs.auth.register,
+    async getSmsCode(name: string, phone_number: string) {
+        await this.instance.post(URLs.auth.register,
             JSON.stringify({ name, phone_number }), {
             headers: { 'Content-Type': 'application/json' }
         });
-        return response.data
     }
 
-    async login() {
-        const response = await this.instance.get(URLs.auth.login)
+    async login(phone_number: string, confirmation_code: string) {
+        const response = await this.instance.post(URLs.auth.login,
+            JSON.stringify({ phone_number, confirmation_code }), {
+            headers: { 'Content-Type': 'application/json' }
+        });
         return response.data
     }
 }

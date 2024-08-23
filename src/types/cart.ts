@@ -7,6 +7,23 @@ export type selectedType = {
     queue: number
 }
 
+type orderViewType = {
+    id: number
+    quantity: number
+    price: number
+}
+
+// оформленный заказ
+export type orderProductsType = {
+    tyres?: Array<orderViewType>
+    disks?: Array<orderViewType>
+}
+
+export type orderType = {
+    total_amount: number
+    order_items: orderProductsType
+}
+
 
 // интерфейс стейта
 export interface IinitialState {
@@ -15,6 +32,8 @@ export interface IinitialState {
     selectAll: boolean
     tyres: Array<selectedType & resultsTyresType>
     disks: Array<selectedType & resultsDisksType>
+    creatingOrder: boolean
+    orderNumber: number
 }
 
 

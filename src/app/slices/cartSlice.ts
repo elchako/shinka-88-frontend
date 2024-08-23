@@ -1,11 +1,13 @@
 import { type PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../createAppSlice"
-import {
-    type commonArrDataType,
-    type IinitialState
+import type {
+    orderType,
+    commonArrDataType,
+    IinitialState
 } from "../../types/cart"
 import { type resultsTyresType } from "../../types/tires"
 import { type resultsDisksType } from "../../types/disks"
+import { orderApi } from "../../api/order"
 
 
 const initialState: IinitialState = {
@@ -14,6 +16,8 @@ const initialState: IinitialState = {
     selectAll: true,
     tyres: [],
     disks: [],
+    creatingOrder: false,
+    orderNumber: 0
 }
 
 
@@ -172,23 +176,54 @@ export const cartSlice = createAppSlice({
                 state.selectAll = localDataParsed.selectAll
             }
         }),
+        // заказ создаётся
+        orderIsCreating: create.reducer(state => {
+            state.creatingOrder = !state.creatingOrder
+        }),
+        // создание заказа
+        createOrder: create.asyncThunk(
+            async (args: { order: orderType, token: string }) => {
+                const response = await orderApi.createOrder(args.order, args.token)
+                return response.order
+            },
+            {
+                pending: state => {
+                    state.creatingOrder = !state.creatingOrder
+                },
+                fulfilled: (state, action: PayloadAction<number>) => {
+                    state.priceAmount = 0
+                    state.queueCounter = 0
+                    state.selectAll = true
+                    state.tyres = []
+                    state.disks = []
+                    state.orderNumber = 0
+                    state.orderNumber = action.payload
+                    localStorage.removeItem('cartData')
+                },
+                rejected: state => {
+                    state.creatingOrder = !state.creatingOrder
+                },
+            },
+        ),
     }),
     selectors: {
         priceAmountSelector: state => state.priceAmount,
         tyresDataSelector: state => state.tyres,
         disksDataSelector: state => state.disks,
-        selectAllSelector: state => state.selectAll
+        selectAllSelector: state => state.selectAll,
+        creatingOrderSelector: state => state.creatingOrder,
+        orderNumberSelector: state => state.orderNumber,
     },
 })
 
 // actions
 export const { addTyresToCart, selectAllHandler, selectProductHandler,
     resetCart, delOneTypeProduct, changeAmount, pullLocalStorageData,
-    addDisksToCart } =
+    addDisksToCart, orderIsCreating, createOrder } =
     cartSlice.actions
 
 // selectors
 export const { priceAmountSelector, tyresDataSelector, selectAllSelector,
-    disksDataSelector
+    disksDataSelector, creatingOrderSelector, orderNumberSelector
 } =
     cartSlice.selectors

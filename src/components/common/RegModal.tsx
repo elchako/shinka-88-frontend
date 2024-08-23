@@ -1,7 +1,11 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { checkProcessSelector, getSmsCode, login, nameSelector, phoneSelector, regModalSelector, setCheckProcess, smsCodeSelector, tokenSelector, toogleModal, toogleSmsCode } from "../../app/slices/authSlice";
+import {
+    checkProcessSelector, getSmsCode, login, nameSelector,
+    phoneSelector, regModalSelector, smsCodeSelector,
+    tokenSelector, toogleModal, toogleSmsCode
+} from "../../app/slices/authSlice";
 import Styles from './common.module.scss';
 import Cookies from 'js-cookie';
 
@@ -18,9 +22,9 @@ export const RegModal: React.FC = () => {
     // показывать или скрывать модалку
     let openStyle
     if (regModal) {
-        openStyle = Styles.regModalWrapper
+        openStyle = Styles.placingOrderWrapper
     } else {
-        openStyle = Styles.regModalWrapper + ' ' + Styles.regModalWrapperHidden
+        openStyle = Styles.placingOrderWrapper + ' ' + Styles.placingOrderWrapperHidden
     }
 
     // получить код
@@ -52,18 +56,18 @@ export const RegModal: React.FC = () => {
     }, [token])
 
     return <div className={openStyle}>
-        <div className={Styles.regModal}>
-            <div className={Styles.regModalContent}>
-                <div className={Styles.closeRegModal}
+        <div className={Styles.placingOrder}>
+            <div className={Styles.placingOrderContent}>
+                <div className={Styles.closeplacingOrder}
                     onClick={closeModal}>&#10006;</div>
                 <p>Мы Вас не узнали на этом устройстве.<br />Просьба подтвердить Ваш номер телефона.</p>
                 {smsCode
-                    ? <input className={Styles.regModalSmsCode} type="number" placeholder="введите код из смс"
+                    ? <input className={Styles.placingOrderSmsCode} type="number" placeholder="введите код из смс"
                         onChange={e => codeHandler(e)}
                         value={codeValue} />
-                    : <button className={Styles.regModalButton}
+                    : <button className={Styles.placingOrderButton}
                         onClick={getCodeHandler}>Отправить смс-код на номер {phone}</button>}
-                {smsCode && <p className={Styles.regModalWasSend}>{`код отправлен на номер ${phone}`}</p>}
+                {smsCode && <p className={Styles.placingOrderWasSend}>{`код отправлен на номер ${phone}`}</p>}
             </div>
         </div>
     </div>

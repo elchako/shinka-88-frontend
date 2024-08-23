@@ -13,7 +13,7 @@
     padding: 15px 15px;
 }
 
-.regModalWrapper {
+.placingOrderWrapper {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -30,27 +30,29 @@
     transition: 0.5s;
 }
 
-.regModalWrapper.regModalWrapperHidden {
+.placingOrderWrapper.placingOrderWrapperHidden {
     visibility: hidden;
     opacity: 0;
     transition: 0.5s;
 }
 
-.regModal {
+.placingOrder {
     max-width: 420px;
-    height: 200px;
     background: #fff;
     border-radius: 10px;
-    padding: 15px;
+    padding: 25px;
+    display: flex;
+    justify-content: center;
 }
 
-.regModalContent {
+.placingOrderContent {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    text-align: center;
 }
 
-.closeRegModal {
+.closeplacingOrder {
     width: 20px;
     height: 20px;
     text-align: center;
@@ -59,7 +61,7 @@
     align-self: flex-end;
 }
 
-.regModalButton {
+.placingOrderButton {
     background: rgb(239, 129, 0);
     text-align: center;
     color: #fff;
@@ -68,22 +70,80 @@
     border-radius: 7px;
 }
 
-.regModalSmsCode {
+.placingOrderSmsCode {
     border-radius: 7px;
     border: 1px solid #00000095;
     padding: 10px;
     text-align: center;
 }
 
-.regModalSmsCode::-webkit-outer-spin-button,
-.regModalSmsCode::-webkit-inner-spin-button {
+.placingOrderSmsCode::-webkit-outer-spin-button,
+.placingOrderSmsCode::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
 
-.regModalSmsCode[type='number'] {
+.placingOrderSmsCode[type='number'] {
     -moz-appearance: textfield;
 }
 
-.regModalWasSend {
+.placingOrderWasSend {
     text-align: center;
+}
+
+
+/* Основной контейнер лоадера */
+.loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    width: 300px;
+}
+
+/* Шина */
+.wheel {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 10px solid #333;
+    border-top-color: transparent;
+    /* Скрываем верхнюю часть, чтобы создать эффект вращения */
+    animation: spin 1s linear infinite;
+    /* Анимация вращения */
+}
+
+/* Диск колеса */
+.rim {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 50%;
+    background: #555;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Центральная часть шины */
+.tire {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    height: 60%;
+    border: 10px solid #333;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Анимация вращения */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }

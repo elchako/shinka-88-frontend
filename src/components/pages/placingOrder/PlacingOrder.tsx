@@ -7,12 +7,44 @@ import { useEffect } from "react";
 import Cookies from 'js-cookie';
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { nameSelector, phoneSelector, setName, setPhone, toogleModal } from "../../../app/slices/authSlice";
+import { createOrder, disksDataSelector, priceAmountSelector, tyresDataSelector } from "../../../app/slices/cartSlice";
+import type { orderProductsType, orderType } from "../../../types/cart";
 
 
 export const PlacingOrder: React.FC = () => {
     const dispatch = useAppDispatch()
     const name = useAppSelector(nameSelector)
     const phone = useAppSelector(phoneSelector)
+    const tyres = useAppSelector(tyresDataSelector)
+    const disks = useAppSelector(disksDataSelector)
+    const total_amount = useAppSelector(priceAmountSelector)
+    const order_items: orderProductsType = {}
+    const order: orderType = {
+        total_amount: total_amount,
+        order_items: order_items
+    }
+
+    if (tyres.length !== 0) {
+        order_items.tyres = []
+        for (let i = 0; i < tyres.length; i++) {
+            order_items.tyres.push({
+                id: tyres[i].id,
+                quantity: tyres[i].amount,
+                price: tyres[i].price_sale
+            })
+        }
+    }
+
+    if (disks.length !== 0) {
+        order_items.disks = []
+        for (let i = 0; i < disks.length; i++) {
+            order_items.disks.push({
+                id: disks[i].id,
+                quantity: disks[i].amount,
+                price: disks[i].price_sale
+            })
+        }
+    }
 
     const buttonHandler = (): void => {
         const phoneRegex = /^(?:\+7|7)\d{10}$/
@@ -28,7 +60,7 @@ export const PlacingOrder: React.FC = () => {
                 dispatch(toogleModal())
             } else {
                 localStorage.setItem('customerLocalData', JSON.stringify({ name, phone }))
-                console.log('отправка заказа и не забыть очистить корзину и сделать модалку с номером заказа и телефоном, чтобы туда звонить если чё')
+                dispatch(createOrder({ order, token }))
             }
         }
     }

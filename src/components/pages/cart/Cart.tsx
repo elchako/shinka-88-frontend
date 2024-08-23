@@ -45,7 +45,6 @@ export const Cart: React.FC = () => {
             navigate('/' + links[10].link)
         }
     }
-
     // регулировка ширины в зависимости от наполненности корзины
     let wrapperStyle = cardData.length === 0
         ? CartStyles.contentWrapper + ' ' + CartStyles.contentWrapperAnotherWidth

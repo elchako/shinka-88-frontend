@@ -15,7 +15,7 @@ interface URLsTypes {
     order: string
 }
 
-const baseURL = 'https://217.25.94.79:8000'
+const baseURL = 'http://217.25.94.79:8000'
 
 export const URLs: URLsTypes = {
     base: `${baseURL}/api/v1`,

@@ -2,7 +2,8 @@ import type React from "react"
 import CardDesktopStyles from "../CardDesktopStyles.module.scss"
 import { OffenButton } from "../../../../common/OffenButton"
 import { useAppDispatch, } from "../../../../../app/hooks"
-import { amountHandler, type resultsDisksType } from "../../../../../app/slices/filters/disksFiltersSlice"
+import { amountHandler } from "../../../../../app/slices/filters/disksFiltersSlice"
+import type { resultsDisksType } from "../../../../../types/disks"
 
 
 interface IProps {

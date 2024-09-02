@@ -6,7 +6,7 @@ import {
     selectSelector,
     selectsSelect
 } from "../../../app/slices/filters/disksFiltersSlice"
-import { type disksAPI } from "../../../types/disks"
+import type { diskResponseData } from "../../../types/disks"
 
 
 export const SizeFilterMobile: React.FC = () => {
@@ -18,7 +18,7 @@ export const SizeFilterMobile: React.FC = () => {
     return (
         <>
             {selects.map((item, index) => {
-                let values = [...disksAPI[item.selectName.apiName as keyof disksAPI]]
+                let values = [...disksAPI[item.selectName.apiName as keyof diskResponseData]]
                 values.sort()
                 values.sort()
                 let defaultValue = ''

@@ -1,23 +1,25 @@
 // данные для фильтров
+export type tiresResponseData = {
+    diameter: Array<string>
+    goodland: Array<string | null>
+    height: Array<string>
+    load: Array<string>
+    marka: Array<string>
+    model: Array<string>
+    powerload: Array<string | null>
+    runflat: Array<string | null>
+    seazon: Array<string>
+    speed: Array<string | null>
+    territory_rn: Array<string>
+    thorning: Array<string>
+    thorntype: Array<string | null>
+    width: Array<string>
+}
+
 export type tiresAPI = {
     max_price: number
     min_price: number
-    response_data: {
-        diameter: Array<string>
-        goodland: Array<string | null>
-        height: Array<string>
-        load: Array<string>
-        marka: Array<string>
-        model: Array<string>
-        powerload: Array<string | null>
-        runflat: Array<string | null>
-        seazon: Array<string>
-        speed: Array<string | null>
-        territory_rn: Array<string>
-        thorning: Array<string>
-        thorntype: Array<string | null>
-        width: Array<string>
-    }
+    response_data: tiresResponseData
 }
 
 

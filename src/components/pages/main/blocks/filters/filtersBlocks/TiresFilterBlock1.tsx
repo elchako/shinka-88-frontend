@@ -21,7 +21,7 @@ import {
     selectsSelect,
     tiresAPISelector
 } from "../../../../../../app/slices/filters/tiresFiltersSlice"
-import { type tiresAPI } from "../../../../../../types/tires"
+import type { tiresResponseData } from "../../../../../../types/tires"
 
 export const TiresFilterBlock1: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -45,7 +45,7 @@ export const TiresFilterBlock1: React.FC = () => {
             <div className={FilterBlocksStyles.selects}>
                 {/* селекты */}
                 {selects.map((item, index) => {
-                    let values = [...tiresAPI[item.selectName.apiName as keyof tiresAPI]]
+                    let values = [...tiresAPI[item.selectName.apiName as keyof tiresResponseData]]
                     values.sort()
                     return <div className={FilterBlocksStyles.select} key={`${index} - ${item}`}>
                         <p>{item.selectName.displayName}</p>

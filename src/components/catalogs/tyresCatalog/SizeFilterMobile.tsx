@@ -6,7 +6,7 @@ import {
     selectsSelect,
     tiresAPISelector
 } from "../../../app/slices/filters/tiresFiltersSlice"
-import { type tiresAPI } from "../../../types/tires"
+import type { tiresResponseData } from "../../../types/tires"
 
 
 // селекты фильтр мобильные
@@ -18,7 +18,7 @@ export const SizeFilterMobile: React.FC = () => {
     return (
         <>
             {selects.map((item, index) => {
-                let values = [...tiresAPI[item.selectName.apiName as keyof tiresAPI]]
+                let values = [...tiresAPI[item.selectName.apiName as keyof tiresResponseData]]
                 values.sort()
                 let defaultValue = ''
                 if (item.value !== '' && item.value.length !== 0) {

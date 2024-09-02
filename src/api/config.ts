@@ -15,9 +15,11 @@ interface URLsTypes {
     order: string
 }
 
+const baseURL = 'https://217.25.94.79:8000'
+
 export const URLs: URLsTypes = {
-    base: 'http://217.25.94.79:8000/api/v1',
-    authBase: 'http://217.25.94.79:8000/auth',
+    base: `${baseURL}/api/v1`,
+    authBase: `${baseURL}/auth`,
     filters: {
         tyres: '/filter/tyre',
         disks: '/filter/disk',

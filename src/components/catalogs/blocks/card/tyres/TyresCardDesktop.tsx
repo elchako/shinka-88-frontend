@@ -2,7 +2,8 @@ import type React from "react"
 import CardDesktopStyles from "../CardDesktopStyles.module.scss"
 import { OffenButton } from "../../../../common/OffenButton"
 import { useAppDispatch, useTyresCardData, } from "../../../../../app/hooks"
-import { amountHandler, type resultsTyresType } from "../../../../../app/slices/filters/tiresFiltersSlice"
+import { amountHandler } from "../../../../../app/slices/filters/tiresFiltersSlice"
+import type { resultsTyresType } from "../../../../../types/tires"
 
 interface IProps {
     data: resultsTyresType

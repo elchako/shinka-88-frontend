@@ -8,7 +8,7 @@ import {
     selectsSelect,
     tiresAPISelector
 } from "../../../app/slices/filters/tiresFiltersSlice"
-import { type tiresAPI } from "../../../types/tires"
+import type { tiresResponseData } from "../../../types/tires"
 
 
 // селекты фильтр
@@ -22,7 +22,7 @@ export const SizeFilter: React.FC = () => {
     useEffect(() => {
         let dataIsEmpty = true
         for (const key in tiresAPI) {
-            if (tiresAPI[key as keyof tiresAPI].length === 0) {
+            if (tiresAPI[key as keyof tiresResponseData].length === 0) {
                 dataIsEmpty = false
                 break
             }
@@ -34,7 +34,7 @@ export const SizeFilter: React.FC = () => {
         <div className={FiltersStyles.size}>
             <p className={FiltersStyles.filterTitle}>Размер</p>
             {selects.map((item, index) => {
-                let values = [...tiresAPI[item.selectName.apiName as keyof tiresAPI]]
+                let values = [...tiresAPI[item.selectName.apiName as keyof tiresResponseData]]
                 values.sort()
                 let defaultValue = ''
                 if (item.value !== '' && item.value.length !== 0) {

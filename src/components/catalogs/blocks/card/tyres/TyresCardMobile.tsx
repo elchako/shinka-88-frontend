@@ -3,7 +3,8 @@ import CardMobileStyles from "../CardDesktopStyles.module.scss"
 import gift from '../../../../../imgs/tiresCard/gift.png'
 import cart from '../../../../../imgs/cart/productMobileCart.png'
 import { useAppDispatch, useTyresCardData } from "../../../../../app/hooks"
-import { amountHandler, type resultsTyresType } from "../../../../../app/slices/filters/tiresFiltersSlice"
+import { amountHandler } from "../../../../../app/slices/filters/tiresFiltersSlice"
+import type { resultsTyresType } from "../../../../../types/tires"
 
 
 interface IProps {

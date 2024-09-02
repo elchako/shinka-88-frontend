@@ -12,7 +12,7 @@ import {
     selectSelector,
     selectsSelect
 } from "../../../../../../app/slices/filters/disksFiltersSlice"
-import { type disksAPI } from "../../../../../../types/disks"
+import type { diskResponseData } from "../../../../../../types/disks"
 
 export const DisksFilterBlock2: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -33,7 +33,7 @@ export const DisksFilterBlock2: React.FC = () => {
             <div className={FilterBlocksStyles.selects}>
                 {/* селекты */}
                 {selects.map((item, index) => {
-                    let values = [...disksAPI[item.selectName.apiName as keyof disksAPI]]
+                    let values = [...disksAPI[item.selectName.apiName as keyof diskResponseData]]
                     values.sort()
                     return <div className={FilterBlocksStyles.select} key={index}>
                         <p>{item.selectName.displayName}</p>

@@ -8,7 +8,7 @@ import {
     selectSelector,
     selectsSelect
 } from "../../../app/slices/filters/disksFiltersSlice"
-import { type disksAPI } from "../../../types/disks"
+import type { diskResponseData } from "../../../types/disks"
 
 
 // селекты фильтр
@@ -22,7 +22,7 @@ export const SizeFilter: React.FC = () => {
     useEffect(() => {
         let dataIsEmpty = true
         for (const key in disksAPI) {
-            if (disksAPI[key as keyof disksAPI].length === 0) {
+            if (disksAPI[key as keyof diskResponseData].length === 0) {
                 dataIsEmpty = false
                 break
             }
@@ -34,7 +34,7 @@ export const SizeFilter: React.FC = () => {
         <div className={FiltersStyles.size}>
             <p className={FiltersStyles.filterTitle}>Размер</p>
             {selects.map((item, index) => {
-                let values = [...disksAPI[item.selectName.apiName as keyof disksAPI]]
+                let values = [...disksAPI[item.selectName.apiName as keyof diskResponseData]]
                 values.sort()
                 let defaultValue = ''
                 if (item.value !== '' && item.value.length !== 0) {

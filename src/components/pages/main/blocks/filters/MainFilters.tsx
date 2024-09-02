@@ -5,10 +5,10 @@ import { useState } from "react"
 import { tabs } from '../../../../../consts'
 import arrow from '../../../../../imgs/filtersMobileMenu.png'
 import { AutoPartsFilterBlock2 } from "./filtersBlocks/AutoPartsFilterBlock2"
-import { TiresFilterBlock1 } from "./filtersBlocks/tiresFilterBlock1"
-import { DisksFilterBlock2 } from "./filtersBlocks/disksFilterBlock2"
-import { OilsFilterBlock3 } from "./filtersBlocks/oilsFilterBlock3"
-import { AKBFilterBlock4 } from "./filtersBlocks/akbFilterBlock4"
+import { TiresFilterBlock1 } from "./filtersBlocks/TiresFilterBlock1"
+import { DisksFilterBlock2 } from "./filtersBlocks/DisksFilterBlock2"
+import { OilsFilterBlock3 } from "./filtersBlocks/OilsFilterBlock3"
+import { AKBFilterBlock4 } from "./filtersBlocks/AKBFilterBlock4"
 
 export interface ITabsProps {
     isModalOpen: boolean

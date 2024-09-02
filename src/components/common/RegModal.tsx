@@ -29,8 +29,22 @@ export const RegModal: React.FC = () => {
 
     // получить код
     const getCodeHandler = () => {
-        dispatch(toogleSmsCode())
-        dispatch(getSmsCode({ name, phone }))
+        const time = localStorage.getItem('time')
+        if (!time) {
+            localStorage.setItem('time', String(Date.now()))
+            dispatch(toogleSmsCode())
+            dispatch(getSmsCode({ name, phone }))
+        } else {
+            const timeNow = Date.now()
+            const difSeconds = Math.trunc((timeNow - Number(time)) / 1000)
+            if (difSeconds < 60) {
+                alert(`Слишком часто. Повторите Ваш запрос через ${60 - difSeconds} секунд(ы)`)
+            } else {
+                localStorage.setItem('time', String(Date.now()))
+                dispatch(toogleSmsCode())
+                dispatch(getSmsCode({ name, phone }))
+            }
+        }
     }
 
     // отправка кода

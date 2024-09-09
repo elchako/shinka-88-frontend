@@ -11,14 +11,22 @@ class OrderAPI {
     }
 
     async createOrder(order: orderType, token: string) {
-        const response = await this.instance.post(URLs.order,
-            JSON.stringify(order), {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${token}`
+        try {
+            const response = await this.instance.post(URLs.order,
+                JSON.stringify(order), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${token}`
+                }
+            });
+            return response.data
+        } catch (error) {
+            // Проверяем, если ошибка является ошибкой от axios
+            if (axios.isAxiosError(error)) {
+                // Читаем детали ошибки
+                return error.response?.data
             }
-        });
-        return response.data
+        }
     }
 }
 

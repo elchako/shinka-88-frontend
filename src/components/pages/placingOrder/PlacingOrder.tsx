@@ -67,8 +67,8 @@ export const PlacingOrder: React.FC = () => {
 
     useEffect(() => {
         const token = Cookies.get('token')
-        if (token) {
-            const customerLocalData: string | null = localStorage.getItem('customerLocalData')
+        const customerLocalData: string | null = localStorage.getItem('customerLocalData')
+        if (token && customerLocalData) {
             let data = JSON.parse(customerLocalData as string)
             dispatch(setName(data.name))
             dispatch(setPhone(data.phone))

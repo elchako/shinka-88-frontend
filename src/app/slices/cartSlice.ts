@@ -184,7 +184,11 @@ export const cartSlice = createAppSlice({
         createOrder: create.asyncThunk(
             async (args: { order: orderType, token: string }) => {
                 const response = await orderApi.createOrder(args.order, args.token)
-                return response.order
+                if (response.order) {
+                    return response.order
+                } else {
+                    throw new Error(response.id + ':' + response.type)
+                }
             },
             {
                 pending: state => {
@@ -200,8 +204,39 @@ export const cartSlice = createAppSlice({
                     state.orderNumber = action.payload
                     localStorage.removeItem('cartData')
                 },
-                rejected: state => {
+                rejected: (state, action: any) => {
                     state.creatingOrder = !state.creatingOrder
+                    const [id, type] = action.error.message.split(':')
+                    if (type === 'disk') {
+                        let disks = [...state.disks]
+                        for (let i = 0; i < disks.length; i++) {
+                            if (disks[i].id === Number(id)) {
+                                alert(`К сожалению товар ${disks[i].name} закончился`)
+                                disks.splice(i, 1)
+                                state.disks = disks
+                                break
+                            }
+                        }
+                    }
+                    if (type === 'tyre') {
+                        let tyres = [...state.tyres]
+                        for (let i = 0; i < tyres.length; i++) {
+                            if (tyres[i].id === Number(id)) {
+                                alert(`К сожалению товар ${tyres[i].name} закончился`)
+                                tyres.splice(i, 1)
+                                state.tyres = tyres
+                                break
+                            }
+                        }
+                    }
+
+                    const newCartArr = sortAllProducts(state)
+                    state.priceAmount = recalcPriceAmount(newCartArr)
+                    state.queueCounter = newCartArr.length
+                    if (newCartArr.length !== 0) {
+                        newCartArr.forEach((item, index) => item.queue = index)
+                    }
+                    localStorage.setItem('cartData', JSON.stringify(state))
                 },
             },
         ),

@@ -6,6 +6,7 @@ import mobileCart from '../../imgs/cart/mobileCart.png'
 import { Logo } from "../common/Logo";
 import { useAppSelector } from "../../app/hooks";
 import { disksDataSelector, tyresDataSelector } from "../../app/slices/cartSlice";
+import { CartCounter } from "../common/CartCounter";
 
 
 export const MobileHeader: React.FC = () => {
@@ -24,7 +25,7 @@ export const MobileHeader: React.FC = () => {
         </a>
         <Logo {...mobileLogoStyles} />
         <NavLink to='cart' className={HeaderStyles.mobileCart}>
-            <p className={HeaderStyles.productsCounter}>{tyresAmount + disksAmount}</p>
+            <CartCounter />
             <img src={mobileCart} alt="cart" />
         </NavLink>
     </div>

@@ -47,7 +47,7 @@ export const PlacingOrder: React.FC = () => {
     }
 
     const buttonHandler = (): void => {
-        const phoneRegex = /^(?:\+7|7)\d{10}$/
+        const phoneRegex = /^\d{10}$/
         if (name === '' || phone === '') {
             alert('Заполните все поля')
             return
@@ -93,7 +93,7 @@ export const PlacingOrder: React.FC = () => {
                             <div className={PlacingOrderStyles.field}>
                                 <p className={PlacingOrderStyles.fieldTitle}>Телефон *</p>
                                 <input type="text" className={PlacingOrderStyles.fieldInput}
-                                    placeholder="+7 999 999 99 99"
+                                    placeholder="999 999 99 99"
                                     onChange={(e) => dispatch(setPhone(e.target.value))}
                                     value={phone} />
                             </div>

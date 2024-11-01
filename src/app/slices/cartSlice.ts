@@ -179,11 +179,13 @@ export const cartSlice = createAppSlice({
         // заказ создаётся
         orderIsCreating: create.reducer(state => {
             state.creatingOrder = !state.creatingOrder
+            state.orderNumber = 0
         }),
         // создание заказа
         createOrder: create.asyncThunk(
             async (args: { order: orderType, token: string }) => {
                 const response = await orderApi.createOrder(args.order, args.token)
+                console.log(response)
                 if (response.order) {
                     return response.order
                 } else {

@@ -1,6 +1,6 @@
 import type React from "react";
 import { NavLink } from "react-router-dom";
-import logo from '../../imgs/logo.png'
+import logo from '../../imgs/logo.svg'
 
 interface ILogoCSSProps {
     logoImg: string
@@ -9,7 +9,7 @@ interface ILogoCSSProps {
 }
 
 export const Logo: React.FC<ILogoCSSProps> = (styles) => {
-    
+
     return <NavLink to='/' className={styles.logo}>
         <div className={styles.logoImg}>
             <img src={logo} alt="logo" />

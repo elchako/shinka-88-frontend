@@ -1,3 +1,5 @@
+@import '../../common.scss';
+
 .mainWrapperOffenButton {
     border-radius: 7px;
     background: rgb(239, 129, 0);
@@ -145,5 +147,44 @@
 
     to {
         transform: rotate(360deg);
+    }
+}
+
+
+/* Счётчик товаров в корзине */
+
+.cartAmount {
+    position: absolute;
+    top: 5px;
+    left: 25px;
+    min-width: 16px;
+    height: 16px;
+    padding: 5px;
+    flex-shrink: 0;
+    border-radius: 50px;
+    background: #EF8100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: visible;
+}
+
+.cartAmount.cartAmountHidden {
+    visibility: hidden;
+}
+
+.cartAmount p {
+    color: #FFF;
+    font-family: $font1;
+    font-size: 8px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+@media screen and (max-width: 880px) {
+    .cartAmount {
+        top: -3px;
+        left: 20px;
     }
 }

@@ -12,21 +12,22 @@
 
 .logo {
     display: flex;
+    align-items: center;
 }
 
 .logoImg img {
-    width: 66px;
+    width: 44px;
 }
 
 .title {
     align-self: center;
     color: rgba(0, 0, 0, 0.76);
     font-family: $font1;
-    font-size: 40px;
+    font-size: 22px;
     font-weight: 700;
     line-height: 61px;
     letter-spacing: 0%;
-    margin-left: 20px;
+    margin-left: 16px;
 }
 
 .data {
@@ -57,10 +58,11 @@
 
 .cartImg {
     display: flex;
+    position: relative;
 }
 
 .cartImg img {
-    width: 45px;
+    width: 32px;
     cursor: pointer;
     align-self: center;
 }

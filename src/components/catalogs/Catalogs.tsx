@@ -18,6 +18,10 @@ import { DisksSortHeaderMobile } from "./blocks/sortHeader/DisksSortHeaderMobile
 import { addDisksToCart, addTyresToCart } from "../../app/slices/cartSlice"
 import { type resultsTyresType } from "../../types/tires"
 import { type resultsDisksType } from "../../types/disks"
+import summer from '../../imgs/tiresCard/summer.png'
+import winter from '../../imgs/tiresCard/winter.png'
+import runflat from '../../imgs/tiresCard/runflat.png'
+import strong from '../../imgs/tiresCard/strong.png'
 
 
 export const Catalogs: React.FC = () => {
@@ -46,7 +50,32 @@ export const Catalogs: React.FC = () => {
             <p className="pageTitle">{catalogData.title}</p>
 
             {/* сортировка */}
-            <SortHeader sortData={catalogData.sortData} />
+            <div className={CatalogStyles.sortPrompt}>
+                <SortHeader sortData={catalogData.sortData} />
+                <div className={CatalogStyles.promptHiddenWrapper}>
+                    <div className={CatalogStyles.promptWrapper}>
+                        <p>Подсказки:</p>
+                        <div className={CatalogStyles.prompts}>
+                            <div>
+                                <img src={summer} alt="лето" />
+                                <p>лето</p>
+                            </div>
+                            <div>
+                                <img src={winter} alt="зима" />
+                                <p>зима</p>
+                            </div>
+                            <div>
+                                <img src={runflat} alt="runflat" />
+                                <p>runflat</p>
+                            </div>
+                            <div>
+                                <img src={strong} alt="усиленные" />
+                                <p>усиленные</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className={CatalogStyles.content}>
 
                 {/* десктопные фильтры */}

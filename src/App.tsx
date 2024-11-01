@@ -47,7 +47,7 @@ export const App = () => {
       overflow: modalStyle.overflow,
       height: modalStyle.height,
     }}>
-      <BrowserRouter basename="/shinka-88-frontend">
+      <BrowserRouter basename="/">
         {/* <BrowserRouter> */}
         <Header />
         <HiddenMobileMenu />

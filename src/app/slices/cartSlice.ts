@@ -57,7 +57,8 @@ export const cartSlice = createAppSlice({
     name: "cart",
     initialState,
     reducers: create => ({
-        // добавление шин в корзину
+        // добавление/удаление шин в корзину
+        // из каталога
         addTyresToCart: create.reducer((state,
             action: PayloadAction<resultsTyresType>) => {
             let founded = false
@@ -73,7 +74,8 @@ export const cartSlice = createAppSlice({
             state.priceAmount = recalcPriceAmount([...state.tyres, ...state.disks])
             localStorage.setItem('cartData', JSON.stringify(state))
         }),
-        // добавление дисков в корзину
+        // добавление/удаление дисков в корзину
+        // из каталога
         addDisksToCart: create.reducer((state,
             action: PayloadAction<resultsDisksType>) => {
             let founded = false

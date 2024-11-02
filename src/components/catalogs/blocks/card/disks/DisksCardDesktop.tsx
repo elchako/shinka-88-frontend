@@ -1,19 +1,26 @@
 import type React from "react"
 import CardDesktopStyles from "../CardDesktopStyles.module.scss"
 import { OffenButton } from "../../../../common/OffenButton"
-import { useAppDispatch, } from "../../../../../app/hooks"
+import { useAppDispatch, useSelectedProduct, } from "../../../../../app/hooks"
 import { amountHandler } from "../../../../../app/slices/filters/disksFiltersSlice"
 import type { resultsDisksType } from "../../../../../types/disks"
 
 
 interface IProps {
     data: resultsDisksType
-    handler: (data: resultsDisksType) => void
+    handler: (data: resultsDisksType, inCart: boolean) => void
 }
 
 
 export const DisksCardDesktop: React.FC<IProps> = ({ data, handler }) => {
     const dispatch = useAppDispatch()
+
+    // поиск товаров, которые находятся в корзине
+    const cartButtonData = useSelectedProduct(data)
+    let buttonTitle = cartButtonData.buttonTitle
+    let buttonStyles = cartButtonData.buttonStyles
+        ? CardDesktopStyles.cartButton
+        : undefined
 
     return (
         <div className={CardDesktopStyles.mainWrapper}>
@@ -49,7 +56,8 @@ export const DisksCardDesktop: React.FC<IProps> = ({ data, handler }) => {
                     <p>Итого:</p>
                     <p>{data.price_sale * data.amount}</p>
                 </div>
-                <OffenButton handler={() => handler(data)} name={'КОРЗИНА'} />
+                <OffenButton handler={() => handler(data, cartButtonData.buttonStyles)} name={buttonTitle}
+                    styles={buttonStyles} />
             </div>
         </div>
     )

@@ -182,6 +182,19 @@
     line-height: normal;
 }
 
+@media screen and (max-width:970px) {
+    .mainWrapperOffenButton {
+        font-size: 15px;
+        line-height: 10px;
+        width: 100%;
+    }
+
+    .mainWrapperOffenButton p {
+        padding: 15px 15px;
+    }
+}
+
+
 @media screen and (max-width: 880px) {
     .cartAmount {
         top: -3px;

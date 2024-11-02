@@ -39,7 +39,7 @@ export const authSlice = createAppSlice({
         // получить код
         getSmsCode: create.asyncThunk(
             async (args: { name: string, phone: string }) => {
-                await authApi.getSmsCode(args.name, args.phone)
+                await authApi.getSmsCode(args.name, args.phone.slice(1))
             },
             {
                 pending: () => {

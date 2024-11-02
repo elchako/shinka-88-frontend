@@ -143,10 +143,15 @@ export const filterBlock1Slice = createAppSlice({
         amountHandler: create.reducer((state, action: PayloadAction<{ id: number, isPlus: boolean }>) => {
             for (let i = 0; i < state.tyresCardsArr.results.length; i++) {
                 if (state.tyresCardsArr.results[i].id === action.payload.id) {
+                    console.log(state.tyresCardsArr.results[i].amount)
+                    console.log(state.tyresCardsArr.results[i].balance)
+                    let amount = state.tyresCardsArr.results[i].amount
+                    let balance = state.tyresCardsArr.results[i].balance
+
                     if (action.payload.isPlus
-                        && state.tyresCardsArr.results[i].amount < state.tyresCardsArr.results[i].balance) {
+                        && amount < balance) {
                         state.tyresCardsArr.results[i].amount++
-                    } else if (state.tyresCardsArr.results[i].amount > 1) {
+                    } else if (amount !== 1 && !action.payload.isPlus) {
                         state.tyresCardsArr.results[i].amount--
                     }
                     break

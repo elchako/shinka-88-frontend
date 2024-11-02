@@ -1,18 +1,25 @@
 import type React from "react"
-import CardMobileStyles from "../CardDesktopStyles.module.scss"
-import cart from '../../../../../imgs/cart/productMobileCart.png'
-import { useAppDispatch } from "../../../../../app/hooks"
+import { useAppDispatch, useSelectedProduct } from "../../../../../app/hooks"
 import { amountHandler } from "../../../../../app/slices/filters/disksFiltersSlice"
 import type { resultsDisksType } from "../../../../../types/disks"
+import { OffenButton } from "../../../../common/OffenButton"
+import CardMobileStyles from "../CardDesktopStyles.module.scss"
 
 
 interface IProps {
     data: resultsDisksType
-    handler: (data: resultsDisksType) => void
+    handler: (data: resultsDisksType, inCart: boolean) => void
 }
 
 export const DisksCardMobile: React.FC<IProps> = ({ data, handler }) => {
     const dispatch = useAppDispatch()
+
+    // поиск товаров, которые находятся в корзине
+    const cartButtonData = useSelectedProduct(data)
+    let buttonTitle = cartButtonData.buttonTitle
+    let buttonStyles = cartButtonData.buttonStyles
+        ? CardMobileStyles.cartButton
+        : undefined
     return (
         <div className={CardMobileStyles.mainWrapperMobile}>
             <div className={CardMobileStyles.productImgMobile}>
@@ -41,9 +48,8 @@ export const DisksCardMobile: React.FC<IProps> = ({ data, handler }) => {
                     <div className={CardMobileStyles.productPriceMobile}>
                         {data.price_sale}
                     </div>
-                    <div onClick={() => handler(data)} className={CardMobileStyles.productCartMobile}>
-                        <img src={cart} alt="" />
-                    </div>
+                    <OffenButton handler={() => handler(data, cartButtonData.buttonStyles)} name={buttonTitle}
+                        styles={buttonStyles} />
                 </div>
             </div>
         </div>

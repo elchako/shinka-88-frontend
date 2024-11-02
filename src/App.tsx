@@ -19,6 +19,7 @@ import { mobileFiltersSelector } from "./app/slices/common/smallActions"
 import { pullLocalStorageData } from "./app/slices/cartSlice"
 import { RegModal } from "./components/common/RegModal"
 import { CreateOrder } from "./components/common/CreateOrderModal"
+import { HelmetProvider } from "react-helmet-async"
 
 
 export const App = () => {
@@ -47,26 +48,28 @@ export const App = () => {
       overflow: modalStyle.overflow,
       height: modalStyle.height,
     }}>
-      <BrowserRouter basename="/">
-        {/* <BrowserRouter> */}
-        <Header />
-        <HiddenMobileMenu />
-        <MobileFiltersModal />
-        <RegModal />
-        <CreateOrder />
-        <Routes>
-          <Route path={links[0].link} element={<MainPage />} />
-          <Route path={links[3].link} element={<Catalogs />} />
-          <Route path={links[4].link} element={<Catalogs />} />
-          <Route path={links[7].link} element={<AutoParts />} />
-          <Route path={links[1].link} element={<Cart />} />
-          <Route path={links[10].link} element={<PlacingOrder />} />
-          <Route path={links[11].link} element={<Payment />} />
-          <Route path={links[12].link} element={<AboutUs />} />
-          <Route path={links[13].link} element={<Guarantees />} />
-        </Routes>
-        <MobileMenu />
-      </BrowserRouter>
+      <HelmetProvider>
+        <BrowserRouter basename="/">
+          {/* <BrowserRouter> */}
+          <Header />
+          <HiddenMobileMenu />
+          <MobileFiltersModal />
+          <RegModal />
+          <CreateOrder />
+          <Routes>
+            <Route path={links[0].link} element={<MainPage />} />
+            <Route path={links[3].link} element={<Catalogs />} />
+            <Route path={links[4].link} element={<Catalogs />} />
+            <Route path={links[7].link} element={<AutoParts />} />
+            <Route path={links[1].link} element={<Cart />} />
+            <Route path={links[10].link} element={<PlacingOrder />} />
+            <Route path={links[11].link} element={<Payment />} />
+            <Route path={links[12].link} element={<AboutUs />} />
+            <Route path={links[13].link} element={<Guarantees />} />
+          </Routes>
+          <MobileMenu />
+        </BrowserRouter>
+      </HelmetProvider>
     </div>
   )
 }

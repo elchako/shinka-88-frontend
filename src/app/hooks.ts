@@ -37,7 +37,8 @@ import {
     priceMaxSelector as priceMax2,
 } from './slices/filters/disksFiltersSlice'
 import { type resultsTyresType, type tyresCards } from '../types/tires'
-import { type disksCards } from '../types/disks'
+import { type resultsDisksType, type disksCards } from '../types/disks'
+import { disksDataSelector, tyresDataSelector } from './slices/cartSlice'
 
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
@@ -131,5 +132,35 @@ export const useTyresCardData = (data: resultsTyresType) => {
         runflatIcon,
         strongText,
         strongIcon
+    }
+}
+
+
+// поиск товаров каталога в корзине
+// для обозначения выбранных и положенных в корзину
+export const useSelectedProduct = (data: resultsTyresType | resultsDisksType) => {
+    const tyres = useAppSelector(tyresDataSelector)
+    const disks = useAppSelector(disksDataSelector)
+    const tiresData = tyres.map(item => {
+        return { id: item.id, amount: item.amount }
+    })
+    const disksData = disks.map(item => {
+        return { id: item.id, amount: item.amount }
+    })
+    const cartData = [...tiresData, ...disksData]
+    let buttonTitle = 'КОРЗИНА'
+    let buttonStyles = false
+
+    for (let i = 0; i < cartData.length; i++) {
+        if (cartData[i].id === data.id && cartData[i].amount === data.amount) {
+            buttonTitle = 'В КОРЗИНЕ'
+            buttonStyles = true
+            break
+        }
+    }
+
+    return {
+        buttonTitle,
+        buttonStyles
     }
 }

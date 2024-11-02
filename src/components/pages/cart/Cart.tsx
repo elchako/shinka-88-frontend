@@ -20,6 +20,7 @@ import { type resultsTyresType } from "../../../types/tires";
 import { type resultsDisksType } from "../../../types/disks";
 import { type selectedType } from "../../../types/cart";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 
 type commonArray = Array<(selectedType & resultsTyresType) | (selectedType & resultsDisksType)>
@@ -51,55 +52,60 @@ export const Cart: React.FC = () => {
         : CartStyles.contentWrapper
 
     return (
-        <div className={CartStyles.mainWrapper}>
-            <div className={wrapperStyle}>
-                <p className="pageTitle">Корзина</p>
-                <div className={CartStyles.content}>
-                    <div className={CartStyles.leftBlock}>
+        <>
+            <Helmet>
+                <title>Шинка88 - Корзина</title>
+            </Helmet>
+            <div className={CartStyles.mainWrapper}>
+                <div className={wrapperStyle}>
+                    <p className="pageTitle">Корзина</p>
+                    <div className={CartStyles.content}>
+                        <div className={CartStyles.leftBlock}>
 
-                        {/* управление всеми элементами корзины */}
-                        <div className={CartStyles.actionForAll}>
-                            {<Checkbox
-                                icon={<div className={CartStyles.icon}></div>}
-                                label={'Выбрать все'}
-                                className={CartStyles.checkboxCN}
-                                labelClassName={CartStyles.checkboxLCN}
-                                borderRadius={10}
-                                borderColor={'#000'}
-                                checked={selectAll}
-                                onChange={() => dispatch(selectAllHandler())}
-                            />}
-                            <p
-                                onClick={() => dispatch(resetCart())}
-                                className={CartStyles.clearCart}>Очистить корзину</p>
+                            {/* управление всеми элементами корзины */}
+                            <div className={CartStyles.actionForAll}>
+                                {<Checkbox
+                                    icon={<div className={CartStyles.icon}></div>}
+                                    label={'Выбрать все'}
+                                    className={CartStyles.checkboxCN}
+                                    labelClassName={CartStyles.checkboxLCN}
+                                    borderRadius={10}
+                                    borderColor={'#000'}
+                                    checked={selectAll}
+                                    onChange={() => dispatch(selectAllHandler())}
+                                />}
+                                <p
+                                    onClick={() => dispatch(resetCart())}
+                                    className={CartStyles.clearCart}>Очистить корзину</p>
+                            </div>
+
+                            {/* карточки товаров */}
+                            <div className={CartStyles.cards}>
+                                {cardData.map((item, index) => {
+                                    // шины
+                                    if (item.product_type === tabs[0]) {
+                                        return <CartTyresCards
+                                            data={item as tiresData}
+                                            key={`${item} - ${index}`} />
+                                    }
+                                    // диски
+                                    if (item.product_type === tabs[1]) {
+                                        return <CartDisksCards
+                                            data={item as disksData}
+                                            key={`${item} - ${index}`} />
+                                    }
+                                    return null
+                                })}
+                            </div>
                         </div>
 
-                        {/* карточки товаров */}
-                        <div className={CartStyles.cards}>
-                            {cardData.map((item, index) => {
-                                // шины
-                                if (item.product_type === tabs[0]) {
-                                    return <CartTyresCards
-                                        data={item as tiresData}
-                                        key={`${item} - ${index}`} />
-                                }
-                                // диски
-                                if (item.product_type === tabs[1]) {
-                                    return <CartDisksCards
-                                        data={item as disksData}
-                                        key={`${item} - ${index}`} />
-                                }
-                                return null
-                            })}
-                        </div>
+                        {/* кнопка оформления заказа */}
+                        <OrderInfo nameButton='ОФОРМИТЬ ЗАКАЗ' name='В корзине'
+                            handler={buttonHandler} />
                     </div>
-
-                    {/* кнопка оформления заказа */}
-                    <OrderInfo nameButton='ОФОРМИТЬ ЗАКАЗ' name='В корзине'
-                        handler={buttonHandler} />
                 </div>
+                <Footer />
             </div>
-            <Footer />
-        </div>
+        </>
     )
 }

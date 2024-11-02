@@ -1,14 +1,13 @@
 import type React from "react"
-import CardDesktopStyles from "../CardDesktopStyles.module.scss"
-import { OffenButton } from "../../../../common/OffenButton"
-import { useAppDispatch, useAppSelector, useTyresCardData, } from "../../../../../app/hooks"
+import { useAppDispatch, useSelectedProduct, useTyresCardData, } from "../../../../../app/hooks"
 import { amountHandler } from "../../../../../app/slices/filters/tiresFiltersSlice"
 import type { resultsTyresType } from "../../../../../types/tires"
-import { disksDataSelector, tyresDataSelector } from "../../../../../app/slices/cartSlice"
+import { OffenButton } from "../../../../common/OffenButton"
+import CardDesktopStyles from "../CardDesktopStyles.module.scss"
 
 interface IProps {
     data: resultsTyresType
-    handler: (data: resultsTyresType) => void
+    handler: (data: resultsTyresType, inCart: boolean) => void
 }
 
 
@@ -17,25 +16,11 @@ export const TyresCardDesktop: React.FC<IProps> = ({ data, handler }) => {
     const cardData = useTyresCardData(data)
 
     // поиск товаров, которые находятся в корзине
-    const tyres = useAppSelector(tyresDataSelector)
-    const disks = useAppSelector(disksDataSelector)
-    const tiresData = tyres.map(item => {
-        return { id: item.id, amount: item.amount }
-    })
-    const disksData = disks.map(item => {
-        return { id: item.id, amount: item.amount }
-    })
-    const cartData = [...tiresData, ...disksData]
-    let buttonTitle = 'КОРЗИНА'
-    let buttonStyles = undefined
-
-    for (let i = 0; i < cartData.length; i++) {
-        if (cartData[i].id === data.id && cartData[i].amount === data.amount) {
-            buttonTitle = 'В КОРЗИНЕ'
-            buttonStyles = CardDesktopStyles.cartButton
-            break
-        }
-    }
+    const cartButtonData = useSelectedProduct(data)
+    let buttonTitle = cartButtonData.buttonTitle
+    let buttonStyles = cartButtonData.buttonStyles
+        ? CardDesktopStyles.cartButton
+        : undefined
 
     return (
         <div className={CardDesktopStyles.mainWrapper}>
@@ -85,7 +70,7 @@ export const TyresCardDesktop: React.FC<IProps> = ({ data, handler }) => {
                     <p>Итого:</p>
                     <p>{data.price_sale * data.amount}</p>
                 </div>
-                <OffenButton handler={() => handler(data)} name={buttonTitle} styles={buttonStyles} />
+                <OffenButton handler={() => handler(data, cartButtonData.buttonStyles)} name={buttonTitle} styles={buttonStyles} />
             </div>
         </div>
     )

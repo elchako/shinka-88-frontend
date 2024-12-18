@@ -22,6 +22,14 @@ export const DisksCardDesktop: React.FC<IProps> = ({ data, handler }) => {
         ? CardDesktopStyles.cartButton
         : undefined
 
+    const plusHandler = () => {
+        if (data.amount === data.balance) {
+            alert(`Количество товара на складе ${data.balance}шт, невозможно добавить товар`)
+            return
+        }
+        dispatch(amountHandler({ id: data.id, isPlus: true }))
+    }
+
     return (
         <div className={CardDesktopStyles.mainWrapper}>
             <div className={CardDesktopStyles.productImg}>
@@ -49,7 +57,7 @@ export const DisksCardDesktop: React.FC<IProps> = ({ data, handler }) => {
                             dispatch(amountHandler({ id: data.id, isPlus: false }))}>&#9668;</button>
                         <p>{data.amount}</p>
                         <button onClick={() =>
-                            dispatch(amountHandler({ id: data.id, isPlus: true }))}>&#9658;</button>
+                            plusHandler()}>&#9658;</button>
                     </div>
                 </div>
                 <div className={CardDesktopStyles.productInfoAmountItem}>

@@ -16,7 +16,7 @@ export const HiddenMobileMenu: React.FC = () => {
         : menuStyles = MobileMenuStyles.mainHiddenMenuWrapper
 
     // ссылки меню
-    const menuLinks = links.slice(3,)
+    const menuLinks = [...links.slice(3, 5), ...links.slice(10,)]
 
     return <div className={menuStyles}>
         <div className={MobileMenuStyles.hiddenMenuHeader}>

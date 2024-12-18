@@ -14,6 +14,14 @@ interface IProps {
 export const DisksCardMobile: React.FC<IProps> = ({ data, handler }) => {
     const dispatch = useAppDispatch()
 
+    const plusHandler = () => {
+        if (data.amount === data.balance) {
+            alert(`Количество товара на складе ${data.balance}шт, невозможно добавить товар`)
+            return
+        }
+        dispatch(amountHandler({ id: data.id, isPlus: true }))
+    }
+
     // поиск товаров, которые находятся в корзине
     const cartButtonData = useSelectedProduct(data)
     let buttonTitle = cartButtonData.buttonTitle
@@ -43,7 +51,7 @@ export const DisksCardMobile: React.FC<IProps> = ({ data, handler }) => {
                             dispatch(amountHandler({ id: data.id, isPlus: false }))}>-</button>
                         <p>{data.amount}</p>
                         <button onClick={() =>
-                            dispatch(amountHandler({ id: data.id, isPlus: true }))}>+</button>
+                            plusHandler()}>+</button>
                     </div>
                     <div className={CardMobileStyles.productPriceMobile}>
                         {data.price_sale}

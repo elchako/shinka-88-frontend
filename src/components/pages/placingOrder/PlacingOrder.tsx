@@ -10,6 +10,7 @@ import { nameSelector, phoneSelector, setName, setPhone, toogleModal } from "../
 import { createOrder, disksDataSelector, priceAmountSelector, tyresDataSelector } from "../../../app/slices/cartSlice";
 import type { orderProductsType, orderType } from "../../../types/cart";
 import { Helmet } from "react-helmet-async";
+import { normalizePhoneNumber } from "../../../utils/other";
 
 
 export const PlacingOrder: React.FC = () => {
@@ -48,14 +49,15 @@ export const PlacingOrder: React.FC = () => {
     }
 
     const buttonHandler = (): void => {
-        const phoneRegex = /^7\d{10}$/;
+        let cleanPhone = normalizePhoneNumber(phone)
         if (name === '' || phone === '') {
             alert('Заполните все поля')
             return
-        } else if (!phone.match(phoneRegex)) {
+        } else if (!cleanPhone) {
             alert('Неверный номер телефона')
             return
         } else {
+            dispatch(setPhone(cleanPhone))
             const token = Cookies.get('token')
             if (!token) {
                 dispatch(toogleModal())
@@ -98,7 +100,7 @@ export const PlacingOrder: React.FC = () => {
                                 <div className={PlacingOrderStyles.field}>
                                     <p className={PlacingOrderStyles.fieldTitle}>Телефон *</p>
                                     <input type="text" className={PlacingOrderStyles.fieldInput}
-                                        placeholder="7 999 999 99 99"
+                                        placeholder="999 999 99 99"
                                         onChange={(e) => dispatch(setPhone(e.target.value))}
                                         value={phone} />
                                 </div>
@@ -132,7 +134,8 @@ export const PlacingOrder: React.FC = () => {
                                             <p className={PlacingOrderStyles.address}>
                                                 г. Егорьевск, ул. Рязанская, ГСК ЦЕНА<br />
                                                 6 мкр-н, гаражи рядом с пожарным депо</p>
-                                            <p><a href="https://yandex.ru/maps/org/avto_stop/1015072993?si=4j1jcathucrm7pd2zk4jtjvukg">Построить маршрут &#10148;</a></p>
+                                            <p><a href="https://yandex.ru/maps/org/avto_stop/1015072993?si=4j1jcathucrm7pd2zk4jtjvukg"
+                                                target="_blank">Построить маршрут &#10148;</a></p>
                                         </div>
                                         <div className={PlacingOrderStyles.contactsTextBottom}>
                                             <p className={PlacingOrderStyles.firstTime}>летом с 8.00 до 23.00</p>

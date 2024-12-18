@@ -9,6 +9,7 @@ class AuthAPI {
         this.instance = axios.create({ baseURL })
     }
 
+    // отправка смс кода клиенту
     async getSmsCode(name: string, phone_number: string) {
         await this.instance.post(URLs.auth.register,
             JSON.stringify({ name, phone_number }), {
@@ -16,6 +17,7 @@ class AuthAPI {
         });
     }
 
+    // отправка смс кода на сервер для подтверждения
     async login(phone_number: string, confirmation_code: string) {
         const response = await this.instance.post(URLs.auth.login,
             JSON.stringify({ phone_number, confirmation_code }), {

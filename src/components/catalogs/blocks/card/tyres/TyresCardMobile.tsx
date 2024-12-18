@@ -17,6 +17,14 @@ export const TyresCardMobile: React.FC<IProps> = ({ data, handler }) => {
     const dispatch = useAppDispatch()
     const cardData = useTyresCardData(data)
 
+    const plusHandler = () => {
+        if (data.amount === data.balance) {
+            alert(`Количество товара на складе ${data.balance}шт, невозможно добавить товар`)
+            return
+        }
+        dispatch(amountHandler({ id: data.id, isPlus: true }))
+    }
+
     // поиск товаров, которые находятся в корзине
     const cartButtonData = useSelectedProduct(data)
     let buttonTitle = cartButtonData.buttonTitle
@@ -76,7 +84,7 @@ export const TyresCardMobile: React.FC<IProps> = ({ data, handler }) => {
                                 dispatch(amountHandler({ id: data.id, isPlus: false }))}><img src={minus} alt="" /></button>
                             <p>{data.amount}</p>
                             <button className={plusButtonStyle} onClick={() =>
-                                dispatch(amountHandler({ id: data.id, isPlus: true }))}><img src={plus} alt="" /></button>
+                                plusHandler()}><img src={plus} alt="" /></button>
                         </div>
                     </div>
                     <OffenButton handler={() => handler(data, cartButtonData.buttonStyles)} name={buttonTitle}

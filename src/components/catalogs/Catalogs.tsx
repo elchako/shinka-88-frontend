@@ -1,9 +1,9 @@
 import type React from "react"
 import { useRef } from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useAppDispatch, useCatalogDataHook } from "../../app/hooks"
-import { addDisksToCart, addTyresToCart, delOneTypeProduct } from "../../app/slices/cartSlice"
+import { addDisksToCart, addTyresToCart } from "../../app/slices/cartSlice"
 import '../../common.scss'
 import runflat from '../../imgs/tiresCard/runflat.png'
 import strong from '../../imgs/tiresCard/strong.png'
@@ -23,10 +23,12 @@ import { SortHeader } from "./blocks/sortHeader/SortHeader"
 import { TyresSortHeaderMobile } from "./blocks/sortHeader/TyresSortHeaderMobile"
 import CatalogStyles from "./CatalogStyles.module.scss"
 import { Helmet } from "react-helmet-async"
+import { links } from "../../consts"
 
 
 export const Catalogs: React.FC = () => {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
     // данные для каталога
     // в зависимости от страницы
@@ -39,9 +41,7 @@ export const Catalogs: React.FC = () => {
     // добавление шин в корзину
     const addToCartTiresHandler = (data: resultsTyresType, inCart: boolean): void => {
         if (inCart) {
-            const productType = data.product_type
-            const id = data.id
-            dispatch(delOneTypeProduct({ productType, id }))
+            navigate(`/${links[1].link}`)
         } else {
             dispatch(addTyresToCart(data))
         }
@@ -50,9 +50,7 @@ export const Catalogs: React.FC = () => {
     // добавление дисков в корзину
     const addToCartDisksHandler = (data: resultsDisksType, inCart: boolean): void => {
         if (inCart) {
-            const productType = data.product_type
-            const id = data.id
-            dispatch(delOneTypeProduct({ productType, id }))
+            navigate(`/${links[1].link}`)
         } else {
             dispatch(addDisksToCart(data))
         }

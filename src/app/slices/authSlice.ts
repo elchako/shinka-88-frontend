@@ -8,6 +8,7 @@ const initialState: IinitialState = {
     phone: '',
     regModal: false,
     smsCode: false,
+    oftensmsCodeReq: false,
     token: '',
     checkProcess: false,
 }
@@ -39,17 +40,17 @@ export const authSlice = createAppSlice({
         // получить код
         getSmsCode: create.asyncThunk(
             async (args: { name: string, phone: string }) => {
-                await authApi.getSmsCode(args.name, args.phone.slice(1))
+                await authApi.getSmsCode(args.name, args.phone)
             },
             {
                 pending: () => {
                     console.log('pending')
                 },
                 fulfilled: state => {
-                    console.log('code was send')
+                    state.oftensmsCodeReq = false
                 },
-                rejected: () => {
-                    console.log('error')
+                rejected: state => {
+                    state.oftensmsCodeReq = true
                 },
             },
         ),
@@ -77,6 +78,7 @@ export const authSlice = createAppSlice({
         phoneSelector: state => state.phone,
         tokenSelector: state => state.token,
         smsCodeSelector: state => state.smsCode,
+        oftensmsCodeReqSelector: state => state.oftensmsCodeReq,
         regModalSelector: state => state.regModal,
         checkProcessSelector: state => state.checkProcess
     },
@@ -90,6 +92,6 @@ export const { getSmsCode, toogleModal, toogleSmsCode, setName, setPhone,
 
 // selectors
 export const { smsCodeSelector, regModalSelector, nameSelector, phoneSelector,
-    tokenSelector, checkProcessSelector
+    tokenSelector, checkProcessSelector, oftensmsCodeReqSelector
 } =
     authSlice.selectors

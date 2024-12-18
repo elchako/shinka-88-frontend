@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
     checkProcessSelector, getSmsCode, login, nameSelector,
+    oftensmsCodeReqSelector,
     phoneSelector, regModalSelector, smsCodeSelector,
     tokenSelector, toogleModal, toogleSmsCode
 } from "../../app/slices/authSlice";
@@ -18,6 +19,7 @@ export const RegModal: React.FC = () => {
     const token = useAppSelector(tokenSelector)
     const [codeValue, setCodeValue] = useState<string>('')
     const checkProcess = useAppSelector(checkProcessSelector)
+    const oftensmsCodeReq = useAppSelector(oftensmsCodeReqSelector)
 
     // показывать или скрывать модалку
     let openStyle
@@ -29,21 +31,11 @@ export const RegModal: React.FC = () => {
 
     // получить код
     const getCodeHandler = () => {
-        const time = localStorage.getItem('time')
-        if (!time) {
-            localStorage.setItem('time', String(Date.now()))
+        dispatch(getSmsCode({ name, phone }))
+        if (!oftensmsCodeReq) {
             dispatch(toogleSmsCode())
-            dispatch(getSmsCode({ name, phone }))
         } else {
-            const timeNow = Date.now()
-            const difSeconds = Math.trunc((timeNow - Number(time)) / 1000)
-            if (difSeconds < 60) {
-                alert(`Слишком часто. Повторите Ваш запрос через ${60 - difSeconds} секунд(ы)`)
-            } else {
-                localStorage.setItem('time', String(Date.now()))
-                dispatch(toogleSmsCode())
-                dispatch(getSmsCode({ name, phone }))
-            }
+            alert(`Слишком много запросов. Вы можете запросить проверочный код 3 раза за час.`)
         }
     }
 
@@ -80,7 +72,7 @@ export const RegModal: React.FC = () => {
                         onChange={e => codeHandler(e)}
                         value={codeValue} />
                     : <button className={Styles.placingOrderButton}
-                        onClick={getCodeHandler}>Отправить смс-код на номер {phone}</button>}
+                        onClick={() => getCodeHandler()}>Отправить смс-код на номер {phone}</button>}
                 {smsCode && <p className={Styles.placingOrderWasSend}>{`код отправлен на номер ${phone}`}</p>}
             </div>
         </div>

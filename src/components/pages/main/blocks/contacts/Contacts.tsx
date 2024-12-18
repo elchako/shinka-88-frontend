@@ -13,7 +13,8 @@ export const Contacts: React.FC = () => {
                 <div className={ContactsStyles.contactsBlock}>
                     <p className={ContactsStyles.title}>ОРИЕНТИР:</p>
                     <p className={ContactsStyles.text}>6 мкр-н, гаражи рядом с пожарным депо</p>
-                    <p><a href="https://yandex.ru/maps/org/avto_stop/1015072993?si=4j1jcathucrm7pd2zk4jtjvukg">Построить маршрут &#10148;</a></p>
+                    <p><a href="https://yandex.ru/maps/org/avto_stop/1015072993?si=4j1jcathucrm7pd2zk4jtjvukg"
+                        target="_blank">Построить маршрут &#10148;</a></p>
                 </div>
                 <div className={ContactsStyles.contactsBlock}>
                     <p className={ContactsStyles.title}>ЧАСЫ РАБОТЫ:</p>

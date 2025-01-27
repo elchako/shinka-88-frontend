@@ -49,6 +49,10 @@ export const PlacingOrder: React.FC = () => {
     }
 
     const buttonHandler = (): void => {
+        if (total_amount === 0) {
+            alert("Нет выбранных товаров")
+            return
+        }
         let cleanPhone = normalizePhoneNumber(phone)
         if (name === '' || phone === '') {
             alert('Заполните все поля')

@@ -28,7 +28,7 @@ export const SizeFilter: React.FC = () => {
             }
         }
         if (!dataIsEmpty) dispatch(getTyresParametrs(''))
-    }, [dispatch, tiresAPI])
+    }, [dispatch])
 
     return (
         <div className={FiltersStyles.size}>

@@ -210,6 +210,7 @@ export const cartSlice = createAppSlice({
                 },
                 rejected: (state, action: any) => {
                     state.creatingOrder = !state.creatingOrder
+                    console.log(action.error)
                     const [id, type] = action.error.message.split(':')
                     if (type === 'disk') {
                         let disks = [...state.disks]

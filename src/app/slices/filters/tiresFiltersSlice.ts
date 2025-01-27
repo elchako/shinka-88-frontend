@@ -217,7 +217,7 @@ export const filterBlock1Slice = createAppSlice({
                         : price[0] = 0
                     state.priceEnd !== 0
                         ? price[1] = state.priceEnd
-                        : price[1] = 20000
+                        : price[1] = 10000000
                     fields.price = price
                 }
 
@@ -228,7 +228,7 @@ export const filterBlock1Slice = createAppSlice({
 
                 let orderBy = 'price_sale'
                 if (state.sortType === sorts[1]) orderBy = '-' + orderBy
-
+                console.log(fields)
                 const response = await filtersApi.getFilteredTyres(fields, orderBy, url)
 
                 return { response, refresh }

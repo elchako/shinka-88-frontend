@@ -3,10 +3,10 @@ import PlacingOrderStyles from "./PlacingOrderStyles.module.scss"
 import '../../../common.scss'
 import { Footer } from "../../footer/Footer"
 import { OrderInfo } from "../blocks/orderInfo/OrderInfo";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { nameSelector, phoneSelector, setName, setPhone, toogleModal } from "../../../app/slices/authSlice";
+import { customerLocalDataSelector, nameSelector, phoneSelector, setCustomerLocalData, setName, setPhone, setToken, tokenSelector, toogleModal } from "../../../app/slices/authSlice";
 import { createOrder, disksDataSelector, priceAmountSelector, tyresDataSelector } from "../../../app/slices/cartSlice";
 import type { orderProductsType, orderType } from "../../../types/cart";
 import { Helmet } from "react-helmet-async";
@@ -15,6 +15,7 @@ import { normalizePhoneNumber } from "../../../utils/other";
 
 export const PlacingOrder: React.FC = () => {
     const dispatch = useAppDispatch()
+    const token = useAppSelector(tokenSelector)
     const name = useAppSelector(nameSelector)
     const phone = useAppSelector(phoneSelector)
     const tyres = useAppSelector(tyresDataSelector)
@@ -25,6 +26,7 @@ export const PlacingOrder: React.FC = () => {
         total_amount: total_amount,
         order_items: order_items
     }
+    const customerLocalData = useAppSelector(customerLocalDataSelector)
 
     if (tyres.length !== 0) {
         order_items.tyres = []
@@ -57,30 +59,43 @@ export const PlacingOrder: React.FC = () => {
         if (name === '' || phone === '') {
             alert('Заполните все поля')
             return
-        } else if (!cleanPhone) {
+        }
+        if (!cleanPhone) {
             alert('Неверный номер телефона')
             return
-        } else {
-            dispatch(setPhone(cleanPhone))
-            const token = Cookies.get('token')
-            if (!token) {
+        }
+        dispatch(setPhone(cleanPhone))
+        if (!token) {
+            alert('нет токена')
+            dispatch(toogleModal())
+            return
+        }
+        if (customerLocalData) {
+            let data = JSON.parse(customerLocalData as string)
+            if (data.phone !== cleanPhone) {
+                alert('Телефоны разные')
+                alert(data.phone)
+                alert(cleanPhone)
+                Cookies.remove('token')
+                dispatch(setToken(''))
                 dispatch(toogleModal())
-            } else {
-                localStorage.setItem('customerLocalData', JSON.stringify({ name, phone }))
-                dispatch(createOrder({ order, token }))
+                return
             }
         }
+        localStorage.setItem('customerLocalData', JSON.stringify({ name, phone: cleanPhone }))
+        dispatch(createOrder({ order, token }))
     }
 
     useEffect(() => {
-        const token = Cookies.get('token')
-        const customerLocalData: string | null = localStorage.getItem('customerLocalData')
-        if (token && customerLocalData) {
+        const cookiesToken = Cookies.get('token')
+        dispatch(setToken(cookiesToken))
+        dispatch(setCustomerLocalData(localStorage.getItem('customerLocalData')))
+        if (customerLocalData) {
             let data = JSON.parse(customerLocalData as string)
             dispatch(setName(data.name))
             dispatch(setPhone(data.phone))
         }
-    }, [dispatch])
+    }, [dispatch, customerLocalData])
 
     return (
         <>

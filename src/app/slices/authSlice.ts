@@ -11,12 +11,18 @@ const initialState: IinitialState = {
     oftensmsCodeReq: false,
     token: '',
     checkProcess: false,
+    isLogin: false,
+    customerLocalData: null
 }
 
 export const authSlice = createAppSlice({
     name: "auth",
     initialState,
     reducers: create => ({
+        // данные о клиенте из localstorage
+        setCustomerLocalData: create.reducer((state, action: PayloadAction<string | null>) => {
+            state.customerLocalData = action.payload
+        }),
         // изменить имя
         setName: create.reducer((state, action: PayloadAction<string>) => {
             state.name = action.payload
@@ -24,6 +30,10 @@ export const authSlice = createAppSlice({
         // изменить телефон
         setPhone: create.reducer((state, action: PayloadAction<string>) => {
             state.phone = action.payload
+        }),
+        // сохранить токен в стейт
+        setToken: create.reducer((state, action: PayloadAction<string>) => {
+            state.token = action.payload
         }),
         // показывать или скрывать модалку
         toogleModal: create.reducer((state) => {
@@ -36,6 +46,9 @@ export const authSlice = createAppSlice({
         // код проверяется
         setCheckProcess: create.reducer((state) => {
             state.checkProcess = !state.checkProcess
+        }),
+        setLoginToggle: create.reducer((state) => {
+            state.isLogin = false
         }),
         // получить код
         getSmsCode: create.asyncThunk(
@@ -66,6 +79,8 @@ export const authSlice = createAppSlice({
                 fulfilled: (state, action: PayloadAction<string>) => {
                     state.token = action.payload
                     state.checkProcess = !state.checkProcess
+                    state.isLogin = true
+                    alert('Теперь можете отправить заказ')
                 },
                 rejected: state => {
                     state.checkProcess = !state.checkProcess
@@ -80,18 +95,21 @@ export const authSlice = createAppSlice({
         smsCodeSelector: state => state.smsCode,
         oftensmsCodeReqSelector: state => state.oftensmsCodeReq,
         regModalSelector: state => state.regModal,
-        checkProcessSelector: state => state.checkProcess
+        checkProcessSelector: state => state.checkProcess,
+        isLoginSelector: state => state.isLogin,
+        customerLocalDataSelector: state => state.customerLocalData,
     },
 })
 
 // actions
 export const { getSmsCode, toogleModal, toogleSmsCode, setName, setPhone,
-    login, setCheckProcess
+    login, setCheckProcess, setToken, setLoginToggle, setCustomerLocalData
 } =
     authSlice.actions
 
 // selectors
 export const { smsCodeSelector, regModalSelector, nameSelector, phoneSelector,
-    tokenSelector, checkProcessSelector, oftensmsCodeReqSelector
+    tokenSelector, checkProcessSelector, oftensmsCodeReqSelector, isLoginSelector,
+    customerLocalDataSelector
 } =
     authSlice.selectors

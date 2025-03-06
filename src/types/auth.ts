@@ -7,4 +7,6 @@ export interface IinitialState {
     oftensmsCodeReq: boolean
     token: string
     checkProcess: boolean
+    isLogin: boolean
+    customerLocalData: string | null
 }

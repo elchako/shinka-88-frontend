@@ -1,11 +1,14 @@
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
-    checkProcessSelector, getSmsCode, login, nameSelector,
+    checkProcessSelector, getSmsCode, login, isLoginSelector, nameSelector,
     oftensmsCodeReqSelector,
     phoneSelector, regModalSelector, smsCodeSelector,
-    tokenSelector, toogleModal, toogleSmsCode
+    tokenSelector, toogleModal, toogleSmsCode,
+    setLoginToggle,
+    setToken,
+    setCustomerLocalData
 } from "../../app/slices/authSlice";
 import Styles from './common.module.scss';
 import Cookies from 'js-cookie';
@@ -17,6 +20,7 @@ export const RegModal: React.FC = () => {
     const name = useAppSelector(nameSelector)
     const phone = useAppSelector(phoneSelector)
     const token = useAppSelector(tokenSelector)
+    const isLogin = useAppSelector(isLoginSelector)
     const [codeValue, setCodeValue] = useState<string>('')
     const checkProcess = useAppSelector(checkProcessSelector)
     const oftensmsCodeReq = useAppSelector(oftensmsCodeReqSelector)
@@ -31,9 +35,9 @@ export const RegModal: React.FC = () => {
 
     // получить код
     const getCodeHandler = () => {
-        dispatch(getSmsCode({ name, phone }))
         if (!oftensmsCodeReq) {
             dispatch(toogleSmsCode())
+            dispatch(getSmsCode({ name, phone }))
         } else {
             alert(`Слишком много запросов. Вы можете запросить проверочный код 3 раза за час.`)
         }
@@ -49,17 +53,29 @@ export const RegModal: React.FC = () => {
     }
 
     // закрытие модалки
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
         dispatch(toogleModal())
         if (smsCode) dispatch(toogleSmsCode())
-    }
+    }, [dispatch, smsCode])
 
     useEffect(() => {
-        if (token !== '') {
+        const customerLocalData = localStorage.getItem('customerLocalData')
+        const data = JSON.parse(customerLocalData as string)
+        if (isLogin) {
             Cookies.set('token', token)
+            if (data) {
+                data.phone = phone
+                const newLocalData = JSON.stringify(data)
+                localStorage.setItem('customerLocalData', newLocalData)
+                dispatch(setCustomerLocalData(newLocalData))
+            }
+            alert(localStorage.getItem('customerLocalData'))
+            setCodeValue('')
             closeModal()
+            dispatch(setLoginToggle())
         }
-    }, [token])
+        alert(isLogin)
+    }, [isLogin])
 
     return <div className={openStyle}>
         <div className={Styles.placingOrder}>

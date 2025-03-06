@@ -69,12 +69,10 @@ export const RegModal: React.FC = () => {
                 localStorage.setItem('customerLocalData', newLocalData)
                 dispatch(setCustomerLocalData(newLocalData))
             }
-            alert(localStorage.getItem('customerLocalData'))
             setCodeValue('')
             closeModal()
             dispatch(setLoginToggle())
         }
-        alert(isLogin)
     }, [isLogin])
 
     return <div className={openStyle}>

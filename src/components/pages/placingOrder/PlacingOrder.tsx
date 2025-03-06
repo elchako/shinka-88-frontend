@@ -66,16 +66,12 @@ export const PlacingOrder: React.FC = () => {
         }
         dispatch(setPhone(cleanPhone))
         if (!token) {
-            alert('нет токена')
             dispatch(toogleModal())
             return
         }
         if (customerLocalData) {
             let data = JSON.parse(customerLocalData as string)
             if (data.phone !== cleanPhone) {
-                alert('Телефоны разные')
-                alert(data.phone)
-                alert(cleanPhone)
                 Cookies.remove('token')
                 dispatch(setToken(''))
                 dispatch(toogleModal())

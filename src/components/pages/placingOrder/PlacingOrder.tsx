@@ -131,7 +131,11 @@ export const PlacingOrder: React.FC = () => {
                             </div> */}
                                 <p className={PlacingOrderStyles.formText}>
                                     Наш менеджер свяжется с Вами для подтверждения заказа</p>
+                                <OrderInfo nameButton='ОТПРАВИТЬ' name='Ваш заказ'
+                                    handler={buttonHandler} />
                             </div>
+                            <p className={PlacingOrderStyles.mapHelpText}>
+                                Оплата производится при получении</p>
                             <div className={PlacingOrderStyles.contacts}>
                                 <p className={PlacingOrderStyles.formTitle}>Пункт выдачи</p>
                                 <div className={PlacingOrderStyles.contactsInfo}>
@@ -158,13 +162,9 @@ export const PlacingOrder: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <p className={PlacingOrderStyles.mapHelpText}>
-                                    Оплата производится при получении</p>
                             </div>
 
                         </div>
-                        <OrderInfo nameButton='ОТПРАВИТЬ' name='Ваш заказ'
-                            handler={buttonHandler} />
                     </div>
                 </div>
                 <Footer />

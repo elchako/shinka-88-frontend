@@ -190,7 +190,10 @@ export const cartSlice = createAppSlice({
                 console.log(response)
                 if (response.order) {
                     return response.order
-                } else {
+                } else if (response.error) {
+                    throw new Error(response.error)
+                }
+                else {
                     throw new Error(response.id + ':' + response.type)
                 }
             },
@@ -211,37 +214,44 @@ export const cartSlice = createAppSlice({
                 rejected: (state, action: any) => {
                     state.creatingOrder = !state.creatingOrder
                     console.log(action.error)
-                    const [id, type] = action.error.message.split(':')
-                    if (type === 'disk') {
-                        let disks = [...state.disks]
-                        for (let i = 0; i < disks.length; i++) {
-                            if (disks[i].id === Number(id)) {
-                                alert(`К сожалению товар ${disks[i].name} закончился`)
-                                disks.splice(i, 1)
-                                state.disks = disks
-                                break
+                    console.log(action.error.message === 'order_error')
+                    console.log(action.error.message)
+                    console.log('order_error')
+                    if (action.error.message === 'order_error') {
+                        alert('Что-то пошло не так. Заказ не был создан. Мы уже работаем над устранением неполадок.')
+                    } else {
+                        const [id, type] = action.error.message.split(':')
+                        if (type === 'disk') {
+                            let disks = [...state.disks]
+                            for (let i = 0; i < disks.length; i++) {
+                                if (disks[i].id === Number(id)) {
+                                    alert(`К сожалению товар ${disks[i].name} закончился`)
+                                    disks.splice(i, 1)
+                                    state.disks = disks
+                                    break
+                                }
                             }
                         }
-                    }
-                    if (type === 'tyre') {
-                        let tyres = [...state.tyres]
-                        for (let i = 0; i < tyres.length; i++) {
-                            if (tyres[i].id === Number(id)) {
-                                alert(`К сожалению товар ${tyres[i].name} закончился`)
-                                tyres.splice(i, 1)
-                                state.tyres = tyres
-                                break
+                        if (type === 'tyre') {
+                            let tyres = [...state.tyres]
+                            for (let i = 0; i < tyres.length; i++) {
+                                if (tyres[i].id === Number(id)) {
+                                    alert(`К сожалению товар ${tyres[i].name} закончился`)
+                                    tyres.splice(i, 1)
+                                    state.tyres = tyres
+                                    break
+                                }
                             }
                         }
-                    }
 
-                    const newCartArr = sortAllProducts(state)
-                    state.priceAmount = recalcPriceAmount(newCartArr)
-                    state.queueCounter = newCartArr.length
-                    if (newCartArr.length !== 0) {
-                        newCartArr.forEach((item, index) => item.queue = index)
+                        const newCartArr = sortAllProducts(state)
+                        state.priceAmount = recalcPriceAmount(newCartArr)
+                        state.queueCounter = newCartArr.length
+                        if (newCartArr.length !== 0) {
+                            newCartArr.forEach((item, index) => item.queue = index)
+                        }
+                        localStorage.setItem('cartData', JSON.stringify(state))
                     }
-                    localStorage.setItem('cartData', JSON.stringify(state))
                 },
             },
         ),

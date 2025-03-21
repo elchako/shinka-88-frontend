@@ -17,6 +17,7 @@ interface URLsTypes {
 
 const baseURL = 'https://xn--88-6kc5akr9e.xn--p1ai'
 // const baseURL = 'http://127.0.0.1:8000'
+// const baseURL = 'http://192.168.31.24:8000'
 
 export const URLs: URLsTypes = {
     base: `${baseURL}/api/v1`,

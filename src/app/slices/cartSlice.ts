@@ -190,7 +190,7 @@ export const cartSlice = createAppSlice({
                 console.log(response)
                 if (response.order) {
                     return response.order
-                } else if (response.error) {
+                } else if (response.error && !response.id) {
                     throw new Error(response.error)
                 }
                 else {
@@ -220,8 +220,7 @@ export const cartSlice = createAppSlice({
                     if (action.error.message === 'order_error') {
                         alert('Что-то пошло не так. Заказ не был создан. Мы уже работаем над устранением неполадок.')
                     } else {
-                        const id = action.id
-                        const type = action.type
+                        const [id, type] = action.error.message.split(':')
                         if (type === 'disk') {
                             let disks = [...state.disks]
                             for (let i = 0; i < disks.length; i++) {

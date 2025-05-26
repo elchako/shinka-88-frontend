@@ -220,7 +220,8 @@ export const cartSlice = createAppSlice({
                     if (action.error.message === 'order_error') {
                         alert('Что-то пошло не так. Заказ не был создан. Мы уже работаем над устранением неполадок.')
                     } else {
-                        const [id, type] = action.error.message.split(':')
+                        const id = action.id
+                        const type = action.type
                         if (type === 'disk') {
                             let disks = [...state.disks]
                             for (let i = 0; i < disks.length; i++) {

@@ -8,6 +8,7 @@ export const DesktopMenu: React.FC = () => {
     return <div className={DesktopMenuStyles.mainWrapper}>
         <div className={DesktopMenuStyles.mainMenu}>
             <div className={DesktopMenuStyles.leftMenu}>
+                <NavLink to={links[12].link}>{links[12].title}</NavLink>
                 <NavLink to={links[3].link}>{links[3].title}</NavLink>
                 <NavLink to={links[4].link}>{links[4].title}</NavLink>
                 {/* <NavLink to={links[5].link}>{links[5].title}</NavLink>

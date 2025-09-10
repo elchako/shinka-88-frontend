@@ -39,7 +39,7 @@ export const DisksCardMobile: React.FC<IProps> = ({ data, handler }) => {
                     <p className={CardMobileStyles.productNameMobile}>{data.name}</p>
                     <div className={CardMobileStyles.productInfoContentMobile}>
                         <div>
-                            <p>{data.diameter}</p>
+                            <p>Диаметр: {data.diameter}</p>
                             <p>{data.pcd}</p>
                             <p>{data.type_disk}</p>
                         </div>

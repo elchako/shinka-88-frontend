@@ -13,25 +13,25 @@ export const links: Array<{ title: string, link: string }> = [
         link: 'tel:+79197728888'
     },
     {
-        title: 'ШИНЫ',
+        title: 'Шины',
         link: 'tires'
     }, {
-        title: 'ДИСКИ',
+        title: 'Диски',
         link: 'disks'
     }, {
-        title: 'МАСЛА',
+        title: 'масла',
         link: 'oils'
     }, {
         title: 'АКБ',
         link: 'akb'
     }, {
-        title: 'АВТОЗАПЧАСТИ',
+        title: 'Автозапчасти',
         link: 'autoParts'
     }, {
-        title: 'ШИНОМОНТАЖ',
+        title: 'Шиномонтаж',
         link: 'tireFitting'
     }, {
-        title: 'АВТОСЕРВИС',
+        title: 'Автосервис',
         link: 'carService'
     },
     {
@@ -50,9 +50,8 @@ export const links: Array<{ title: string, link: string }> = [
 ]
 
 // фильтры на главной странице
-export const tabs: Array<string> = ['Шины', 'Диски', 'Масла', 'АКБ', 'Автозапчасти']
-export const tabsButtons: Array<string> = ['Подобрать шины', 'Подобрать диски', 'Подобрать масла',
-    'Подобрать АКБ', 'Подобрать автозапчасти']
+export const tabs: Array<string> = ['Шины', 'Диски'] // ['Масла', 'АКБ', 'Автозапчасти']
+export const tabsButtons: Array<string> = ['Подобрать шины', 'Подобрать диски'] //['Подобрать масла', 'Подобрать АКБ', 'Подобрать автозапчасти']
 export const selectsNames1: Array<{ apiName: string, displayName: string }> = [
     { apiName: 'width', displayName: 'Ширина' },
     { apiName: 'height', displayName: 'Высота' },

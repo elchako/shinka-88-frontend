@@ -187,7 +187,7 @@ export const cartSlice = createAppSlice({
         createOrder: create.asyncThunk(
             async (args: { order: orderType, token: string }) => {
                 const response = await orderApi.createOrder(args.order, args.token)
-                console.log(response)
+                // console.log(response)
                 if (response.order) {
                     return response.order
                 } else if (response.error && !response.id) {
@@ -213,10 +213,10 @@ export const cartSlice = createAppSlice({
                 },
                 rejected: (state, action: any) => {
                     state.creatingOrder = !state.creatingOrder
-                    console.log(action.error)
-                    console.log(action.error.message === 'order_error')
-                    console.log(action.error.message)
-                    console.log('order_error')
+                    // console.log(action.error)
+                    // console.log(action.error.message === 'order_error')
+                    // console.log(action.error.message)
+                    // console.log('order_error')
                     if (action.error.message === 'order_error') {
                         alert('Что-то пошло не так. Заказ не был создан. Мы уже работаем над устранением неполадок.')
                     } else {

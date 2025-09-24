@@ -13,6 +13,6 @@ export const MobileMenu: React.FC = () => {
         <NavLink to={links[0].link} className={MobileMenuStyles.bottomMenuItem}>{links[0].title}</NavLink>
         <button className={MobileMenuStyles.bottomMenuItem}
             onClick={() => dispatch(mobileMenuReducer())}>Меню</button>
-        <p className={MobileMenuStyles.bottomMenuItem}>Заказы</p>
+        {/* <p className={MobileMenuStyles.bottomMenuItem}>Заказы</p> */}
     </div>
 }

@@ -77,17 +77,17 @@ export const authSlice = createAppSlice({
             {
                 pending: state => {
                     state.checkProcess = !state.checkProcess
-                    console.log('запрос на авторизацию')
+                    // console.log('запрос на авторизацию')
                 },
                 fulfilled: (state, action: PayloadAction<string>) => {
-                    console.log('авторизация прошла успешно')
+                    // console.log('авторизация прошла успешно')
                     state.token = action.payload
                     state.checkProcess = !state.checkProcess
                     state.isLogin = true
                     alert('Теперь можете отправить заказ')
                 },
                 rejected: state => {
-                    console.log('авторизация неудачна')
+                    // console.log('авторизация неудачна')
                     state.checkProcess = !state.checkProcess
                 },
             },

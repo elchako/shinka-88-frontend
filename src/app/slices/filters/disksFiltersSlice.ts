@@ -120,7 +120,7 @@ export const filterBlock2Slice = createAppSlice({
         // сбросить фильтры
         resetFilters: create.reducer(state => {
             state.selects = selects
-            console.log(selects)
+            // console.log(selects)
             state.priceStart = 0
             state.priceEnd = 0
         }),

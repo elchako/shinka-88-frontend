@@ -247,7 +247,7 @@ export const filterBlock1Slice = createAppSlice({
                         item.amount = 1
                         return item
                     })
-                    console.log(res.results)
+                    // console.log(res.results)
                     if (action.payload.refresh) {
                         state.tyresCardsArr.results = res.results
                     } else {

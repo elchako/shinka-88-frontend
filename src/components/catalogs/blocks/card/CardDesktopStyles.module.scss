@@ -155,14 +155,15 @@
 }
 
 .productNameMobile {
-    font-size: 16px;
+    display: flex;
+    justify-content: flex-end;
     font-weight: 600;
     line-height: 20px;
 }
 
 .productInfoContentMobile {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
 .productInfoContentMobile>div:last-child {
@@ -174,6 +175,7 @@
 }
 
 .productInfoMobileBottom {
+    position: relative;
     display: flex;
     justify-content: space-between;
     gap: 25px;
@@ -225,12 +227,12 @@
 }
 
 .productPriceMobile {
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 12px;
     position: absolute;
     top: -20px;
     right: 0;
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 12px;
 }
 
 .productCartMobile {

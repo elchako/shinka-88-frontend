@@ -61,9 +61,9 @@ export const TyresCardMobile: React.FC<IProps> = ({ data, handler }) => {
                         <p className={CardMobileStyles.productNameMobile}>{data.name}</p>
                         <div className={CardMobileStyles.productInfoContentMobile}>
                             <div>
-                                <p>{`${data.width}/${data.height}`}</p>
-                                <p>{data.seazon}</p>
-                                <p>{data.marka}</p>
+                                <p>Размер: {`${data.width}/${data.height}`}</p>
+                                <p>Сезон: {data.seazon}</p>
+                                <p>Марка: {data.marka}</p>
                             </div>
                             <div>
                                 <p>{cardData.runflatText}</p>
@@ -75,10 +75,10 @@ export const TyresCardMobile: React.FC<IProps> = ({ data, handler }) => {
             </div>
             <div className={CardMobileStyles.bottomBlock}>
                 <div className={CardMobileStyles.productInfoMobileBottom}>
+                    <div className={CardMobileStyles.productPriceMobile}>
+                        {data.price_sale}р.
+                    </div>
                     <div className={CardMobileStyles.priceAmount}>
-                        <div className={CardMobileStyles.productPriceMobile}>
-                            {data.price_sale}
-                        </div>
                         <div className={CardMobileStyles.productInfoAmountItemMobile}>
                             <button className={minusButtonStyle} onClick={() =>
                                 dispatch(amountHandler({ id: data.id, isPlus: false }))}><img src={minus} alt="" /></button>

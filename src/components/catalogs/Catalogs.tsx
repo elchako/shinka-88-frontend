@@ -140,21 +140,29 @@ export const Catalogs: React.FC = () => {
                             ? <MobileTyresFilters />
                             : <MobileDisksFilters />}
                     </div>
-                    <div className={CatalogStyles.cardsMobile}>
+                    <div className={CatalogStyles.cardsMobile} id='scrollableDivMobile'>
                         {/* мобильные карточки товаров в зависимости от страницы */}
-                        {catalogData.cardsData.results.length
-                            ? catalogData.cardsData.results.map((item, index) => {
-                                if (catalogData.title === 'Каталог шин') {
-                                    return <TyresCardMobile handler={addToCartTiresHandler}
-                                        data={item as resultsTyresType} key={`${item} - ${index}`} />
-                                }
-                                if (catalogData.title === 'Каталог дисков') {
-                                    return <DisksCardMobile handler={addToCartDisksHandler}
-                                        data={item as resultsDisksType} key={`${item} - ${index}`} />
-                                }
-                                return null
-                            })
-                            : <p>Ничего не найдено</p>}
+                        <InfiniteScroll
+                            dataLength={catalogData.cardsData.results.length}
+                            next={() => dispatch(catalogData.sortData.newDataReq(false))}
+                            hasMore={catalogData.cardsData.next !== null}
+                            loader={'Загрузка...'}
+                            scrollableTarget='scrollableDivMobile'
+                        >
+                            {catalogData.cardsData.results.length
+                                ? catalogData.cardsData.results.map((item, index) => {
+                                    if (catalogData.title === 'Каталог шин') {
+                                        return <TyresCardMobile handler={addToCartTiresHandler}
+                                            data={item as resultsTyresType} key={`${item} - ${index}`} />
+                                    }
+                                    if (catalogData.title === 'Каталог дисков') {
+                                        return <DisksCardMobile handler={addToCartDisksHandler}
+                                            data={item as resultsDisksType} key={`${item} - ${index}`} />
+                                    }
+                                    return null
+                                })
+                                : <p>Ничего не найдено</p>}
+                        </InfiniteScroll>
                     </div>
                 </div>
             </div>

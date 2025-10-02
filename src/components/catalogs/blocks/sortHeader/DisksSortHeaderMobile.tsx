@@ -2,6 +2,7 @@ import type React from "react"
 import SortHeaderStyles from "./SortHeaderStyles.module.scss"
 import { useState } from "react"
 import { sorts } from "../../../../consts"
+import SortIcon from '../../../../imgs/tiresCard/sortMobile.svg';
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 import {
     sortDisksTypeSelect,
@@ -27,7 +28,9 @@ export const DisksSortHeaderMobile: React.FC = () => {
 
     return (
         <div className={styles}>
-            <div className={SortHeaderStyles.sortImg}>&#8646;</div>
+            <div className={SortHeaderStyles.sortImg}>
+                <img src={SortIcon} alt="" className={SortHeaderStyles.sortImg} />
+            </div>
             <div className={SortHeaderStyles.sorts}>
                 {newSorts.map((item, index) => {
                     return <p className={SortHeaderStyles.sortsItem} key={`${index} ${item}`}

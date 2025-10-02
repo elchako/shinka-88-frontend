@@ -1,7 +1,7 @@
 import type React from "react"
 import AutoPartsCardStyles from "./AutoPartsCardStyles.module.scss"
 import tireExample from '../../../../../imgs/tiresCard/tire-example.png'
-import cart from '../../../../../imgs/cart/productMobileCart.png'
+import cart from '../../../../../imgs/cart/basket.svg'
 import { OffenButton } from "../../../../common/OffenButton"
 
 

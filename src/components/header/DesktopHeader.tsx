@@ -1,7 +1,7 @@
 import type React from "react";
 import HeaderStyles from "./HeaderStyles.module.scss";
 import { NavLink } from "react-router-dom";
-import cart from '../../imgs/cart/desktopHeader.svg'
+import cart from '../../imgs/cart/basket.svg'
 import { Logo } from "../common/Logo";
 import { links } from "../../consts";
 import { useAppSelector } from "../../app/hooks";

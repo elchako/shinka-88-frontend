@@ -3,7 +3,7 @@ import * as R from "react"
 import MainFiltersStyles from "./MainFilters.module.scss"
 import { useState } from "react"
 import { tabs } from '../../../../../consts'
-import arrow from '../../../../../imgs/filtersMobileMenu.png'
+import arrow from '../../../../../imgs/filtersMobileMenu.svg'
 import { AutoPartsFilterBlock2 } from "./filtersBlocks/AutoPartsFilterBlock2"
 import { TiresFilterBlock1 } from "./filtersBlocks/TiresFilterBlock1"
 import { DisksFilterBlock2 } from "./filtersBlocks/DisksFilterBlock2"

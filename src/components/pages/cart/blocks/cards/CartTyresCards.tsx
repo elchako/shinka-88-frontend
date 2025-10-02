@@ -1,7 +1,7 @@
 import type React from "react"
 import CartCardsStyles from "./CartCardsStyles.module.scss"
 import CartStyles from '../../CartStyles.module.scss'
-import delElement from '../../../../../imgs/cart/del_from_cart.png'
+import delElement from '../../../../../imgs/cart/trash-bin.svg'
 import Checkbox from "react-custom-checkbox";
 import { useAppDispatch, useTyresCardData } from "../../../../../app/hooks"
 import {
@@ -49,9 +49,9 @@ export const CartTyresCards: React.FC<IProps> = ({ data }) => {
                 <p className={CartCardsStyles.productName}>{data.name}</p>
                 <div className={CartCardsStyles.productInfoContent}>
                     <div>
-                        <p>{`${data.width}/${data.height}`}</p>
-                        <p>{data.seazon}</p>
-                        <p>{data.marka}</p>
+                        <p>Размер: {`${data.width}/${data.height}`}</p>
+                        <p>Сезон: {data.seazon}</p>
+                        <p>Марка: {data.marka}</p>
                     </div>
                     <div>
                         <p>{cardData.runflatText}</p>
@@ -80,7 +80,7 @@ export const CartTyresCards: React.FC<IProps> = ({ data }) => {
             <div className={CartCardsStyles.delElement}>
                 <img onClick={() =>
                     dispatch(delOneTypeProduct({ productType: data.product_type, id: data.id }))}
-                    src={delElement} alt="" />
+                    src={delElement} alt="" width={28} height={28} />
             </div>
         </div>
     )

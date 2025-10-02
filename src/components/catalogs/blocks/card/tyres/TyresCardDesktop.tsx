@@ -49,9 +49,9 @@ export const TyresCardDesktop: React.FC<IProps> = ({ data, handler }) => {
                 <p className={CardDesktopStyles.productName}>{data.name}</p>
                 <div className={CardDesktopStyles.productInfoContent}>
                     <div>
-                        <p>{`${data.width}/${data.height}`}</p>
-                        <p>{data.seazon}</p>
-                        <p>{data.marka}</p>
+                        <p>Размер: {`${data.width}/${data.height}`}</p>
+                        <p>Сезон: {data.seazon}</p>
+                        <p>Марка: {data.marka}</p>
                     </div>
                     <div>
                         <p>{cardData.runflatText}</p>

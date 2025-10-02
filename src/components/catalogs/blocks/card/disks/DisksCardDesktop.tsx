@@ -40,8 +40,8 @@ export const DisksCardDesktop: React.FC<IProps> = ({ data, handler }) => {
                 <div className={CardDesktopStyles.productInfoContent}>
                     <div>
                         <p>Диаметр: {data.diameter}</p>
-                        <p>{data.pcd}</p>
-                        <p>{data.type_disk}</p>
+                        <p>Диаметр PCD: {data.pcd}</p>
+                        <p>Тип: {data.type_disk}</p>
                     </div>
                 </div>
             </div>

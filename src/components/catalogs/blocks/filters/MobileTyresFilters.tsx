@@ -1,5 +1,6 @@
 import type React from "react"
 import FiltersStyles from "./FiltersStyles.module.scss"
+import FilterIcon from '../../../../imgs/tiresCard/filtersMobile.svg';
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 import { useEffect, useState } from "react"
 import {
@@ -46,7 +47,7 @@ export const MobileTyresFilters: React.FC = () => {
         statePriceStart, statePriceEnd])
     return (
         <div onClick={() => dispatch(mobileFiltersReducer())} className={FiltersStyles.mainWrapperMobile}>
-            <div className={FiltersStyles.mobileFilterImg}></div>
+            <img src={FilterIcon} alt="" className={FiltersStyles.mobileFilterImg} />
             <div className={FiltersStyles.mobileTitle}>Параметры</div>
             <div className={FiltersStyles.mobileFiltersCounter}>
                 {filterCounter === 0 ? '' : filterCounter}</div>

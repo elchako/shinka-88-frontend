@@ -1,6 +1,6 @@
 import type React from "react"
 import FilterBlocksStyles from "./FilterBlocks.module.scss"
-import closeModal from '../../../../../../imgs/closeHiddenMenu.png';
+import closeModal from '../../../../../../imgs/closeHiddenMenu.svg';
 import tires from '../../../../../../imgs/modalTires.png';
 
 export const ExplanationModal: React.FC = () => {

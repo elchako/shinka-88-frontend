@@ -2,8 +2,8 @@ import type React from "react";
 import MobileMenuStyles from './MobileMenu.module.scss'
 import { links } from '../../../consts'
 import { NavLink } from "react-router-dom";
-import close from '../../../imgs/closeHiddenMenu.png'
-import menuArrow from '../../../imgs/hiddenMenuArrow.png'
+import close from '../../../imgs/closeHiddenMenu.svg'
+import menuArrow from '../../../imgs/hiddenMenuArrow.svg'
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { mobileMenuReducer, mobileMenuSelector } from "../../../app/slices/common/smallActions";
 

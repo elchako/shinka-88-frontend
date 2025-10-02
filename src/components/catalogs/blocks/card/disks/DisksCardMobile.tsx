@@ -65,10 +65,10 @@ export const DisksCardMobile: React.FC<IProps> = ({ data, handler }) => {
                         <div className={CardMobileStyles.priceAmount}>
                             <div className={CardMobileStyles.productInfoAmountItemMobile}>
                                 <button className={minusButtonStyle} onClick={() =>
-                                    dispatch(amountHandler({ id: data.id, isPlus: false }))}><img src={minus} alt="" /></button>
+                                    dispatch(amountHandler({ id: data.id, isPlus: false }))}><img src={minus} alt="" width={24} height={24} /></button>
                                 <p>{data.amount}</p>
                                 <button className={plusButtonStyle} onClick={() =>
-                                    plusHandler()}><img src={plus} alt="" /></button>
+                                    plusHandler()}><img src={plus} alt="" width={24} height={24} /></button>
                             </div>
                         </div>
                         <OffenButton handler={() => handler(data, cartButtonData.buttonStyles)} name={buttonTitle}

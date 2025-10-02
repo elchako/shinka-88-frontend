@@ -25,11 +25,11 @@ export const Footer: React.FC = () => {
                                 <NavLink to={'../' + links[3].link}>Каталог</NavLink>
                                 <NavLink to={'../' + links[11].link}>Оплата</NavLink>
                             </div>
-                            <p className={FooterStyles.coop}>©2024 Шинка88. Все права защищены.</p>
+                            <p className={FooterStyles.coop}>©2025 Шинка88. Все права защищены.</p>
                         </div>
                     </div>
                 </div>
-                <p className={FooterStyles.coopMobile}>©2024 Шинка88. Все права защищены.</p>
+                <p className={FooterStyles.coopMobile}>©2025 Шинка88. Все права защищены.</p>
             </div>
         </div>
     )

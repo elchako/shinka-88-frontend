@@ -11,7 +11,7 @@ export const Oferta: React.FC = () => {
   return (
       <>
           <Helmet>
-              <title>Шинка88 - Гарантия</title>
+              <title>Шинка88 - Оферта</title>
           </Helmet>
           <div className={PoliceStyles.mainWrapper}>
               <div className={PoliceStyles.contentWrapper}>

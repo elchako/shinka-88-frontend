@@ -38,14 +38,14 @@ export const links: Array<{ title: string, link: string }> = [
         title: 'Оформление заказа',
         link: 'placing_order'
     }, {
-        title: 'Оплата',
-        link: 'payment'
+        title: 'Политика конфиденциальности',
+        link: 'police'
     }, {
         title: 'О нас',
         link: 'aboutUs'
     }, {
-        title: 'Гарантии',
-        link: 'guarantees'
+        title: 'Оферта',
+        link: 'oferta'
     },
 ]
 

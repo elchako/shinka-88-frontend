@@ -20,10 +20,10 @@ export const Footer: React.FC = () => {
                     <div className={FooterStyles.infoLinks}>
                         <div className={FooterStyles.infoLinksContent}>
                             <div className={FooterStyles.links}>
-                                <NavLink to={'../' + links[12].link}>О нас</NavLink>
-                                <NavLink to={'../' + links[13].link}>Гарантии</NavLink>
                                 <NavLink to={'../' + links[3].link}>Каталог</NavLink>
-                                <NavLink to={'../' + links[11].link}>Оплата</NavLink>
+                                <NavLink to={'../' + links[12].link}>О нас</NavLink>
+                                <NavLink to={'../' + links[13].link}>Оферта</NavLink>
+                                <NavLink to={'../' + links[11].link}>Политика</NavLink>
                             </div>
                             <p className={FooterStyles.coop}>©2025 Шинка88. Все права защищены.</p>
                         </div>

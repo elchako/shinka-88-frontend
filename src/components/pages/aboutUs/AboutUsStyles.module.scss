@@ -29,14 +29,14 @@
 }
 
 .title {
-    font-size: 25px;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 600;
     line-height: 39px;
 }
 
 .text {
     white-space: pre-line;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
     line-height: 150%;
 }
@@ -46,18 +46,18 @@
         gap: 15px;
     }
     .title {
-        font-size: 20px;
+        font-size: 18px;
     }
     .text {
-        font-size: 16px;
+        font-size: 14px;
     }
 }
 
 @media screen and (max-width: 400px) {
     .title {
-        font-size: 20px;
+        font-size: 16px;
     }
     .text {
-        font-size: 14px;
+        font-size: 13px;
     }
 }

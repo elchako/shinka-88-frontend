@@ -9,9 +9,9 @@ import { useAppDispatch, useAppSelector } from "./app/hooks"
 import { Cart } from "./components/pages/cart/Cart"
 import { PlacingOrder } from "./components/pages/placingOrder/PlacingOrder"
 import { AutoParts } from "./components/pages/autoParts/AutoParts"
-import { Payment } from "./components/pages/payment/Payment"
+import { Police } from "./components/pages/police/Police" 
 import { AboutUs } from "./components/pages/aboutUs/AboutUs"
-import { Guarantees } from "./components/pages/guarantees/Guarantees"
+import { Oferta } from "./components/pages/oferta/Oferta"
 import { Catalogs } from "./components/catalogs/Catalogs"
 import { MobileFiltersModal } from "./components/catalogs/blocks/filters/MobileFiltersModal"
 import { useEffect } from "react"
@@ -63,9 +63,9 @@ export const App = () => {
             <Route path={links[7].link} element={<AutoParts />} />
             <Route path={links[1].link} element={<Cart />} />
             <Route path={links[10].link} element={<PlacingOrder />} />
-            <Route path={links[11].link} element={<Payment />} />
+            <Route path={links[11].link} element={<Police />} />
             <Route path={links[12].link} element={<AboutUs />} />
-            <Route path={links[13].link} element={<Guarantees />} />
+            <Route path={links[13].link} element={<Oferta />} />
           </Routes>
           <MobileMenu />
         </BrowserRouter>

@@ -77,7 +77,7 @@ export const typeSelectsText: Array<string> = ['Подбор по парамет
 export const filterButtons: Array<{ name: string, value1: string, value2: string }> =
     [{ name: 'все', value1: 'Ш.,н/ш.,_', value2: 'Всесезонная,Зимняя,Летняя' },
     { name: 'зима, шипы', value1: 'Ш.', value2: 'Зимняя' },
-    { name: 'зима, без шипов', value1: 'н/ш.', value2: 'Зимняя' },
+    { name: 'зима, без шипов', value1: '_', value2: 'Зимняя' },
     { name: 'лето', value1: '_', value2: 'Летняя' }]
 export const checkboxesNames: Array<string> = ['RunFlat', 'Усиленные', 'Бесплатный шиномонтаж']
 

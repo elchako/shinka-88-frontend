@@ -24,6 +24,7 @@ export const Footer: React.FC = () => {
                                 <NavLink to={'../' + links[12].link}>О нас</NavLink>
                                 <NavLink to={'../' + links[13].link}>Оферта</NavLink>
                                 <NavLink to={'../' + links[11].link}>Политика</NavLink>
+                                <NavLink to={'../' + links[14].link}>Покупателю</NavLink>
                             </div>
                             <p className={FooterStyles.coop}>©2025 Шинка88. Все права защищены.</p>
                         </div>

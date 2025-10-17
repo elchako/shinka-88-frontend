@@ -19,8 +19,7 @@ export const Contacts: React.FC = () => {
                 <div className={ContactsStyles.contactsBlock}>
                     <p className={ContactsStyles.title}>ЧАСЫ РАБОТЫ:</p>
                     <p className={ContactsStyles.text}>
-                        летом с 8.00 до 23.00,<br />
-                        зимой с 9.00 до 19.00
+                        с 8.00 до 20.00
                     </p>
                 </div>
             </div>

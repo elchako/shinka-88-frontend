@@ -12,6 +12,7 @@ import { AutoParts } from "./components/pages/autoParts/AutoParts"
 import { Police } from "./components/pages/police/Police" 
 import { AboutUs } from "./components/pages/aboutUs/AboutUs"
 import { Oferta } from "./components/pages/oferta/Oferta"
+import { Purchaser } from "./components/pages/purchaser/Purchaser"
 import { Catalogs } from "./components/catalogs/Catalogs"
 import { MobileFiltersModal } from "./components/catalogs/blocks/filters/MobileFiltersModal"
 import { useEffect } from "react"
@@ -66,6 +67,7 @@ export const App = () => {
             <Route path={links[11].link} element={<Police />} />
             <Route path={links[12].link} element={<AboutUs />} />
             <Route path={links[13].link} element={<Oferta />} />
+            <Route path={links[14].link} element={<Purchaser />} />
           </Routes>
           <MobileMenu />
         </BrowserRouter>

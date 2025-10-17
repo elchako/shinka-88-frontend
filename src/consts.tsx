@@ -46,6 +46,9 @@ export const links: Array<{ title: string, link: string }> = [
     }, {
         title: 'Оферта',
         link: 'oferta'
+    }, {
+        title: 'Покупателю',
+        link: 'purchaser'
     },
 ]
 

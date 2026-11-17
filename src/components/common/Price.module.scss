@@ -1,0 +1,13 @@
+.price { display: inline-flex; align-items: baseline; gap: 4px; font-weight: 600; color: var(--color-text-primary); white-space: nowrap; letter-spacing: -.025em; }
+.amount { font-feature-settings: 'tnum'; font-variant-numeric: tabular-nums; }
+.currency { font-weight: 500; font-size: .88em; }
+.sm { font-size: 14px; }
+.md { font-size: 18px; }
+.lg { font-size: 22px; }
+.xl { font-size: 26px; }
+.default { color: var(--color-text-primary); }
+.sale { color: var(--color-primary); }
+.old { color: var(--color-text-secondary); text-decoration: line-through; font-weight: 400; }
+.saleContainer { display: flex; flex-direction: column; gap: 5px; }
+.oldPriceContainer { display: flex; align-items: center; gap: 9px; }
+.discountBadge { padding: 3px 6px; border-radius: 5px; background: var(--color-error-light); color: var(--color-error); font-size: 12px; font-weight: 600; }

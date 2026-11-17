@@ -1,154 +1,22 @@
-@import '../../common.scss';
-
-
-// Desktop Header
-.mainWrapper {
-    max-width: $maxWidth;
-    padding: 12px 10px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-}
-
-.logoImg img {
-    width: 44px;
-}
-
-.title {
-    align-self: center;
-    color: rgba(0, 0, 0, 0.76);
-    font-family: $font1;
-    font-size: 22px;
-    font-weight: 700;
-    line-height: 61px;
-    letter-spacing: 0%;
-    margin-left: 16px;
-}
-
-.data {
-    display: flex;
-    justify-content: flex-end;
-    gap: 40px;
-}
-
-.phone {
-    display: flex;
-}
-
-.phone a {
-    color: $orangeTextColor;
-    font-family: $font1;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 29px;
-    letter-spacing: 0%;
-    text-decoration: none;
-    align-self: center;
-}
-
-.cart {
-    display: flex;
-    gap: 15px;
-}
-
-.cartImg {
-    display: flex;
-    position: relative;
-}
-
-.cartImg img {
-    width: 32px;
-    cursor: pointer;
-    align-self: center;
-}
-
-.priceAmount {
-    color: rgb(0, 0, 0);
-    font-family: $font1;
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 29px;
-    letter-spacing: 0%;
-    align-self: center;
-}
-
-// Mobile Header
-
-.mobileMainWrapper {
-    display: none;
-    justify-content: space-between;
-    padding: 20px;
-}
-
-.mobilePhone {
-    display: flex;
-}
-
-.mobilePhone img {
-    width: 28px;
-    align-self: center;
-}
-
-.logoImgMobile {
-    display: flex;
-}
-
-.logoImgMobile img {
-    width: 40px;
-    align-self: center;
-}
-
-.titleMobile {
-    align-self: center;
-    color: rgba(0, 0, 0, 0.8);
-    font-family: $font1;
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 18px;
-    letter-spacing: 0%;
-    text-align: left;
-    margin-left: 10px;
-}
-
-.mobileCart {
-    display: flex;
-    position: relative;
-}
-
-.mobileCart img {
-    width: 30px;
-    align-self: center;
-}
-
-.productsCounter {
-    position: absolute;
-    font-size: 10px;
-    min-width: 20px;
-    height: 20px;
-    top: -7px;
-    left: 22px;
-    background-color: rgb(232, 237, 255);
-    border-radius: 100px;
-    padding: 5px;
-    text-align: center;
-    font-weight: 700;
-}
-
-
-
-
-
-@media screen and (max-width: 880px) {
-    .mainWrapper {
-        display: none;
-    }
-
-    .mobileMainWrapper {
-        display: flex;
-    }
-}
+.header { background: var(--color-bg-primary); border-bottom: 1px solid var(--color-border); }
+.mainWrapper { max-width: var(--page-max-width); margin: 0 auto; padding: 14px 20px; min-height: 86px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+.logo { display: flex; align-items: center; gap: 10px; flex: none; text-decoration: none; min-width: 0; }
+.logoImg, .logoImgMobile { flex: none; }
+.logoImg img { width: 45px; height: 40px; object-fit: contain; }
+.title { font-family: var(--font-display); font-size: 21px; font-weight: 700; line-height: 1; letter-spacing: -.035em; white-space: nowrap; }
+.data { display: flex; align-items: center; gap: 34px; }
+.phone { display: flex; align-items: center; gap: 9px; min-height: 44px; font-size: 17px; font-weight: 600; white-space: nowrap; color: var(--color-text-primary); font-variant-numeric: tabular-nums; }
+.phone svg { color: var(--color-primary); }
+.cart { display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 6px 0; }
+.cartImg { position: relative; display: block; width: 25px; height: 25px; }
+.cartInfo { display: grid; gap: 2px; }
+.cartLabel { font-size: 12px; line-height: 1.35; color: var(--color-text-secondary); }
+.mobileHeader { display: none; border-bottom: 1px solid var(--color-border); background: var(--color-bg-primary); }
+.mobileMainWrapper { display: flex; align-items: center; justify-content: space-between; min-height: 73px; gap: 10px; padding: 9px 16px; }
+.logoImgMobile img { width: 35px; height: 32px; object-fit: contain; }
+.titleMobile { font-family: var(--font-display); font-size: 16px; font-weight: 700; line-height: 1; letter-spacing: -.04em; white-space: nowrap; }
+.mobileActions { display: flex; align-items: center; gap: 8px; flex: none; }
+.mobilePhone, .mobileCart { position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; }
+.mobilePhone { color: var(--color-primary); }
+@media (max-width: 850px) { .header { display: none; } .mobileHeader { display: block; } }
+@media (max-width: 360px) { .titleMobile { font-size: 14px; } .logo { gap: 6px; } .mobileActions { gap: 2px; } }

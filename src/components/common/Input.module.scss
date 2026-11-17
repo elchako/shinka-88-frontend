@@ -1,0 +1,19 @@
+.container { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.label { font-size: 13px; font-weight: 500; line-height: 1.5; color: var(--color-text-primary); }
+.required { color: var(--color-error); margin-left: 3px; }
+.wrapper { position: relative; display: flex; align-items: center; min-width: 0; }
+.input { width: 100%; min-width: 0; height: var(--control-height); min-height: var(--control-height); padding: 0 12px; border: 1px solid var(--color-gray-300); border-radius: 7px; font-family: var(--font-primary); font-size: 14px; font-weight: 400; color: var(--color-text-primary); background: var(--color-bg-primary); caret-color: var(--color-primary); }
+.input::placeholder { color: var(--color-text-secondary); opacity: 1; }
+.input:focus { border-color: var(--color-border-focus); }
+.input:disabled { background: var(--color-bg-secondary); cursor: not-allowed; }
+.hasLeftIcon .input { padding-left: 42px; }
+.hasRightIcon .input { padding-right: 42px; }
+.leftIcon,.rightIcon,.spinner { position: absolute; display: flex; align-items: center; justify-content: center; color: var(--color-text-secondary); pointer-events: none; }
+.leftIcon { left: 12px; }
+.rightIcon,.spinner { right: 12px; }
+.spinnerInner { width: 18px; height: 18px; border: 2px solid var(--color-border); border-top-color: var(--color-primary); border-radius: 50%; animation: inputSpin .8s linear infinite; }
+.error .input { border-color: var(--color-error); }
+.errorText { font-size: 12px; color: var(--color-error); line-height: 1.5; }
+.hint { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+@keyframes inputSpin { to { transform: rotate(360deg); } }
+@media (max-width: 850px), (pointer: coarse) { .input { font-size: 16px; } }

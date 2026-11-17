@@ -1,5 +1,5 @@
 import { type PayloadAction, } from "@reduxjs/toolkit"
-import { checkboxesNames, selectsNames1, sorts } from "../../../consts"
+import { catalogOrderBy, checkboxesNames, selectsNames1, sorts } from "../../../consts"
 import { createAppSlice } from "../../createAppSlice"
 import { filtersApi } from "../../../api/catalog"
 import { type RootState } from "../../store"
@@ -57,6 +57,12 @@ export const initialState: IinitialState = {
     priceMin: 0,
     priceMax: 0,
     sortType: sorts[0],
+    onlyCompleteSets: false,
+    filtersStatus: 'idle',
+    cardsStatus: 'idle',
+    cardsError: null,
+    cardsRequestId: null,
+    cardsRefresh: true,
 }
 
 export const filterBlock1Slice = createAppSlice({
@@ -66,8 +72,8 @@ export const filterBlock1Slice = createAppSlice({
         // селекты 
         selectsSelect: create.reducer((state,
             action: PayloadAction<{ selectName: string, value: string, isOneChoice: boolean }>) => {
-            let payload = action.payload
-            let newSelects = state.selects.map(item => {
+            const payload = action.payload
+            const newSelects = state.selects.map(item => {
                 if (item.selectName.apiName === payload.selectName) {
                     // для постоянных селектов где только 1 значение
                     if (typeof item.value === 'string') {
@@ -77,7 +83,7 @@ export const filterBlock1Slice = createAppSlice({
                         // где массив значений
                         if (payload.isOneChoice) {
                             // если селект
-                            item.value = [payload.value]
+                            item.value = payload.value ? [payload.value] : []
                         } else {
                             // если чекбоксы
                             if (item.value.includes(payload.value)) {
@@ -110,8 +116,8 @@ export const filterBlock1Slice = createAppSlice({
         }),
         // чекбоксы внизу
         checkboxesSelect: create.reducer((state, action: PayloadAction<string>) => {
-            let payload = action.payload
-            let newCheckboxes = state.checkboxes.map(item => {
+            const payload = action.payload
+            const newCheckboxes = state.checkboxes.map(item => {
                 if (item.checkboxName === payload) {
                     item.checked = !item.checked
                 }
@@ -129,32 +135,33 @@ export const filterBlock1Slice = createAppSlice({
             })
             state.priceStart = 0
             state.priceEnd = 0
+            state.onlyCompleteSets = false
         }),
         // установить цену
-        setPrice: create.reducer((state, action: PayloadAction<{ number: string, isStartOrEnd: boolean }>) => {
-            if (Number.isNaN(action.payload.number)) return
+        setPrice: create.reducer((state, action: PayloadAction<{ number: number | string, isStartOrEnd: boolean }>) => {
             let number = Number(action.payload.number)
-            if (number > state.priceMax) number = state.priceMax
-            action.payload.isStartOrEnd
-                ? state.priceStart = number
-                : state.priceEnd = number
+            if (!Number.isFinite(number)) return
+            number = Math.max(0, number)
+            if (state.priceMax > 0 && number > state.priceMax) number = state.priceMax
+            if (action.payload.isStartOrEnd) state.priceStart = number
+            else state.priceEnd = number
         }),
         // плюс/минус количество конкретного товара
         amountHandler: create.reducer((state, action: PayloadAction<{ id: number, isPlus: boolean }>) => {
             for (let i = 0; i < state.tyresCardsArr.results.length; i++) {
                 if (state.tyresCardsArr.results[i].id === action.payload.id) {
-                    let amount = state.tyresCardsArr.results[i].amount
-                    let balance = state.tyresCardsArr.results[i].balance
+                    const amount = state.tyresCardsArr.results[i].amount
+                    const balance = state.tyresCardsArr.results[i].balance
 
-                    if (action.payload.isPlus
-                        && amount < balance) {
-                        state.tyresCardsArr.results[i].amount++
-                    } else if (amount !== 1 && !action.payload.isPlus) {
-                        state.tyresCardsArr.results[i].amount--
-                    }
+                    if (balance < 1) break
+                    state.tyresCardsArr.results[i].amount = Math.min(balance,
+                        Math.max(1, amount + (action.payload.isPlus ? 1 : -1)))
                     break
                 }
             }
+        }),
+        setOnlyCompleteSets: create.reducer((state, action: PayloadAction<boolean>) => {
+            state.onlyCompleteSets = action.payload
         }),
         // сортировка
         sortTyresTypeSelect: create.reducer((state, action: PayloadAction<string>) => {
@@ -164,32 +171,34 @@ export const filterBlock1Slice = createAppSlice({
         // Thunks
         // получить данные для фильтров
         getTyresParametrs: create.asyncThunk(
-            async () => {
+            async (): Promise<tiresAPI> => {
                 const response = await filtersApi.getTyres()
                 // The value we return becomes the `fulfilled` action payload
                 return response
             },
             {
-                pending: () => {
-                    console.log('pending')
+                pending: state => {
+                    state.filtersStatus = 'loading'
                 },
                 fulfilled: (state, action: PayloadAction<tiresAPI>) => {
-                    state.tiresAPI = { ...state.tiresAPI, ...action.payload }
-                    action.payload.response_data.runflat.splice(action.payload.response_data.runflat.indexOf(null), 1)
-                    action.payload.response_data.powerload.splice(action.payload.response_data.powerload.indexOf(null), 1)
-                    state.checkboxes[0].value = action.payload.response_data.runflat
-                    state.checkboxes[1].value = action.payload.response_data.powerload
+                    state.filtersStatus = 'succeeded'
+                    state.tiresAPI = action.payload
+                    state.checkboxes[0].value = action.payload.response_data.runflat.filter(value => value != null)
+                    state.checkboxes[1].value = action.payload.response_data.powerload.filter(value => value != null)
                     state.priceMin = action.payload.min_price
                     state.priceMax = action.payload.max_price
                 },
-                rejected: () => {
-                    console.log('error')
+                rejected: state => {
+                    state.filtersStatus = 'failed'
+                },
+                options: {
+                    condition: (_, api): boolean => (api.getState() as RootState).tiresFilters.filtersStatus !== 'loading',
                 },
             },
         ),
         // Получение карточек товаров по установленным фильтрам
         getTyresCards: create.asyncThunk(
-            async (refresh, thunkAPI) => {
+            async (refresh: boolean, thunkAPI): Promise<{ response: tyresCards, refresh: boolean }> => {
                 const store = thunkAPI.getState() as RootState
                 const state = store.tiresFilters
                 const fields: fieldsTyresType = {}
@@ -198,8 +207,8 @@ export const filterBlock1Slice = createAppSlice({
                 if (state.selects[1].value.length !== 0) fields.height = state.selects[1].value
                 if (state.selects[2].value.length !== 0) fields.diameter = state.selects[2].value
                 if (state.season.length !== 0) {
-                    let seasons: Array<string> = []
-                    let thorning: Array<string> = []
+                    const seasons: Array<string> = []
+                    const thorning: Array<string> = []
                     state.season.forEach(item => {
                         seasons.push(item.value2)
                         thorning.push(item.value1)
@@ -211,14 +220,8 @@ export const filterBlock1Slice = createAppSlice({
                 if (state.checkboxes[1].checked) fields.powerload = state.checkboxes[1].value
 
                 if (state.priceStart !== 0 || state.priceEnd !== 0) {
-                    const price = []
-                    state.priceStart !== 0
-                        ? price[0] = state.priceStart
-                        : price[0] = 0
-                    state.priceEnd !== 0
-                        ? price[1] = state.priceEnd
-                        : price[1] = 10000000
-                    fields.price = price
+                    fields.price = [state.priceStart !== 0 ? state.priceStart : 0,
+                        state.priceEnd !== 0 ? state.priceEnd : 10000000]
                 }
 
                 let url = null
@@ -226,36 +229,50 @@ export const filterBlock1Slice = createAppSlice({
                     url = state.tyresCardsArr.next.split('?')[1]
                 }
 
-                let orderBy = 'price_sale'
-                if (state.sortType === sorts[1]) orderBy = '-' + orderBy
-                console.log(fields)
-                const response = await filtersApi.getFilteredTyres(fields, orderBy, url)
-
-                return { response, refresh }
+                if (state.onlyCompleteSets) fields.min_balance = 4
+                const orderBy = catalogOrderBy(state.sortType)
+                const response: tyresCards = await filtersApi.getFilteredTyres(fields, orderBy, url)
+                const cart = (thunkAPI.getState() as RootState).cart.tyres
+                const results = response.results.map(item => ({
+                    ...item,
+                    amount: item.balance < 1 ? 0 : Math.min(item.balance,
+                        cart.find(product => product.id === item.id)?.amount || 1),
+                }))
+                return { response: { ...response, results }, refresh }
             },
             {
-                pending: () => {
-                    console.log('pending')
+                pending: (state, action) => {
+                    state.cardsStatus = 'loading'
+                    state.cardsError = null
+                    state.cardsRequestId = action.meta.requestId
+                    state.cardsRefresh = action.meta.arg
                 },
-                fulfilled: (state, action: PayloadAction<{ response: tyresCards, refresh: boolean }>) => {
-                    let res = action.payload.response
+                fulfilled: (state, action) => {
+                    if (state.cardsRequestId !== action.meta.requestId) return
+                    const res = action.payload.response
+                    state.cardsStatus = 'succeeded'
+                    state.cardsRequestId = null
                     state.tyresCardsArr.count = res.count
                     state.tyresCardsArr.next = res.next
                     state.tyresCardsArr.previous = res.previous
-
-                    let results = res.results.map(item => {
-                        item.amount = 1
-                        return item
-                    })
-                    // console.log(res.results)
                     if (action.payload.refresh) {
                         state.tyresCardsArr.results = res.results
                     } else {
-                        state.tyresCardsArr.results = [...state.tyresCardsArr.results, ...results]
+                        const ids = new Set(state.tyresCardsArr.results.map(item => item.id))
+                        state.tyresCardsArr.results.push(...res.results.filter(item => !ids.has(item.id)))
                     }
                 },
-                rejected: () => {
-                    console.log('error')
+                rejected: (state, action) => {
+                    if (state.cardsRequestId !== action.meta.requestId) return
+                    state.cardsStatus = 'failed'
+                    state.cardsRequestId = null
+                    state.cardsError = 'Не удалось загрузить шины. Попробуйте ещё раз.'
+                },
+                options: {
+                    condition: (refresh, api): boolean => {
+                        const state = (api.getState() as RootState).tiresFilters
+                        return refresh || (state.cardsStatus !== 'loading' && state.tyresCardsArr.next !== null)
+                    },
                 },
             },
         ),
@@ -278,7 +295,7 @@ export const filterBlock1Slice = createAppSlice({
 // actions
 export const { seasonsSelectOne, selectsSelect, checkboxesSelect,
     seasonsSelectMany, getTyresParametrs, sortTyresTypeSelect,
-    getTyresCards, resetFilters, setPrice, amountHandler,
+    getTyresCards, resetFilters, setPrice, amountHandler, setOnlyCompleteSets,
 } =
     filterBlock1Slice.actions
 

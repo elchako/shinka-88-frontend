@@ -1,108 +1,13 @@
-.mainWrapper {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 40px;
-    background-color: #d8e0fe;
-    display: none;
-    justify-content: space-between;
-    padding: 12px 21px;
-    border-top: 1px solid rgba(52, 91, 248, 0.523);
-}
-
-.bottomMenuItem {
-    color: rgb(47 52 105);
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 15px;
-    letter-spacing: 0%;
-    text-align: left;
-    background-color: transparent;
-}
-
-
-@media screen and (max-width: 880px) {
-    .mainWrapper {
-        display: flex;
-    }
-}
-
-.mainHiddenMenuWrapper {
-    position: fixed;
-    z-index: 1000;
-    width: 100%;
-    height: 100vh;
-    top: 0px;
-    background-color: #fff;
-    overflow: hidden;
-    transition: all 0.5s;
-    border-bottom: 3px solid rgb(36, 33, 33);
-}
-
-.mainHiddenMenuWrapper.closedHiddenMenu {
-    top: -10px;
-    height: 0vh;
-    transition: all 0.5s;
-}
-
-.hiddenMenuHeader {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    background-color: rgb(232, 237, 255);
-    padding: 20px 0px;
-}
-
-.hiddenMenuHeader p {
-    color: rgb(0, 0, 0);
-    font-size: 17px;
-    font-weight: 600;
-    line-height: 20px;
-    letter-spacing: 0%;
-    align-self: center;
-}
-
-.hiddenMenuHeader button {
-    position: absolute;
-    right: 17px;
-    top: 17px;
-    background-color: transparent;
-}
-
-.hiddenMenuHeader img {
-    width: 25px;
-    height: 25px;
-}
-
-.hiddenMenuContent {
-    width: 295px;
-    padding: 0px 13px;
-    margin: 0 auto;
-    margin-top: 21px;
-}
-
-.hiddenMenuItem {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(217, 217, 217, 0.498);
-    padding: 10px;
-}
-
-.hiddenMenuItem:last-child {
-    border: 0;
-}
-
-.hiddenMenuItem p {
-    align-self: center;
-    color: #333;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 15px;
-    letter-spacing: 0%;
-}
-
-.hiddenMenuItem img {
-    width: 15px;
-    height: 17px;
-    align-self: center;
-}
+.mainWrapper { position: fixed; inset: auto 0 0; z-index: var(--z-sticky); display: none; grid-template-columns: repeat(4, minmax(0, 1fr)); min-height: 65px; padding: 5px max(12px, env(safe-area-inset-right, 0px)) calc(5px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)); border-top: 1px solid var(--color-border); background: var(--color-bg-primary); }
+.bottomMenuItem { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 53px; padding: 5px 2px; border: 0; background: transparent; color: var(--color-text-secondary); font-size: 11px; line-height: 1.3; font-weight: 500; }
+.active { color: var(--color-primary); }
+.iconWrap { position: relative; width: 21px; height: 21px; }
+.hiddenMenuContent { display: grid; gap: 2px; }
+.hiddenMenuItem { display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 10px 3px; font-size: 14px; line-height: 1.5; }
+.hiddenMenuItem>svg { color: var(--color-text-secondary); }
+.hiddenMenuItem>svg:last-child { margin-left: auto; }
+.hiddenMenuItem:nth-child(5) { margin-top: 10px; padding-top: 18px; border-top: 1px solid var(--color-border); }
+.menuContacts { margin-top: 20px; padding-top: 17px; border-top: 1px solid var(--color-border); font-size: 12px; line-height: 1.7; color: var(--color-text-secondary); }
+.menuContacts a { display: inline-flex; align-items: center; min-height: 40px; color: var(--color-text-primary); font-size: 15px; font-weight: 500; }
+.menuContacts p { margin: 4px 0 0; }
+@media (max-width: 850px) { .mainWrapper { display: grid; } }

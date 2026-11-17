@@ -1,3 +1,4 @@
+import { InformationNav } from '../../common/InformationNav'
 import React from "react";
 import AboutUsStyles from "./AboutUsStyles.module.scss";
 import { Footer } from "../../footer/Footer";
@@ -11,11 +12,13 @@ export const AboutUs: React.FC = () => {
       </Helmet>
       <div className={AboutUsStyles.mainWrapper}>
         <div className={AboutUsStyles.content}>
+          <h1 className="pageTitle">О нас</h1>
+          <div className={AboutUsStyles.readGrid}><InformationNav /><div className={AboutUsStyles.article}>
 
           <div className={AboutUsStyles.paragraph}>
-            <p className={AboutUsStyles.title}>БОЛЕЕ 20 ЛЕТ С ВАМИ</p>
+            <h2 className={AboutUsStyles.title}>Более 20 лет с вами</h2>
             <p className={AboutUsStyles.text}>
-              Компания <strong>«Шинка 88»</strong> работает в Егорьевске с <strong>2000 года</strong>.<br />
+              Компания <strong>«Шинка 88»</strong> работает в Егорьевске с <strong>2001 года</strong>.<br />
               Уже <strong>более 20 лет</strong> мы помогаем автолюбителям и профессиональным водителям.<br />
               За эти годы мы заслужили <strong>доверие</strong> тысяч клиентов.<br />
               Нас выбирают за <strong>опыт, надёжность и честное отношение к каждому покупателю</strong>.
@@ -23,7 +26,7 @@ export const AboutUs: React.FC = () => {
           </div>
 
           <div className={AboutUsStyles.paragraph}>
-            <p className={AboutUsStyles.title}>ТОВАРЫ И УСЛУГИ</p>
+            <h2 className={AboutUsStyles.title}>Товары и услуги</h2>
             <p className={AboutUsStyles.text}>
               В компании <strong>«Шинка 88»</strong> вы найдёте всё необходимое для обслуживания вашего автомобиля:
             </p>
@@ -51,14 +54,14 @@ export const AboutUs: React.FC = () => {
             </p>
             <p className={AboutUsStyles.text}>
               Все работы выполняют <strong>опытные мастера</strong>, быстро и аккуратно, с гарантией.<br />
-              Вы можете быть уверены: ваш автомобиль — в надёжных руках.
+              Вы можете быть уверены: ваш автомобиль - в надёжных руках.
             </p>
           </div>
 
           <div className={AboutUsStyles.paragraph}>
-            <p className={AboutUsStyles.title}>ЦЕНИМ СВОИХ КЛИЕНТОВ</p>
+            <h2 className={AboutUsStyles.title}>Ценим своих клиентов</h2>
             <p className={AboutUsStyles.text}>
-              С первого дня работы для нас главное — <strong>довольный клиент</strong>.<br />
+              С первого дня работы для нас главное - <strong>довольный клиент</strong>.<br />
               Мы благодарны всем, кто выбирает нас снова и снова, и всегда рады новым покупателям.
             </p>
             <p className={AboutUsStyles.text}>Нас ценят за:</p>
@@ -70,9 +73,10 @@ export const AboutUs: React.FC = () => {
             <p className={AboutUsStyles.text}>
               Мы постоянно улучшаем сервис, расширяем ассортимент и контролируем качество, чтобы вы могли уверенно обращаться к нам по любому автовопросу.
             </p>
-            <p className={AboutUsStyles.text}><strong>«Шинка 88» — здесь вам всегда помогут.</strong></p>
+            <p className={AboutUsStyles.text}><strong>«Шинка 88» - здесь вам всегда помогут.</strong></p>
           </div>
 
+        </div></div>
         </div>
         <Footer />
       </div>

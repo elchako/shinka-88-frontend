@@ -1,41 +1,19 @@
-import type React from "react"
-import FiltersStyles from "./FiltersStyles.module.scss"
-import FilterIcon from '../../../../imgs/tiresCard/filtersMobile.svg';
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { useEffect, useState } from "react"
-import {
-    priceEndSelector,
-    priceStartSelector,
-    selectSelector
-} from "../../../../app/slices/filters/disksFiltersSlice"
-import { mobileFiltersReducer } from "../../../../app/slices/common/smallActions"
+import type React from 'react'
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
+import { mobileFiltersReducer } from '../../../../app/slices/common/smallActions'
+import { Button } from '../../../common/Button'
+import { Icon } from '../../../common/Icon'
+import styles from './FiltersStyles.module.scss'
 
 export const MobileDisksFilters: React.FC = () => {
-    const dispatch = useAppDispatch()
-    const [filterCounter, setFilterCounter] = useState<number>(0)
-    const stateSelects = useAppSelector(selectSelector)
-    const statePriceStart = useAppSelector(priceStartSelector)
-    const statePriceEnd = useAppSelector(priceEndSelector)
-
-    useEffect(() => {
-        let newCount = 0
-        // селекты
-        for (let i = 0; i < stateSelects.length; i++) {
-            if (stateSelects[i].value.length !== 0) {
-                newCount++
-            }
-        }
-        // цена
-        if (statePriceStart !== 0 || statePriceEnd !== 0) newCount++
-        setFilterCounter(newCount)
-
-    }, [dispatch, stateSelects, statePriceStart, statePriceEnd])
-    return (
-        <div onClick={() => dispatch(mobileFiltersReducer())} className={FiltersStyles.mainWrapperMobile}>
-            <img src={FilterIcon} alt="" className={FiltersStyles.mobileFilterImg} />
-            <div className={FiltersStyles.mobileTitle}>Параметры</div>
-            <div className={FiltersStyles.mobileFiltersCounter}>
-                {filterCounter === 0 ? '' : filterCounter}</div>
-        </div>
-    )
+  const dispatch = useAppDispatch()
+  const filters = useAppSelector(state => state.disksFilters)
+  const count = filters.selects.filter(item => item.value.length > 0).length
+    + (filters.priceStart !== 0 || filters.priceEnd !== 0 ? 1 : 0)
+  return (
+    <Button variant="outline" className={styles.mobileTrigger} leftIcon={<Icon name="filter" size={17} />}
+      aria-haspopup="dialog" onClick={() => dispatch(mobileFiltersReducer())}>
+      Фильтры{count > 0 && <span className={styles.counter}>{count}</span>}
+    </Button>
+  )
 }

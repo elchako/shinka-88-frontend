@@ -1,60 +1,6 @@
-@import '../../../common.scss';
-
-.mainWrapper {
-    max-width: $maxWidth2;
-    margin: 0 auto;
-    background-color: rgb(250, 251, 255);
-    width: 100%;
-    display: block;
-    box-shadow: 0px 0.5px 0.5px #E5E5E5;
-}
-
-.mainMenu {
-    max-width: $maxWidth;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    padding: 15px 20px;
-}
-
-.mainMenu a {
-    color: rgb(0, 0, 0);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 24px;
-    letter-spacing: 0%;
-}
-
-.leftMenu {
-    display: flex;
-    gap: 35px;
-}
-
-.rightMenu {
-    display: flex;
-    gap: 40px;
-}
-
-@media screen and (max-width: 1170px) {
-    .mainMenu {
-        gap: 10px;
-    }
-
-    .mainMenu a {
-        font-size: 15px;
-    }
-
-    .leftMenu {
-        gap: 35px;
-    }
-
-    .rightMenu {
-        gap: 57px;
-    }
-}
-
-@media screen and (max-width: 880px) {
-    .mainWrapper {
-        display: none;
-    }
-}
+.mainWrapper { width: 100%; border-bottom: 1px solid var(--color-border); background: var(--color-bg-primary); }
+.mainMenu { display: flex; align-items: center; gap: 34px; min-height: 49px; max-width: var(--page-max-width); padding: 0 20px; margin: 0 auto; }
+.mainMenu a { position: relative; display: flex; align-items: center; min-height: 48px; font-size: 14px; font-weight: 500; }
+.mainMenu a:hover, .mainMenu a.active { color: var(--color-primary); }
+.mainMenu a.active::after { content: ''; position: absolute; inset: auto 0 0; height: 2px; background: var(--color-primary); }
+@media (max-width: 850px) { .mainWrapper { display: none; } }

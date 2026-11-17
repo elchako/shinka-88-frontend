@@ -1,94 +1,153 @@
-import type React from "react";
-import { useCallback, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import type React from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Cookies from 'js-cookie'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import {
-    checkProcessSelector, getSmsCode, login, isLoginSelector, nameSelector,
-    oftensmsCodeReqSelector,
-    phoneSelector, regModalSelector, smsCodeSelector,
-    tokenSelector, toogleModal, toogleSmsCode,
-    setLoginToggle,
-    setToken,
-    setCustomerLocalData
-} from "../../app/slices/authSlice";
-import Styles from './common.module.scss';
-import Cookies from 'js-cookie';
+  getSmsCode, login, nameSelector, phoneSelector, regModalSelector, smsCodeSelector, tokenSelector,
+  toogleModal, toogleSmsCode, setLoginToggle, setCustomerLocalData,
+} from '../../app/slices/authSlice'
+import { Modal } from './Modal'
+import { Button } from './Button'
+import { Input } from './Input'
+import { Icon } from './Icon'
+import styles from './RegModal.module.scss'
+import { normalizePhoneNumber } from '../../utils/other'
+
+const authErrorText = (error: unknown, verification: boolean): string => {
+  const message = typeof error === 'object' && error !== null && 'message' in error ? String(error.message) : ''
+  if (/\b429\b/.test(message)) return 'Слишком много запросов. Подождите и попробуйте позже.'
+  if (verification && /\b(400|401|403)\b/.test(message)) return 'Код не подошёл или срок его действия истёк. Проверьте код или запросите новый.'
+  return verification
+    ? 'Не удалось подтвердить номер. Проверьте соединение и повторите проверку.'
+    : 'Не удалось отправить SMS. Сервис временно недоступен. Попробуйте ещё раз позже.'
+}
 
 export const RegModal: React.FC = () => {
-    const dispatch = useAppDispatch()
-    const regModal = useAppSelector(regModalSelector)
-    const smsCode = useAppSelector(smsCodeSelector)
-    const name = useAppSelector(nameSelector)
-    const phone = useAppSelector(phoneSelector)
-    const token = useAppSelector(tokenSelector)
-    const isLogin = useAppSelector(isLoginSelector)
-    const [codeValue, setCodeValue] = useState<string>('')
-    const checkProcess = useAppSelector(checkProcessSelector)
-    const oftensmsCodeReq = useAppSelector(oftensmsCodeReqSelector)
+  const dispatch = useAppDispatch()
+  const regModal = useAppSelector(regModalSelector)
+  const smsCode = useAppSelector(smsCodeSelector)
+  const name = useAppSelector(nameSelector)
+  const rawPhone = useAppSelector(phoneSelector)
+  const phone = normalizePhoneNumber(rawPhone) || rawPhone
+  const validRecipient = name.trim().length >= 2 && Boolean(normalizePhoneNumber(rawPhone))
+  const token = useAppSelector(tokenSelector)
+  const [code, setCode] = useState('')
+  const [requestedPhone, setRequestedPhone] = useState('')
+  const [retryAt, setRetryAt] = useState(0)
+  const [secondsLeft, setSecondsLeft] = useState(0)
+  const [sending, setSending] = useState(false)
+  const [checking, setChecking] = useState(false)
+  const [confirmedPhone, setConfirmedPhone] = useState('')
+  const [error, setError] = useState('')
+  const pending = useRef(false)
+  const smsSent = requestedPhone === phone && Boolean(requestedPhone)
+  const confirmed = Boolean(token && confirmedPhone && confirmedPhone === phone)
 
-    // показывать или скрывать модалку
-    let openStyle
-    if (regModal) {
-        openStyle = Styles.placingOrderWrapper
-    } else {
-        openStyle = Styles.placingOrderWrapper + ' ' + Styles.placingOrderWrapperHidden
-    }
+  useEffect(() => {
+    if (!retryAt) return
+    const update = () => setSecondsLeft(Math.max(0, Math.ceil((retryAt - Date.now()) / 1000)))
+    update()
+    const timer = window.setInterval(update, 1000)
+    return () => window.clearInterval(timer)
+  }, [retryAt])
 
-    // получить код
-    const getCodeHandler = () => {
-        if (!oftensmsCodeReq) {
-            dispatch(toogleSmsCode())
-            dispatch(getSmsCode({ name, phone }))
-        } else {
-            alert(`Слишком много запросов. Вы можете запросить проверочный код 3 раза за час.`)
-        }
-    }
+  useEffect(() => { setCode(''); setError('') }, [phone])
 
-    // отправка кода
-    const codeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (checkProcess) return
-        if (e.target.value.length <= 6) setCodeValue(e.target.value)
-        if (e.target.value.length === 6) {
-            dispatch(login({ phone, code: e.target.value }))
-        }
-    }
+  const closeModal = () => {
+    if (regModal) dispatch(toogleModal())
+  }
 
-    // закрытие модалки
-    const closeModal = useCallback(() => {
-        dispatch(toogleModal())
-        if (smsCode) dispatch(toogleSmsCode())
-    }, [dispatch, smsCode])
+  const sendCode = async () => {
+    if (!validRecipient || pending.current || Date.now() < retryAt) return
+    pending.current = true
+    setSending(true)
+    setError('')
+    try {
+      await dispatch(getSmsCode({ name, phone })).unwrap()
+      setRequestedPhone(phone)
+      setCode('')
+      if (!smsCode) dispatch(toogleSmsCode())
+      setSecondsLeft(60)
+      setRetryAt(Date.now() + 60_000)
+    } catch (failure) { setError(authErrorText(failure, false)) }
+    finally { pending.current = false; setSending(false) }
+  }
 
-    useEffect(() => {
-        const customerLocalData = localStorage.getItem('customerLocalData')
-        const data = JSON.parse(customerLocalData as string)
-        if (isLogin) {
-            Cookies.set('token', token)
-            if (data) {
-                data.phone = phone
-                const newLocalData = JSON.stringify(data)
-                localStorage.setItem('customerLocalData', newLocalData)
-                dispatch(setCustomerLocalData(newLocalData))
-            }
-            setCodeValue('')
-            closeModal()
-            dispatch(setLoginToggle())
-        }
-    }, [isLogin])
+  const verifyCode = async (value: string) => {
+    if (value.length !== 6 || !smsSent || pending.current) return
+    pending.current = true
+    setChecking(true)
+    setError('')
+    try {
+      const token = await dispatch(login({ phone, code: value })).unwrap()
+      if (!token) throw new Error('empty_token')
+      Cookies.set('token', token)
+      const customer = JSON.stringify({ name: name.trim(), phone })
+      try { localStorage.setItem('customerLocalData', customer) } catch { /* Сохраняем подтверждение в Redux. */ }
+      dispatch(setCustomerLocalData(customer))
+      dispatch(setLoginToggle())
+      setConfirmedPhone(phone)
+      setCode('')
+    } catch (failure) { setError(authErrorText(failure, true)) }
+    finally { pending.current = false; setChecking(false) }
+  }
 
-    return <div className={openStyle}>
-        <div className={Styles.placingOrder}>
-            <div className={Styles.placingOrderContent}>
-                <div className={Styles.closeplacingOrder}
-                    onClick={closeModal}>&#10006;</div>
-                <p>Мы Вас не узнали на этом устройстве.<br />Просьба подтвердить Ваш номер телефона.</p>
-                {smsCode
-                    ? <input className={Styles.placingOrderSmsCode} type="number" placeholder="введите код из смс"
-                        onChange={e => codeHandler(e)}
-                        value={codeValue} />
-                    : <button className={Styles.placingOrderButton}
-                        onClick={() => getCodeHandler()}>Отправить смс-код на номер {phone}</button>}
-                {smsCode && <p className={Styles.placingOrderWasSend}>{`код отправлен на номер ${phone}`}</p>}
-            </div>
+  return (
+    <Modal
+      isOpen={regModal}
+      onClose={closeModal}
+      title={confirmed ? 'Телефон подтверждён' : 'Подтвердите телефон'}
+      size="sm"
+      footer={confirmed ? (
+        <Button type="button" fullWidth onClick={closeModal} rightIcon={<Icon name="arrow" size={18} />}>Вернуться к оформлению</Button>
+      ) : smsSent ? (
+        <div className={styles.footer}>
+          <Button type="button" fullWidth onClick={() => void verifyCode(code)} isLoading={checking} disabled={code.length !== 6 || sending}>Проверить код</Button>
+          <Button type="button" variant="ghost" fullWidth onClick={() => void sendCode()} disabled={secondsLeft > 0 || checking} isLoading={sending}>
+            {secondsLeft > 0 ? `Повторить через ${secondsLeft} с` : 'Отправить код повторно'}
+          </Button>
         </div>
-    </div>
+      ) : (
+        <Button type="button" fullWidth onClick={() => void sendCode()} isLoading={sending} disabled={!validRecipient || secondsLeft > 0} leftIcon={<Icon name="phone" size={18} />}>
+          {secondsLeft > 0 ? `Повторить через ${secondsLeft} с` : 'Отправить SMS-код'}
+        </Button>
+      )}
+    >
+      <div className={styles.container}>
+        {confirmed ? (
+          <div className={styles.success} role="status">
+            <Icon name="check" size={24} />
+            <p>Номер {phone} подтверждён.</p>
+            <p>Заказ ещё не отправлен. Вернитесь к оформлению, проверьте состав и нажмите «Оформить заказ».</p>
+          </div>
+        ) : (
+          <>
+            <p className={styles.phone}>Номер для подтверждения: <strong>{phone}</strong></p>
+            {smsSent ? (
+              <>
+                <Input
+                  label="Код из SMS"
+                  placeholder="Введите 6 цифр"
+                  value={code}
+                  onChange={event => {
+                    const value = event.target.value.replace(/\D/g, '').slice(0, 6)
+                    setCode(value)
+                    setError('')
+                    if (value.length === 6) void verifyCode(value)
+                  }}
+                  maxLength={6}
+                  disabled={checking || sending}
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  className={styles.codeInput}
+                />
+                <p className={styles.help} role="status">{checking ? 'Проверяем код…' : 'SMS отправлена. Введите шесть цифр из сообщения.'}</p>
+              </>
+            ) : <p className={styles.help}>Отправим SMS с кодом для подтверждения номера. Это не оформляет заказ.</p>}
+          </>
+        )}
+        {error && <p className={styles.error} role="alert">{error}</p>}
+      </div>
+    </Modal>
+  )
 }

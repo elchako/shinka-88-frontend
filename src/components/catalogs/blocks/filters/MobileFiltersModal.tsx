@@ -1,62 +1,48 @@
-import type React from "react"
-import FiltersStyles from "./FiltersStyles.module.scss"
-import { useAppDispatch, useAppSelector, useCatalogDataHook } from "../../../../app/hooks";
-import { OffenButton } from "../../../common/OffenButton";
-import { useLocation } from "react-router-dom";
-import { mobileFiltersReducer, mobileFiltersSelector } from "../../../../app/slices/common/smallActions";
+import type React from 'react'
+import { useCallback } from 'react'
+import { useLocation } from 'react-router-dom'
+import { useAppDispatch, useAppSelector, useCatalogDataHook } from '../../../../app/hooks'
+import { mobileFiltersReducer, mobileFiltersSelector } from '../../../../app/slices/common/smallActions'
+import { getDisksParametrs } from '../../../../app/slices/filters/disksFiltersSlice'
+import { getTyresParametrs } from '../../../../app/slices/filters/tiresFiltersSlice'
+import { Button } from '../../../common/Button'
+import { Modal } from '../../../common/Modal'
+import { CatalogPriceFields } from './DesktopFilters'
+import styles from './FiltersStyles.module.scss'
 
 export const MobileFiltersModal: React.FC = () => {
-    // открытие/закрытие модалки
-    const mobileFiltersState = useAppSelector(mobileFiltersSelector)
+  const dispatch = useAppDispatch()
+  const isClosed = useAppSelector(mobileFiltersSelector)
+  const { pathname } = useLocation()
+  const catalog = useCatalogDataHook(pathname)
+  const isDisks = pathname === '/disks'
+  const filtersStatus = useAppSelector(state => isDisks
+    ? state.disksFilters.filtersStatus : state.tiresFilters.filtersStatus)
+  const close = useCallback(() => { dispatch(mobileFiltersReducer()) }, [dispatch])
 
-    const { pathname } = useLocation()
-    const catalogData = useCatalogDataHook(pathname)
-
-    const dispatch = useAppDispatch()
-    const priceStart = catalogData.commonFilters.priceStartNumber
-    const priceEnd = catalogData.commonFilters.priceEndNumber
-
-    let openCloseStyles = null
-    mobileFiltersState
-        ? openCloseStyles = 'none'
-        : openCloseStyles = 'block'
-
-    return (
-        <div style={{ display: openCloseStyles }} className={FiltersStyles.mainWrapperMobileModal}>
-            <div className={FiltersStyles.modalMobile}>
-                <div className={FiltersStyles.modalMobileTop}>
-                    <p>Параметры</p>
-                    <div className={FiltersStyles.modalMobilesButtons}>
-                        <p onClick={() =>
-                            dispatch(catalogData.commonFilters.resetFiltersAction())}>Сбросить</p>
-                        <div onClick={() => dispatch(mobileFiltersReducer())} className={FiltersStyles.closeFilters}></div>
-                    </div>
-                </div>
-                <div className={FiltersStyles.modalMobileMiddle}>
-                    {<catalogData.filtersBlocksMobile />}
-                    <div className={FiltersStyles.selectMobile}>
-                        <p>Цена</p>
-                        <div className={FiltersStyles.priceContentMobile}>
-                            <div className={FiltersStyles.priceFromMobile}>
-                                <input type="text" placeholder="3 500"
-                                    value={priceStart === 0 ? '' : priceStart}
-                                    onChange={e =>
-                                        dispatch(catalogData.commonFilters.priceSetter({ number: Number(e.currentTarget.value), isStartOrEnd: true }))} />
-                            </div>
-                            <div className={FiltersStyles.priceLineMobile}></div>
-                            <div className={FiltersStyles.priceToMobile}>
-                                <input type="text" placeholder="20 000"
-                                    value={priceEnd === 0 ? '' : priceEnd}
-                                    onChange={e =>
-                                        dispatch(catalogData.commonFilters.priceSetter({ number: Number(e.currentTarget.value), isStartOrEnd: false }))} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={FiltersStyles.modalMobileBottom}>
-                    <OffenButton name={'ПРИМЕНИТЬ ПАРАМЕТРЫ'} handler={() => dispatch(mobileFiltersReducer())} />
-                </div>
-            </div>
+  return (
+    <Modal isOpen={!isClosed} onClose={close} title={isDisks ? 'Параметры дисков' : 'Параметры шин'} size="md"
+      footer={
+        <div className={styles.modalActions}>
+          <Button variant="outline" onClick={() => dispatch(catalog.commonFilters.resetFiltersAction())}>Сбросить</Button>
+          <Button onClick={close}>Показать товары</Button>
         </div>
-    )
+      }>
+      <div className={styles.modalFilters}>
+        {filtersStatus === 'loading' && <p role="status" className={styles.feedback}>Загружаем параметры…</p>}
+        {filtersStatus === 'failed' && <div role="alert" className={styles.feedback}>
+          <p>Не удалось загрузить параметры.</p>
+          <Button variant="outline" onClick={() => {
+            if (isDisks) dispatch(getDisksParametrs())
+            else dispatch(getTyresParametrs())
+          }}>Повторить</Button>
+        </div>}
+        <catalog.filtersBlocksMobile />
+        <CatalogPriceFields commonFilters={{ ...catalog.commonFilters,
+          priceMinNumber: filtersStatus === 'succeeded' ? catalog.commonFilters.priceMinNumber : null,
+          priceMaxNumber: filtersStatus === 'succeeded' ? catalog.commonFilters.priceMaxNumber : null,
+        }} />
+      </div>
+    </Modal>
+  )
 }

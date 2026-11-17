@@ -1,38 +1,29 @@
-import type React from "react";
-import MobileMenuStyles from './MobileMenu.module.scss'
+import type React from 'react'
+import { useCallback } from 'react'
+import { NavLink } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
+import { mobileMenuReducer, mobileMenuSelector } from '../../../app/slices/common/smallActions'
 import { links } from '../../../consts'
-import { NavLink } from "react-router-dom";
-import close from '../../../imgs/closeHiddenMenu.svg'
-import menuArrow from '../../../imgs/hiddenMenuArrow.svg'
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { mobileMenuReducer, mobileMenuSelector } from "../../../app/slices/common/smallActions";
+import { Modal } from '../../common/Modal'
+import { Icon } from '../../common/Icon'
+import styles from './MobileMenu.module.scss'
 
 export const HiddenMobileMenu: React.FC = () => {
-    // открытие/закрытие меню
-    const mobileMenuState = useAppSelector(mobileMenuSelector) // закрытие/открытие мобильного меню
-    const dispatch = useAppDispatch()
-    let menuStyles = MobileMenuStyles.mainHiddenMenuWrapper
-    mobileMenuState ? menuStyles = MobileMenuStyles.mainHiddenMenuWrapper + ' ' + MobileMenuStyles.closedHiddenMenu
-        : menuStyles = MobileMenuStyles.mainHiddenMenuWrapper
-
-    // ссылки меню
-    const menuLinks = [...links.slice(3, 5), ...links.slice(10,)]
-
-    return <div className={menuStyles}>
-        <div className={MobileMenuStyles.hiddenMenuHeader}>
-            <p>Меню</p>
-            <button onClick={() => dispatch(mobileMenuReducer())}>
-                <img src={close} alt="close menu" />
-            </button>
-        </div>
-        <div className={MobileMenuStyles.hiddenMenuContent}>
-            {menuLinks.map((item, index) => {
-                return <NavLink key={index} to={item.link} className={MobileMenuStyles.hiddenMenuItem}
-                    onClick={() => dispatch(mobileMenuReducer())}>
-                    <p>{item.title}</p>
-                    <img src={menuArrow} alt="menu arrow" />
-                </NavLink>
-            })}
-        </div>
-    </div>
+  const closed = useAppSelector(mobileMenuSelector)
+  const dispatch = useAppDispatch()
+  const close = useCallback(() => { if (!closed) dispatch(mobileMenuReducer()) }, [closed, dispatch])
+  const items = [links[0], links[3], links[4], links[1], links[12], links[14], links[13], links[11]]
+  return (
+    <Modal isOpen={!closed} onClose={close} title="Меню магазина" size="md">
+      <nav className={styles.hiddenMenuContent} aria-label="Разделы магазина">
+        {items.map((item, index) => (
+          <NavLink key={item.link} to={item.link.startsWith('/') ? item.link : `/${item.link}`} className={styles.hiddenMenuItem} onClick={close}>
+            {index < 4 && <Icon name={['home', 'tire', 'wheel', 'cart'][index]} size={20} />}
+            <span>{item.title}</span><Icon name="chevron" size={16} />
+          </NavLink>
+        ))}
+      </nav>
+      <div className={styles.menuContacts}><a href={links[2].link}>{links[2].title}</a><p>Егорьевск, ул. Рязанская, ГСК ЦЕНА</p></div>
+    </Modal>
+  )
 }

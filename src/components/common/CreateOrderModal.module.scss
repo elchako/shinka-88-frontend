@@ -1,0 +1,4 @@
+.content { display: grid; gap: 16px; color: var(--color-text-secondary); font-size: 14px; line-height: 1.7; }
+.content p { margin: 0; }
+.content > svg { color: var(--color-success); }
+.number { color: var(--color-text-primary); font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }

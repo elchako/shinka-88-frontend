@@ -1,63 +1,11 @@
-@import '../../../common.scss';
-
-.mainWrapper {
-    margin: 0 auto;
-    margin-top: 70px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.content {
-    max-width: 1200px;
-    margin: 0 auto;
-    margin-top: 40px;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 150%;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    padding: 0px 10px;
-    flex: 1 1 auto;
-}
-
-.paragraph {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.title {
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 39px;
-}
-
-.text {
-    white-space: pre-line;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 150%;
-}
-
-@media screen and (max-width: 550px) {
-    .paragraph {
-        gap: 15px;
-    }
-    .title {
-        font-size: 18px;
-    }
-    .text {
-        font-size: 14px;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    .title {
-        font-size: 16px;
-    }
-    .text {
-        font-size: 13px;
-    }
-}
+.mainWrapper { display: flex; flex-direction: column; min-width: 0; min-height: calc(100dvh - 135px); }
+.content { width: 100%; max-width: var(--page-max-width); margin: 32px auto 0; padding: 0 20px 20px; flex: 1 0 auto; }
+.readGrid { display: grid; grid-template-columns: 210px minmax(0, 1fr); align-items: start; gap: 40px; margin-top: 28px; }
+.article { min-width: 0; max-width: 74ch; font-size: 14px; line-height: 1.85; }
+.paragraph { margin-bottom: 26px; }
+.title { margin: 28px 0 13px; font-family: var(--font-display); font-size: 20px; font-weight: 600; line-height: 1.4; letter-spacing: -.02em; }
+.paragraph:first-child .title { margin-top: 0; }
+.text { margin: 0 0 17px; font-size: 14px; font-weight: 400; line-height: 1.85; }
+.text strong { font-weight: 600; }
+@media (max-width: 850px) { .mainWrapper { min-height: calc(100dvh - 149px); } .content { margin-top: 24px; } .readGrid { grid-template-columns: 1fr; gap: 22px; margin-top: 22px; } }
+@media (max-width: 650px) { .content { margin-top: 22px; padding: 0 16px 12px; } .article, .text { font-size: 13px; } .title { font-size: 18px; } }

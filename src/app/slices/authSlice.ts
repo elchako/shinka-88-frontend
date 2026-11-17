@@ -84,7 +84,6 @@ export const authSlice = createAppSlice({
                     state.token = action.payload
                     state.checkProcess = !state.checkProcess
                     state.isLogin = true
-                    alert('Теперь можете отправить заказ')
                 },
                 rejected: state => {
                     // console.log('авторизация неудачна')

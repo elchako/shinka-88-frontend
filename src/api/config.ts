@@ -14,8 +14,8 @@ interface URLsTypes {
     order: string
 }
 
-const baseURL = 'https://xn--88-6kc5akr9e.xn--p1ai'
-// const baseURL = 'http://127.0.0.1:8000'
+// В production по умолчанию прежний домен; для изолированного стенда задайте VITE_API_ORIGIN.
+const baseURL = (import.meta.env.VITE_API_ORIGIN || 'https://xn--88-6kc5akr9e.xn--p1ai').replace(/\/$/, '')
 
 
 export const URLs: URLsTypes = {

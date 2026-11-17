@@ -1,38 +1,23 @@
-import type React from "react"
-import AutoPartsStyles from "./AutoPartsStyles.module.scss"
-import '../../../common.scss'
-import { AutoPartsCard } from "./blocks/card/AutoPartsCard"
-import searchIcon from '../../../imgs/searchIcon.png'
-import { Helmet } from "react-helmet-async"
+import type React from 'react'
+import { Helmet } from 'react-helmet-async'
+import { Footer } from '../../footer/Footer'
+import { Icon } from '../../common/Icon'
+import { links } from '../../../consts'
+import styles from './AutoPartsStyles.module.scss'
 
-
-export const AutoParts: React.FC = () => {
-    return (
-        <>
-            <Helmet>
-                <title>Шинка88 - Автозапчасти</title>
-            </Helmet>
-            <div className={AutoPartsStyles.mainWrapper}>
-                <p className="pageTitle">Автозапчасти</p>
-                <div className={AutoPartsStyles.content}>
-                    <div className={AutoPartsStyles.searchBlock}>
-                        <div className={AutoPartsStyles.searchTop}>
-                            <input type="text" placeholder="введите VIN запчасти" />
-                            <button>
-                                <p>ПОИСК</p>
-                                <img src={searchIcon} alt="searchIcon" />
-                            </button>
-                        </div>
-                        <p>Во избежание ошибок по подборке запчастей по VIN запчасти
-                            свяжитесь с нашим менеджером то тел. +7(919)772-88-88</p>
-                    </div>
-                </div>
-                <div className={AutoPartsStyles.cards}>
-                    {[...Array(20)].map(item => {
-                        return <AutoPartsCard />
-                    })}
-                </div>
-            </div>
-        </>
-    )
-}
+export const AutoParts: React.FC = () => (
+  <>
+    <Helmet><title>Шинка88 | Автозапчасти</title></Helmet>
+    <div className={styles.mainWrapper}>
+      <div className={styles.content}>
+        <h1 className="pageTitle">Автозапчасти</h1>
+        <section className={styles.searchBlock} aria-labelledby="parts-heading">
+          <h2 id="parts-heading">Поможем уточнить подбор</h2>
+          <p>Для подбора запчастей по VIN свяжитесь с менеджером магазина. Онлайн-поиск в этом разделе пока недоступен.</p>
+          <a className={styles.phone} href={links[2].link}><Icon name="phone" size={20} />{links[2].title}</a>
+        </section>
+      </div>
+      <Footer />
+    </div>
+  </>
+)

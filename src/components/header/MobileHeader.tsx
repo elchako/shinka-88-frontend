@@ -1,32 +1,23 @@
-import type React from "react";
-import HeaderStyles from "./HeaderStyles.module.scss";
-import { NavLink } from "react-router-dom";
-import phone from '../../imgs/phone.svg';
-import mobileCart from '../../imgs/cart/basket.svg'
-import { Logo } from "../common/Logo";
-import { useAppSelector } from "../../app/hooks";
-import { disksDataSelector, tyresDataSelector } from "../../app/slices/cartSlice";
-import { CartCounter } from "../common/CartCounter";
+import type React from 'react'
+import { NavLink } from 'react-router-dom'
+import styles from './HeaderStyles.module.scss'
+import { Logo } from '../common/Logo'
+import { Icon } from '../common/Icon'
+import { CartCounter } from '../common/CartCounter'
+import { links } from '../../consts'
 
-
-export const MobileHeader: React.FC = () => {
-    const tyresAmount = useAppSelector(tyresDataSelector).length
-    const disksAmount = useAppSelector(disksDataSelector).length
-
-    const mobileLogoStyles = {
-        logoImg: HeaderStyles.logoImgMobile,
-        title: HeaderStyles.titleMobile,
-        logo: HeaderStyles.logo
-    }
-
-    return <div className={HeaderStyles.mobileMainWrapper}>
-        <a href="tel:+79197728888" className={HeaderStyles.mobilePhone}>
-            <img src={phone} alt="phone" />
+export const MobileHeader: React.FC = () => (
+  <header className={styles.mobileHeader}>
+    <div className={styles.mobileMainWrapper}>
+      <Logo logoImg={styles.logoImgMobile} title={styles.titleMobile} logo={styles.logo} />
+      <div className={styles.mobileActions}>
+        <a href={links[2].link} className={styles.mobilePhone} aria-label={`Позвонить: ${links[2].title}`}>
+          <Icon name="phone" size={20} />
         </a>
-        <Logo {...mobileLogoStyles} />
-        <NavLink to='cart' className={HeaderStyles.mobileCart}>
-            <CartCounter />
-            <img src={mobileCart} alt="cart" />
+        <NavLink to={`/${links[1].link}`} className={styles.mobileCart} aria-label="Корзина">
+          <Icon name="cart" size={24} /><CartCounter />
         </NavLink>
+      </div>
     </div>
-}
+  </header>
+)

@@ -1,279 +1,217 @@
-import { type PayloadAction } from "@reduxjs/toolkit"
-import { createAppSlice } from "../createAppSlice"
-import type {
-    orderType,
-    commonArrDataType,
-    IinitialState
-} from "../../types/cart"
-import { type resultsTyresType } from "../../types/tires"
-import { type resultsDisksType } from "../../types/disks"
-import { orderApi } from "../../api/order"
+import { createSelector, type PayloadAction } from '@reduxjs/toolkit'
+import { createAppSlice } from '../createAppSlice'
+import type { commonArrDataType, IinitialState, orderType } from '../../types/cart'
+import type { resultsTyresType } from '../../types/tires'
+import type { resultsDisksType } from '../../types/disks'
+import { orderApi } from '../../api/order'
 
+type CartState = IinitialState & { orderError: string }
+type CartProducts = Pick<IinitialState, 'tyres' | 'disks'>
 
-const initialState: IinitialState = {
-    priceAmount: 0,
-    queueCounter: 0,
-    selectAll: true,
-    tyres: [],
-    disks: [],
-    creatingOrder: false,
-    orderNumber: 0
+const initialState: CartState = {
+  priceAmount: 0,
+  queueCounter: 0,
+  selectAll: true,
+  tyres: [],
+  disks: [],
+  creatingOrder: false,
+  orderNumber: 0,
+  orderError: '',
 }
 
+const sortAllProducts = (state: CartProducts): commonArrDataType =>
+  [...state.tyres, ...state.disks].sort((a, b) => a.queue - b.queue)
 
-// пересчёт общей цены за все товары
-const recalcPriceAmount = (arr: commonArrDataType): number => {
-    return arr.reduce((sum, item) => {
-        if (!item.canceled) {
-            return sum + item.price_sale * item.amount
-        } else {
-            return sum
-        }
-    }, 0)
+// Сумма и состав запроса всегда строятся из одних и тех же выбранных позиций.
+export const buildOrderPayload = (state: CartProducts): orderType => {
+  const tyres = state.tyres.filter(item => !item.canceled)
+  const disks = state.disks.filter(item => !item.canceled)
+  const order_items: orderType['order_items'] = {}
+  const toOrderItem = (item: commonArrDataType[number]) => ({
+    id: item.id,
+    quantity: item.amount,
+    price: item.price_sale,
+  })
+  if (tyres.length) order_items.tyres = tyres.map(toOrderItem)
+  if (disks.length) order_items.disks = disks.map(toOrderItem)
+  return {
+    total_amount: [...tyres, ...disks].reduce((sum, item) => sum + item.price_sale * item.amount, 0),
+    order_items,
+  }
 }
 
-
-// сортировка товаров в корзине
-// в том же порядке, в котором они были добавлены
-const sortAllProducts = (state: IinitialState): commonArrDataType => {
-    return [...state.tyres, ...state.disks].sort((a, b) => a.queue - b.queue)
+const refreshCart = (state: CartState) => {
+  const products = sortAllProducts(state)
+  state.priceAmount = buildOrderPayload(state).total_amount
+  state.selectAll = products.every(item => !item.canceled)
+  state.queueCounter = products.length
+  products.forEach((item, index) => { item.queue = index })
 }
 
-
-// поиск и отмена товара в корзине
-const cancelProduct = (arr: commonArrDataType, id: number): { index: number; value: boolean; } => {
-    let result = { index: 0, value: false }
-    for (let i = 0; i < arr.length; i++) {
-        if (arr[i].id === id) {
-            result.index = i
-            result.value = !arr[i].canceled
-        }
-    }
-    return result
+const persistCart = (state: CartState) => {
+  // Недоступное хранилище не должно блокировать работу корзины в текущем окне.
+  try {
+    localStorage.setItem('cartData', JSON.stringify(state))
+  } catch { /* Корзина остаётся в Redux. */ }
 }
 
+const removeStoredCart = () => {
+  try {
+    localStorage.removeItem('cartData')
+  } catch { /* Корзина остаётся в Redux. */ }
+}
+
+const boundedAmount = (amount: number, balance: number) =>
+  Math.min(balance, Math.max(1, Math.floor(Number.isFinite(amount) ? amount : 1)))
 
 export const cartSlice = createAppSlice({
-    name: "cart",
-    initialState,
-    reducers: create => ({
-        // добавление/удаление шин в корзину
-        // из каталога
-        addTyresToCart: create.reducer((state,
-            action: PayloadAction<resultsTyresType>) => {
-            let founded = false
-            for (let i = 0; i < state.tyres.length; i++) {
-                if (state.tyres[i].id === action.payload.id) {
-                    state.tyres[i].amount = action.payload.amount
-                    state.tyres[i].canceled = false
-                    founded = true
-                    break
-                }
-            }
-            if (!founded) state.tyres.push({ ...action.payload, canceled: false, queue: state.queueCounter++ })
-            state.priceAmount = recalcPriceAmount([...state.tyres, ...state.disks])
-            localStorage.setItem('cartData', JSON.stringify(state))
-        }),
-        // добавление/удаление дисков в корзину
-        // из каталога
-        addDisksToCart: create.reducer((state,
-            action: PayloadAction<resultsDisksType>) => {
-            let founded = false
-            for (let i = 0; i < state.disks.length; i++) {
-                if (state.disks[i].id === action.payload.id) {
-                    state.disks[i].amount = action.payload.amount
-                    state.disks[i].canceled = false
-                    founded = true
-                    break
-                }
-            }
-            if (!founded) state.disks.push({ ...action.payload, canceled: false, queue: state.queueCounter++ })
-            state.priceAmount = recalcPriceAmount([...state.tyres, ...state.disks])
-            localStorage.setItem('cartData', JSON.stringify(state))
-        }),
-        // выбрать/отменить все товары в корзине
-        selectAllHandler: create.reducer(state => {
-            state.selectAll = !state.selectAll
-            state.tyres.forEach(item => item.canceled = !state.selectAll)
-            state.disks.forEach(item => item.canceled = !state.selectAll)
-            state.priceAmount = recalcPriceAmount(sortAllProducts(state))
-            localStorage.setItem('cartData', JSON.stringify(state))
-        }),
-        // выбрать/отменить товар в корзине
-        selectProductHandler: create.reducer((state,
-            action: PayloadAction<{ productType: string, id: number }>) => {
-            if (action.payload.productType === 'Шины') {
-                let productValue = cancelProduct(state.tyres, action.payload.id)
-                state.tyres[productValue.index].canceled = productValue.value
-            }
-            if (action.payload.productType === 'Диски') {
-                let productValue = cancelProduct(state.disks, action.payload.id)
-                state.disks[productValue.index].canceled = productValue.value
-            }
-
-            state.priceAmount = recalcPriceAmount(sortAllProducts(state))
-            localStorage.setItem('cartData', JSON.stringify(state))
-        }),
-        // удаление всех товаров из корзины
-        resetCart: create.reducer(state => {
-            state.tyres = state.tyres.filter(item => item.canceled)
-            state.disks = state.disks.filter(item => item.canceled)
-            const newCartArr = sortAllProducts(state)
-            state.priceAmount = recalcPriceAmount(newCartArr)
-            state.queueCounter = newCartArr.length
-            if (newCartArr.length !== 0) {
-                newCartArr.forEach((item, index) => item.queue = index)
-            }
-            localStorage.removeItem('cartData')
-        }),
-        // удаление одного товара из корзины
-        delOneTypeProduct: create.reducer((state,
-            action: PayloadAction<{ productType: string, id: number }>) => {
-            if (action.payload.productType === 'Шины') {
-                state.tyres = state.tyres.filter(item => item.id !== action.payload.id)
-            }
-
-            if (action.payload.productType === 'Диски') {
-                state.disks = state.disks.filter(item => item.id !== action.payload.id)
-            }
-
-            const newCartArr = sortAllProducts(state)
-            state.priceAmount = recalcPriceAmount(newCartArr)
-            state.queueCounter = newCartArr.length
-            if (newCartArr.length !== 0) {
-                newCartArr.forEach((item, index) => item.queue = index)
-            }
-            localStorage.setItem('cartData', JSON.stringify(state))
-
-        }),
-        // плюс/минус количества товара в конкретной карточке
-        changeAmount: create.reducer((state,
-            action: PayloadAction<{ type: string, id: number, isPlus: boolean }>) => {
-            let arrData: commonArrDataType = []
-            if (action.payload.type === 'Шины') arrData = state.tyres
-            if (action.payload.type === 'Диски') arrData = state.disks
-
-            for (let i = 0; i < arrData.length; i++) {
-                if (arrData[i].id === action.payload.id) {
-                    if (action.payload.isPlus && arrData[i].amount < arrData[i].balance) {
-                        arrData[i].amount++
-                    } else if (!action.payload.isPlus && arrData[i].amount > 1) {
-                        arrData[i].amount--
-                    }
-                    break
-                }
-            }
-            state.priceAmount = recalcPriceAmount(sortAllProducts(state))
-            localStorage.setItem('cartData', JSON.stringify(state))
-        }),
-        // загрузка данных из localStorage
-        pullLocalStorageData: create.reducer(state => {
-            const localData = localStorage.getItem('cartData')
-            if (localData) {
-                const localDataParsed = JSON.parse(localData)
-                state.tyres = localDataParsed.tyres
-                state.disks = localDataParsed.disks
-                state.priceAmount = localDataParsed.priceAmount
-                state.queueCounter = localDataParsed.queueCounter
-                state.selectAll = localDataParsed.selectAll
-            }
-        }),
-        // заказ создаётся
-        orderIsCreating: create.reducer(state => {
-            state.creatingOrder = !state.creatingOrder
-            state.orderNumber = 0
-        }),
-        // создание заказа
-        createOrder: create.asyncThunk(
-            async (args: { order: orderType, token: string }) => {
-                const response = await orderApi.createOrder(args.order, args.token)
-                // console.log(response)
-                if (response.order) {
-                    return response.order
-                } else if (response.error && !response.id) {
-                    throw new Error(response.error)
-                }
-                else {
-                    throw new Error(response.id + ':' + response.type)
-                }
-            },
-            {
-                pending: state => {
-                    state.creatingOrder = !state.creatingOrder
-                },
-                fulfilled: (state, action: PayloadAction<number>) => {
-                    state.priceAmount = 0
-                    state.queueCounter = 0
-                    state.selectAll = true
-                    state.tyres = []
-                    state.disks = []
-                    state.orderNumber = 0
-                    state.orderNumber = action.payload
-                    localStorage.removeItem('cartData')
-                },
-                rejected: (state, action: any) => {
-                    state.creatingOrder = !state.creatingOrder
-                    // console.log(action.error)
-                    // console.log(action.error.message === 'order_error')
-                    // console.log(action.error.message)
-                    // console.log('order_error')
-                    if (action.error.message === 'order_error') {
-                        alert('Что-то пошло не так. Заказ не был создан. Мы уже работаем над устранением неполадок.')
-                    } else {
-                        const [id, type] = action.error.message.split(':')
-                        if (type === 'disk') {
-                            let disks = [...state.disks]
-                            for (let i = 0; i < disks.length; i++) {
-                                if (disks[i].id === Number(id)) {
-                                    alert(`К сожалению товар ${disks[i].name} закончился`)
-                                    disks.splice(i, 1)
-                                    state.disks = disks
-                                    break
-                                }
-                            }
-                        }
-                        if (type === 'tyre') {
-                            let tyres = [...state.tyres]
-                            for (let i = 0; i < tyres.length; i++) {
-                                if (tyres[i].id === Number(id)) {
-                                    alert(`К сожалению товар ${tyres[i].name} закончился`)
-                                    tyres.splice(i, 1)
-                                    state.tyres = tyres
-                                    break
-                                }
-                            }
-                        }
-
-                        const newCartArr = sortAllProducts(state)
-                        state.priceAmount = recalcPriceAmount(newCartArr)
-                        state.queueCounter = newCartArr.length
-                        if (newCartArr.length !== 0) {
-                            newCartArr.forEach((item, index) => item.queue = index)
-                        }
-                        localStorage.setItem('cartData', JSON.stringify(state))
-                    }
-                },
-            },
-        ),
+  name: 'cart',
+  initialState,
+  reducers: create => ({
+    addTyresToCart: create.reducer((state, action: PayloadAction<resultsTyresType>) => {
+      if (action.payload.balance < 1) return
+      const amount = boundedAmount(action.payload.amount, action.payload.balance)
+      const existing = state.tyres.find(item => item.id === action.payload.id)
+      if (existing) {
+        existing.amount = boundedAmount(amount, existing.balance)
+        existing.canceled = false
+      } else {
+        state.tyres.push({ ...action.payload, amount, canceled: false, queue: state.queueCounter })
+      }
+      refreshCart(state)
+      persistCart(state)
     }),
-    selectors: {
-        priceAmountSelector: state => state.priceAmount,
-        tyresDataSelector: state => state.tyres,
-        disksDataSelector: state => state.disks,
-        selectAllSelector: state => state.selectAll,
-        creatingOrderSelector: state => state.creatingOrder,
-        orderNumberSelector: state => state.orderNumber,
-    },
+    addDisksToCart: create.reducer((state, action: PayloadAction<resultsDisksType>) => {
+      if (action.payload.balance < 1) return
+      const amount = boundedAmount(action.payload.amount, action.payload.balance)
+      const existing = state.disks.find(item => item.id === action.payload.id)
+      if (existing) {
+        existing.amount = boundedAmount(amount, existing.balance)
+        existing.canceled = false
+      } else {
+        state.disks.push({ ...action.payload, amount, canceled: false, queue: state.queueCounter })
+      }
+      refreshCart(state)
+      persistCart(state)
+    }),
+    selectAllHandler: create.reducer(state => {
+      const canceled = state.selectAll
+      ;[...state.tyres, ...state.disks].forEach(item => { item.canceled = canceled })
+      refreshCart(state)
+      persistCart(state)
+    }),
+    selectProductHandler: create.reducer((state, action: PayloadAction<{ productType: string, id: number }>) => {
+      const products = action.payload.productType === 'Шины' ? state.tyres
+        : action.payload.productType === 'Диски' ? state.disks : []
+      const product = products.find(item => item.id === action.payload.id)
+      if (!product) return
+      product.canceled = !product.canceled
+      refreshCart(state)
+      persistCart(state)
+    }),
+    resetCart: create.reducer(state => {
+      state.tyres = []
+      state.disks = []
+      refreshCart(state)
+      state.orderError = ''
+      removeStoredCart()
+    }),
+    delOneTypeProduct: create.reducer((state, action: PayloadAction<{ productType: string, id: number }>) => {
+      if (action.payload.productType === 'Шины') state.tyres = state.tyres.filter(item => item.id !== action.payload.id)
+      if (action.payload.productType === 'Диски') state.disks = state.disks.filter(item => item.id !== action.payload.id)
+      refreshCart(state)
+      persistCart(state)
+    }),
+    changeAmount: create.reducer((state, action: PayloadAction<{ type: string, id: number, isPlus: boolean }>) => {
+      const products = action.payload.type === 'Шины' ? state.tyres
+        : action.payload.type === 'Диски' ? state.disks : []
+      const product = products.find(item => item.id === action.payload.id)
+      if (!product || product.balance < 1) return
+      product.amount = boundedAmount(product.amount + (action.payload.isPlus ? 1 : -1), product.balance)
+      refreshCart(state)
+      persistCart(state)
+    }),
+    pullLocalStorageData: create.reducer(state => {
+      try {
+        const saved = localStorage.getItem('cartData')
+        if (!saved) return
+        const data = JSON.parse(saved)
+        if (!Array.isArray(data.tyres) || !Array.isArray(data.disks)) return
+        state.tyres = data.tyres
+        state.disks = data.disks
+        refreshCart(state)
+      } catch { /* Повреждённое хранилище не мешает открыть магазин. */ }
+    }),
+    // Закрытие результата заказа, без переключения состояния pending.
+    orderIsCreating: create.reducer(state => {
+      state.creatingOrder = false
+      state.orderNumber = 0
+      state.orderError = ''
+    }),
+    createOrder: create.asyncThunk(
+      async (args: { order: orderType, token: string }) => {
+        const response = await orderApi.createOrder(args.order, args.token)
+        if (response?.order) return response.order as number
+        if (response?.id && response?.type) throw new Error(`${response.id}:${response.type}`)
+        throw new Error('order_error')
+      },
+      {
+        pending: state => {
+          state.creatingOrder = true
+          state.orderNumber = 0
+          state.orderError = ''
+        },
+        fulfilled: (state, action: PayloadAction<number>) => {
+          state.creatingOrder = false
+          state.orderNumber = action.payload
+          state.orderError = ''
+          state.tyres = []
+          state.disks = []
+          refreshCart(state)
+          removeStoredCart()
+        },
+        rejected: (state, action) => {
+          state.creatingOrder = false
+          const unavailable = /^(\d+):(tyre|disk)$/.exec(action.error.message || '')
+          state.orderError = 'Не удалось оформить заказ. Проверьте соединение и попробуйте ещё раз. Ваши данные сохранены.'
+          if (unavailable) {
+            const id = Number(unavailable[1])
+            const product = (unavailable[2] === 'tyre' ? state.tyres : state.disks).find(item => item.id === id)
+            state.orderError = `Товар ${product?.name || ''} закончился и удалён из корзины. Проверьте состав заказа перед повторным оформлением.`
+            if (unavailable[2] === 'tyre') state.tyres = state.tyres.filter(item => item.id !== id)
+            else state.disks = state.disks.filter(item => item.id !== id)
+            refreshCart(state)
+            persistCart(state)
+          }
+        },
+      },
+    ),
+  }),
+  selectors: {
+    priceAmountSelector: state => state.priceAmount,
+    tyresDataSelector: state => state.tyres,
+    disksDataSelector: state => state.disks,
+    selectAllSelector: state => state.selectAll,
+    creatingOrderSelector: state => state.creatingOrder,
+    orderNumberSelector: state => state.orderNumber,
+    orderErrorSelector: state => state.orderError,
+    selectedProductsSelector: createSelector(
+      [(state: CartState) => state.tyres, (state: CartState) => state.disks],
+      (tyres, disks) => sortAllProducts({ tyres, disks }).filter(item => !item.canceled),
+    ),
+    orderPayloadSelector: createSelector(
+      [(state: CartState) => state.tyres, (state: CartState) => state.disks],
+      (tyres, disks) => buildOrderPayload({ tyres, disks }),
+    ),
+  },
 })
 
-// actions
-export const { addTyresToCart, selectAllHandler, selectProductHandler,
-    resetCart, delOneTypeProduct, changeAmount, pullLocalStorageData,
-    addDisksToCart, orderIsCreating, createOrder } =
-    cartSlice.actions
+export const {
+  addTyresToCart, addDisksToCart, selectAllHandler, selectProductHandler, resetCart,
+  delOneTypeProduct, changeAmount, pullLocalStorageData, orderIsCreating, createOrder,
+} = cartSlice.actions
 
-// selectors
-export const { priceAmountSelector, tyresDataSelector, selectAllSelector,
-    disksDataSelector, creatingOrderSelector, orderNumberSelector
-} =
-    cartSlice.selectors
+export const {
+  priceAmountSelector, tyresDataSelector, disksDataSelector, selectAllSelector,
+  creatingOrderSelector, orderNumberSelector, orderErrorSelector, selectedProductsSelector, orderPayloadSelector,
+} = cartSlice.selectors

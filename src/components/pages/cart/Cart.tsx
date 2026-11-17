@@ -1,111 +1,84 @@
-import type React from "react"
-import CartStyles from "./CartStyles.module.scss"
-import '../../../common.scss'
-import { Footer } from "../../footer/Footer"
-import Checkbox from "react-custom-checkbox";
-import { CartTyresCards } from "./blocks/cards/CartTyresCards";
-import { OrderInfo } from "../blocks/orderInfo/OrderInfo";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { links, tabs } from "../../../consts";
-import { CartDisksCards } from "./blocks/cards/CartDisksCards";
-import {
-    disksDataSelector,
-    priceAmountSelector,
-    resetCart,
-    selectAllHandler,
-    selectAllSelector,
-    tyresDataSelector
-} from "../../../app/slices/cartSlice";
-import { type resultsTyresType } from "../../../types/tires";
-import { type resultsDisksType } from "../../../types/disks";
-import { type selectedType } from "../../../types/cart";
-import { useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
-
-
-type commonArray = Array<(selectedType & resultsTyresType) | (selectedType & resultsDisksType)>
-type tiresData = selectedType & resultsTyresType
-type disksData = selectedType & resultsDisksType
+import type React from 'react'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
+import styles from './CartStyles.module.scss'
+import { Footer } from '../../footer/Footer'
+import { CartProductCard } from './blocks/cards/CartTyresCards'
+import { OrderInfo } from '../blocks/orderInfo/OrderInfo'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
+import { disksDataSelector, resetCart, selectAllHandler, selectAllSelector, tyresDataSelector } from '../../../app/slices/cartSlice'
+import { Button } from '../../common/Button'
+import { Modal } from '../../common/Modal'
+import { Icon } from '../../common/Icon'
 
 export const Cart: React.FC = () => {
-    const dispatch = useAppDispatch()
-    const selectAll = useAppSelector(selectAllSelector)
-    const tyres = useAppSelector(tyresDataSelector)
-    const disks = useAppSelector(disksDataSelector)
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const selectAll = useAppSelector(selectAllSelector)
+  const tyres = useAppSelector(tyresDataSelector)
+  const disks = useAppSelector(disksDataSelector)
+  const [showClearModal, setShowClearModal] = useState(false)
+  const products = [...tyres, ...disks].sort((a, b) => a.queue - b.queue)
+  const isEmpty = products.length === 0
 
-    // формирование массива всех товаров в корзине
-    const cardData: commonArray = [...tyres, ...disks].sort((a, b) => a.queue - b.queue)
-
-    // обработчик кнопки и общая цена для общей информации заказа
-    const priceAmount = useAppSelector(priceAmountSelector)
-    const navigate = useNavigate()
-    const buttonHandler = () => {
-        if (priceAmount === 0) {
-            alert('Нет выбранных товаров')
-        } else {
-            navigate('/' + links[10].link)
-        }
-    }
-    // регулировка ширины в зависимости от наполненности корзины
-    let wrapperStyle = cardData.length === 0
-        ? CartStyles.contentWrapper + ' ' + CartStyles.contentWrapperAnotherWidth
-        : CartStyles.contentWrapper
-
-    return (
-        <>
-            <Helmet>
-                <title>Шинка88 - Корзина</title>
-            </Helmet>
-            <div className={CartStyles.mainWrapper}>
-                <div className={wrapperStyle}>
-                    <p className="pageTitle">Корзина</p>
-                    <div className={CartStyles.content}>
-                        <div className={CartStyles.leftBlock}>
-
-                            {/* управление всеми элементами корзины */}
-                            <div className={CartStyles.actionForAll}>
-                                {<Checkbox
-                                    icon={<div className={CartStyles.icon}></div>}
-                                    label={'Выбрать все'}
-                                    className={CartStyles.checkboxCN}
-                                    labelClassName={CartStyles.checkboxLCN}
-                                    borderRadius={10}
-                                    borderColor={'#000'}
-                                    checked={selectAll}
-                                    onChange={() => dispatch(selectAllHandler())}
-                                />}
-                                <p
-                                    onClick={() => dispatch(resetCart())}
-                                    className={CartStyles.clearCart}>Очистить корзину</p>
-                            </div>
-
-                            {/* карточки товаров */}
-                            <div className={CartStyles.cards}>
-                                {cardData.map((item, index) => {
-                                    // шины
-                                    if (item.product_type === tabs[0]) {
-                                        return <CartTyresCards
-                                            data={item as tiresData}
-                                            key={`${item} - ${index}`} />
-                                    }
-                                    // диски
-                                    if (item.product_type === tabs[1]) {
-                                        return <CartDisksCards
-                                            data={item as disksData}
-                                            key={`${item} - ${index}`} />
-                                    }
-                                    return null
-                                })}
-                            </div>
-                        </div>
-
-                        {/* кнопка оформления заказа */}
-                        <OrderInfo nameButton='ОФОРМИТЬ ЗАКАЗ' name='В корзине'
-                            handler={buttonHandler} />
-                    </div>
+  return (
+    <>
+      <Helmet><title>Шинка88 - Корзина</title></Helmet>
+      <div className={styles.mainWrapper}>
+        <main className={styles.contentWrapper}>
+          <nav className={styles.breadcrumbs} aria-label="Хлебные крошки">
+            <Link to="/">Главная</Link><Icon name="chevron" size={12} /><span aria-current="page">Корзина</span>
+          </nav>
+          <header className={styles.header}>
+            <h1 className="pageTitle">Корзина</h1>
+            <p>Проверьте параметры перед оформлением</p>
+          </header>
+          {isEmpty ? (
+            <section className={styles.emptyState}>
+              <Icon name="cart" size={48} />
+              <h2>Корзина пуста</h2>
+              <p>Добавьте шины или диски, чтобы оформить заказ</p>
+              <Button onClick={() => navigate('/tires')} rightIcon={<Icon name="arrow" size={18} />}>Перейти в каталог</Button>
+            </section>
+          ) : (
+            <>
+              <div className={styles.actionForAll} role="group" aria-label="Действия с корзиной">
+                <label className={styles.selectAll}>
+                  <input type="checkbox" checked={selectAll} onChange={() => dispatch(selectAllHandler())} />
+                  <span>Выбрать все</span>
+                </label>
+                <button className={styles.clearButton} type="button" onClick={() => setShowClearModal(true)}>Очистить корзину</button>
+              </div>
+              <div className={styles.content}>
+                <div className={styles.leftBlock}>
+                  <div className={styles.cards} role="list" aria-label="Товары в корзине">
+                    {products.map(product => <CartProductCard data={product} key={`${product.product_type}-${product.id}`} />)}
+                  </div>
+                  <p className={styles.note}>Снятая галочка исключает позицию из суммы и состава заказа. Товар остаётся в корзине.</p>
                 </div>
-                <Footer />
-            </div>
-        </>
-    )
+                <aside className={styles.rightBlock}>
+                  <OrderInfo name="Ваш заказ" nameButton="К оформлению" handler={() => navigate('/placing_order')} />
+                </aside>
+              </div>
+            </>
+          )}
+        </main>
+        <Footer />
+      </div>
+      <Modal
+        isOpen={showClearModal}
+        onClose={() => setShowClearModal(false)}
+        title="Очистить корзину?"
+        description="Все товары будут удалены, включая позиции без галочки."
+        size="sm"
+        footer={<>
+          <Button type="button" variant="ghost" onClick={() => setShowClearModal(false)}>Отмена</Button>
+          <Button type="button" variant="danger" leftIcon={<Icon name="trash" size={18} />} onClick={() => { dispatch(resetCart()); setShowClearModal(false) }}>Очистить</Button>
+        </>}
+      >
+        <p className={styles.confirmText}>Это действие нельзя отменить.</p>
+      </Modal>
+    </>
+  )
 }

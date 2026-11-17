@@ -1,275 +1,98 @@
-.mainWrapper {
-    border-radius: 5px;
-    background: rgb(250, 251, 255);
-    width: 100%;
-    // height: 220px;
-    border-radius: 5px;
-    background: rgb(249, 250, 255);
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
+.card {
+  display: grid;
+  grid-template-columns: 24px 92px minmax(0, 1fr) 36px;
+  gap: 14px;
+  align-items: start;
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-white);
+  color: var(--color-text-primary);
 }
 
-.icons {
-    display: flex;
-    gap: 20px;
-}
+.select {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  min-height: 44px;
+  margin: -7px -6px 0;
+  cursor: pointer;
 
-.iconsContent {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-
-.iconsTop {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-.iconsTop img {
-    width: 30px;
-}
-
-.productImg {
-    margin-left: 12px;
-    display: flex;
-}
-
-.productImg img {
-    align-self: center;
-    max-width: 170px;
-    border-radius: 20px;
-}
-
-.iconsBottom img {
-    width: 30px;
-}
-
-
-.productName {
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 24px;
-}
-
-.productInfo {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 300px;
-    gap: 10px;
-    padding: 0px 10px;
-}
-
-.productInfoContent {
-    display: flex;
-    width: 100%;
-}
-
-.productInfoContent>div {
-    width: 100%;
-}
-
-.productInfoContent p {
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 17px;
-    margin-bottom: 7px;
-}
-
-.delElement {
-    margin-right: 20px;
-}
-
-.delElement img {
+  input {
+    width: 19px;
+    height: 19px;
+    margin: 0;
+    accent-color: var(--color-primary);
     cursor: pointer;
+
+    &:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 4px; }
+  }
 }
 
-.productButtons {
-    display: flex;
-    gap: 70px;
+.imageWrapper { width: 92px; height: 114px; }
+.image { width: 100%; height: 100%; object-fit: contain; }
+.info { min-width: 0; }
+.name { margin: 0 0 6px; font-size: 15px; font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }
+.size { margin: 0 0 8px; font-size: 13px; line-height: 1.5; }
+.details, .unitPrice, .excludedNote { margin: 0 0 9px; color: var(--color-text-secondary); font-size: 12px; line-height: 1.6; }
+.unitPrice { margin-top: 10px; font-variant-numeric: tabular-nums; }
+.excluded { background: var(--color-bg-secondary); }
+.excluded .info, .excluded .linePrice { color: var(--color-text-secondary); }
+.excludedNote { margin-bottom: 0; font-weight: 500; }
+
+.bottom {
+  grid-column: 3 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 8px;
+  min-width: 0;
+}
+.linePrice { white-space: nowrap; align-self: flex-start; padding-top: 5px; }
+.deleteButton {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+
+  &:hover { background: var(--color-bg-secondary); color: var(--color-primary); }
+  &:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
 }
 
-.productInfoAmountItem {
-    display: flex;
-    border-radius: 5px;
-    background-color: rgb(249, 199, 153);
-    padding: 10px 20px;
-    gap: 15px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 12px;
-    align-self: center;
+@media (min-width: 651px) {
+  .card { grid-template-rows: 1fr auto; }
+  .bottom { align-items: flex-start; }
 }
 
-.productInfoAmountItem button {
-    border-radius: 5px;
-    background: rgb(249, 199, 153);
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 12px;
+@media (max-width: 1050px) and (min-width: 651px) {
+  .card { grid-template-columns: 24px 76px minmax(0, 1fr) 36px; gap: 10px; padding: 15px; }
+  .imageWrapper { width: 76px; height: 100px; }
 }
 
-.productInfoAmountItem p {
-    align-self: center;
-    font-size: 16px;
+@media (max-width: 650px) {
+  .card { grid-template-columns: 28px 66px minmax(0, 1fr) 32px; gap: 8px; padding: 14px; }
+  .select { width: 44px; margin: -7px -8px 0; }
+  .imageWrapper { width: 66px; height: 88px; }
+  .name { font-size: 13px; }
+  .size, .details { font-size: 11px; }
+  .unitPrice { font-size: 12px; }
+  .deleteButton { width: 44px; height: 44px; margin: -6px; }
+  .bottom { grid-column: 2 / -1; gap: 10px; margin-top: 8px; }
 }
 
-.productPrice {
-    border-radius: 5px;
-    background: rgb(249, 199, 153);
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 12px;
-    padding: 9px 20px;
-    align-self: center;
+@media (pointer: coarse) {
+  .deleteButton { min-width: 44px; min-height: 44px; }
 }
 
-
-@media screen and (max-width: 1090px) {
-    .productInfo {
-        gap: 10px;
-    }
-}
-
-
-@media screen and (max-width: 890px) {
-    .mainWrapper {
-        // height: 133px;
-        padding: 15px;
-        width: 450px;
-        gap: 5px;
-    }
-
-    .icons {
-        gap: 5px;
-    }
-
-    .productInfo {
-        gap: 0px;
-        padding: 0px 15px;
-    }
-
-    .iconsContent img {
-        width: 15px;
-        height: 15px;
-    }
-
-    .productImg {
-        margin-left: 3px;
-    }
-
-    .productImg img {
-        width: 65px;
-    }
-
-    .productName {
-        font-size: 13px;
-    }
-
-    .productInfoContent p {
-        font-size: 11px;
-        margin-bottom: -3px;
-    }
-
-    .productButtons {
-        display: flex;
-        gap: 25px;
-        margin-top: 3px;
-    }
-
-    .productInfoAmountItem {
-        display: flex;
-        border-radius: 5px;
-        background-color: rgb(249, 199, 153);
-        padding: 7px 7px;
-        gap: 10px;
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 12px;
-        align-self: center;
-    }
-
-    .productInfoAmountItem button {
-        font-size: 12px;
-        align-self: center;
-    }
-
-    .productInfoAmountItem p {
-        align-self: center;
-        font-size: 12px;
-    }
-
-    .productPrice {
-        padding: 7px 13px;
-        font-size: 12px;
-    }
-
-    .delElement {
-        margin-right: 0px;
-    }
-
-    .delElement img {
-        width: 18px;
-        height: 18px;
-    }
-}
-
-@media screen and (max-width: 560px) {
-    .mainWrapper {
-        // height: 113px;
-        padding: 10px;
-        min-width: 320px;
-        width: auto;
-        gap: 3px;
-    }
-
-    .icons {
-        gap: 1px;
-    }
-
-    .productInfo {
-        gap: 7px;
-        padding: 0px 0px;
-    }
-
-    .productName {
-        font-size: 12px;
-        line-height: 15px;
-    }
-
-    .productButtons {
-        display: flex;
-        gap: 23px;
-        margin-top: 3px;
-    }
-
-    .productInfoAmountItem {
-        display: flex;
-        border-radius: 5px;
-        background-color: rgb(249, 199, 153);
-        padding: 5px 10px;
-        gap: 10px;
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 12px;
-        align-self: center;
-    }
-
-    .productInfoAmountItem button {
-        font-size: 12px;
-        align-self: center;
-    }
-
-    .productInfoAmountItem p {
-        align-self: center;
-        font-size: 12px;
-    }
-
-    .productPrice {
-        padding: 5px 10px;
-        font-size: 12px;
-    }
+@media (max-width: 360px) {
+  .card { grid-template-columns: 26px 52px minmax(0, 1fr) 30px; gap: 7px; padding: 12px; }
+  .imageWrapper { width: 52px; height: 76px; }
+  .name { font-size: 12px; }
 }

@@ -1,62 +1,63 @@
-import type React from "react"
-import FiltersStyles from "./FiltersStyles.module.scss"
-import '../../../../common.scss'
-import type { ReactElement } from "react"
-import { useAppDispatch } from "../../../../app/hooks"
+import type React from 'react'
+import type { ReactElement } from 'react'
+import { useAppDispatch } from '../../../../app/hooks'
+import { Button } from '../../../common/Button'
+import { Icon } from '../../../common/Icon'
+import styles from './FiltersStyles.module.scss'
 
-interface IProps {
-    filterBlocks: ReactElement
-    commonFilters: {
-        resetFiltersAction: any
-        priceStartNumber: number
-        priceEndNumber: number
-        priceMinNumber: number
-        priceMaxNumber: number
-        priceSetter: any
-    }
+export interface CommonCatalogFilters {
+  resetFiltersAction: any
+  priceStartNumber: number
+  priceEndNumber: number
+  priceMinNumber: number | null
+  priceMaxNumber: number | null
+  priceSetter: any
 }
 
-export const DesktopFilters: React.FC<IProps> = ({ filterBlocks, commonFilters }) => {
-    const dispatch = useAppDispatch()
-    const priceStart = commonFilters.priceStartNumber
-    const priceEnd = commonFilters.priceEndNumber
-    const priceMin = commonFilters.priceMinNumber
-    const priceMax = commonFilters.priceMaxNumber
+export const CatalogPriceFields: React.FC<{ commonFilters: CommonCatalogFilters }> = ({ commonFilters }) => {
+  const dispatch = useAppDispatch()
+  return (
+    <fieldset className={styles.group}>
+      <legend>Цена за штуку, ₽</legend>
+      <div className={styles.priceFields}>
+        <label className={styles.field}>
+          <span>От, ₽</span>
+          <input type="number" min="0" step="any" inputMode="decimal"
+            placeholder={commonFilters.priceMinNumber == null ? 'От' : String(commonFilters.priceMinNumber)}
+            value={commonFilters.priceStartNumber === 0 ? '' : commonFilters.priceStartNumber}
+            onChange={event => dispatch(commonFilters.priceSetter({
+              number: Number(event.currentTarget.value), isStartOrEnd: true,
+            }))} />
+        </label>
+        <label className={styles.field}>
+          <span>До, ₽</span>
+          <input type="number" min="0" step="any" inputMode="decimal"
+            placeholder={commonFilters.priceMaxNumber == null ? 'До' : String(commonFilters.priceMaxNumber)}
+            value={commonFilters.priceEndNumber === 0 ? '' : commonFilters.priceEndNumber}
+            onChange={event => dispatch(commonFilters.priceSetter({
+              number: Number(event.currentTarget.value), isStartOrEnd: false,
+            }))} />
+        </label>
+      </div>
+    </fieldset>
+  )
+}
 
-    return (
-        <div className={FiltersStyles.mainWrapper}>
-            <p className={FiltersStyles.title}>ПАРАМЕТРЫ</p>
-            <div className={FiltersStyles.filters}>
-                {filterBlocks}
-                <div className={FiltersStyles.price}>
-                    <p className={FiltersStyles.filterTitle}>Цена</p>
-                    <div className={FiltersStyles.priceContent}>
-                        <div className={FiltersStyles.priceFrom}>
-                            <input type="text" placeholder={String(priceMin)}
-                                value={priceStart === 0 ? '' : priceStart}
-                                onChange={e =>
-                                    dispatch(commonFilters.priceSetter({
-                                        number: Number(e.currentTarget.value),
-                                        isStartOrEnd: true
-                                    }))} />
-                        </div>
-                        <div className={FiltersStyles.priceLine}></div>
-                        <div className={FiltersStyles.priceTo}>
-                            <input type="text" placeholder={String(priceMax)}
-                                value={priceEnd === 0 ? '' : priceEnd}
-                                onChange={e =>
-                                    dispatch(commonFilters.priceSetter({
-                                        number: Number(e.currentTarget.value),
-                                        isStartOrEnd: false
-                                    }))} />
-                        </div>
-                    </div>
-                </div>
-                <div className={FiltersStyles.clearFilters}>
-                    <button onClick={() => dispatch(commonFilters.resetFiltersAction())} className={FiltersStyles.title
-                        + ' ' + FiltersStyles.clearButton}>Сбросить все параметры</button>
-                </div>
-            </div>
-        </div>
-    )
+export const DesktopFilters: React.FC<{
+  filterBlocks: ReactElement
+  commonFilters: CommonCatalogFilters
+}> = ({ filterBlocks, commonFilters }) => {
+  const dispatch = useAppDispatch()
+  return (
+    <aside className={styles.mainWrapper} aria-label="Параметры каталога">
+      <div className={styles.filterHeader}><h2>Параметры</h2><Icon name="filter" size={19} /></div>
+      <div className={styles.filters}>
+        {filterBlocks}
+        <CatalogPriceFields commonFilters={commonFilters} />
+        <Button variant="outline" fullWidth onClick={() => dispatch(commonFilters.resetFiltersAction())}>
+          Сбросить параметры
+        </Button>
+      </div>
+    </aside>
+  )
 }

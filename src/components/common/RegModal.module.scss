@@ -1,0 +1,12 @@
+.container { display: grid; gap: 18px; }
+.phone { font-size: 13px; line-height: 1.7; color: var(--color-text-secondary); margin: 0; overflow-wrap: anywhere; }
+.phone strong { color: var(--color-text-primary); font-weight: 600; white-space: nowrap; }
+.help { margin: 0; color: var(--color-text-secondary); font-size: 12px; line-height: 1.65; }
+.codeInput input { min-height: 58px; text-align: center; font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: .2em; }
+.codeInput input::placeholder { font-size: 14px; font-weight: 400; letter-spacing: 0; }
+.footer { display: grid; gap: 8px; width: 100%; }
+.error { margin: 0; color: var(--color-error); font-size: 13px; line-height: 1.6; }
+.success { display: grid; gap: 14px; }
+.success > svg { color: var(--color-success); }
+.success p { margin: 0; font-size: 14px; line-height: 1.7; color: var(--color-text-primary); }
+.success p:last-child { font-size: 13px; color: var(--color-text-secondary); }

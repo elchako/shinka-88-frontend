@@ -1,174 +1,179 @@
-import type React from "react"
-import PlacingOrderStyles from "./PlacingOrderStyles.module.scss"
-import '../../../common.scss'
-import { Footer } from "../../footer/Footer"
-import { OrderInfo } from "../blocks/orderInfo/OrderInfo";
-import { useEffect, useState } from "react";
-import Cookies from 'js-cookie';
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { customerLocalDataSelector, nameSelector, phoneSelector, setCustomerLocalData, setName, setPhone, setToken, tokenSelector, toogleModal } from "../../../app/slices/authSlice";
-import { createOrder, disksDataSelector, priceAmountSelector, tyresDataSelector } from "../../../app/slices/cartSlice";
-import type { orderProductsType, orderType } from "../../../types/cart";
-import { Helmet } from "react-helmet-async";
-import { normalizePhoneNumber } from "../../../utils/other";
+import type React from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
+import Cookies from 'js-cookie'
+import styles from './PlacingOrderStyles.module.scss'
+import { Footer } from '../../footer/Footer'
+import { OrderInfo } from '../blocks/orderInfo/OrderInfo'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
+import {
+  customerLocalDataSelector, nameSelector, phoneSelector, regModalSelector,
+  setCustomerLocalData, setName, setPhone, setToken, tokenSelector, toogleModal,
+} from '../../../app/slices/authSlice'
+import { createOrder, creatingOrderSelector, orderErrorSelector, orderPayloadSelector } from '../../../app/slices/cartSlice'
+import { formatPhoneInput, normalizePhoneNumber } from '../../../utils/other'
+import { Input } from '../../common/Input'
+import { Icon } from '../../common/Icon'
 
+interface FormErrors { name?: string, phone?: string }
+
+const savedCustomer = (value: string | null): { name?: string, phone?: string } => {
+  try { return JSON.parse(value || '{}') || {} } catch { return {} }
+}
 
 export const PlacingOrder: React.FC = () => {
-    const dispatch = useAppDispatch()
-    const token = useAppSelector(tokenSelector)
-    const name = useAppSelector(nameSelector)
-    const phone = useAppSelector(phoneSelector)
-    const tyres = useAppSelector(tyresDataSelector)
-    const disks = useAppSelector(disksDataSelector)
-    const total_amount = useAppSelector(priceAmountSelector)
-    const order_items: orderProductsType = {}
-    const order: orderType = {
-        total_amount: total_amount,
-        order_items: order_items
+  const dispatch = useAppDispatch()
+  const token = useAppSelector(tokenSelector)
+  const name = useAppSelector(nameSelector)
+  const phone = useAppSelector(phoneSelector)
+  const customerLocalData = useAppSelector(customerLocalDataSelector)
+  const regModal = useAppSelector(regModalSelector)
+  const order = useAppSelector(orderPayloadSelector)
+  const isSubmitting = useAppSelector(creatingOrderSelector)
+  const orderError = useAppSelector(orderErrorSelector)
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
+  const hydrated = useRef(false)
+  const submitting = useRef(false)
+  const cleanPhone = normalizePhoneNumber(phone)
+  const verifiedPhone = normalizePhoneNumber(savedCustomer(customerLocalData).phone || '')
+  const phoneConfirmed = Boolean(token && cleanPhone && verifiedPhone === cleanPhone)
+
+  // Восстановление только при открытии страницы, не при каждом обновлении auth.
+  useEffect(() => {
+    if (hydrated.current) return
+    hydrated.current = true
+    dispatch(setToken(Cookies.get('token') || token || ''))
+    try {
+      const stored = localStorage.getItem('customerLocalData')
+      const customer = savedCustomer(stored)
+      dispatch(setCustomerLocalData(stored))
+      if (!name && customer.name) dispatch(setName(customer.name))
+      if (!phone && customer.phone) dispatch(setPhone(customer.phone))
+    } catch { /* Ввод остаётся доступен без localStorage. */ }
+  }, [dispatch, name, phone, token])
+
+  const validateName = (value: string): string | undefined => {
+    if (!value.trim()) return 'Введите имя'
+    if (value.trim().length < 2) return 'Имя слишком короткое'
+    if (!/^[a-zA-Zа-яА-ЯёЁ\s-]+$/.test(value)) return 'Используйте буквы, пробел или дефис'
+    return undefined
+  }
+  const validatePhone = (value: string): string | undefined =>
+    normalizePhoneNumber(value) ? undefined : 'Введите номер полностью. Другую страну укажите с +кодом.'
+  const formReady = !validateName(name) && Boolean(cleanPhone) && order.total_amount > 0
+
+  const handleSubmit = async () => {
+    if (submitting.current || isSubmitting) return
+    setTouched({ name: true, phone: true })
+    const nextErrors = { name: validateName(name), phone: validatePhone(phone) }
+    setErrors(nextErrors)
+    if (nextErrors.name || nextErrors.phone || !cleanPhone || order.total_amount <= 0) return
+    dispatch(setPhone(cleanPhone))
+    if (!phoneConfirmed) {
+      if (token) {
+        Cookies.remove('token')
+        dispatch(setToken(''))
+      }
+      if (!regModal) dispatch(toogleModal())
+      return
     }
-    const customerLocalData = useAppSelector(customerLocalDataSelector)
+    const customer = JSON.stringify({ name: name.trim(), phone: cleanPhone })
+    try { localStorage.setItem('customerLocalData', customer) } catch { /* Значения сохранены в Redux. */ }
+    dispatch(setCustomerLocalData(customer))
+    submitting.current = true
+    try {
+      await dispatch(createOrder({ order, token })).unwrap()
+    } catch { /* Сообщение об ошибке приходит из cartSlice, поля не сбрасываются. */ }
+    finally { submitting.current = false }
+  }
 
-    if (tyres.length !== 0) {
-        order_items.tyres = []
-        for (let i = 0; i < tyres.length; i++) {
-            order_items.tyres.push({
-                id: tyres[i].id,
-                quantity: tyres[i].amount,
-                price: tyres[i].price_sale
-            })
-        }
-    }
-
-    if (disks.length !== 0) {
-        order_items.disks = []
-        for (let i = 0; i < disks.length; i++) {
-            order_items.disks.push({
-                id: disks[i].id,
-                quantity: disks[i].amount,
-                price: disks[i].price_sale
-            })
-        }
-    }
-
-    const buttonHandler = (): void => {
-        if (total_amount === 0) {
-            alert("Нет выбранных товаров")
-            return
-        }
-        let cleanPhone = normalizePhoneNumber(phone)
-        if (name === '' || phone === '') {
-            alert('Заполните все поля')
-            return
-        }
-        if (!cleanPhone) {
-            alert('Неверный номер телефона')
-            return
-        }
-        dispatch(setPhone(cleanPhone))
-        if (!token) {
-            dispatch(toogleModal())
-            return
-        }
-        if (customerLocalData) {
-            let data = JSON.parse(customerLocalData as string)
-            if (data.phone !== cleanPhone) {
-                Cookies.remove('token')
-                dispatch(setToken(''))
-                dispatch(toogleModal())
-                return
-            }
-        }
-        localStorage.setItem('customerLocalData', JSON.stringify({ name, phone: cleanPhone }))
-        dispatch(createOrder({ order, token }))
-    }
-
-    useEffect(() => {
-        const cookiesToken = Cookies.get('token')
-        dispatch(setToken(cookiesToken))
-        dispatch(setCustomerLocalData(localStorage.getItem('customerLocalData')))
-        if (customerLocalData) {
-            let data = JSON.parse(customerLocalData as string)
-            dispatch(setName(data.name))
-            dispatch(setPhone(data.phone))
-        }
-    }, [dispatch, customerLocalData])
-
-    return (
-        <>
-            <Helmet>
-                <title>Шинка88 - Оформление заказа</title>
-            </Helmet>
-            <div className={PlacingOrderStyles.mainWrapper}>
-                <div className={PlacingOrderStyles.contentWrapper}>
-                    <p className="pageTitle">Оформление заказа</p>
-                    <div className={PlacingOrderStyles.content}>
-                        <div className={PlacingOrderStyles.leftBlock}>
-                            <p className={PlacingOrderStyles.formTitle}>Получатель</p>
-                            <div className={PlacingOrderStyles.form}>
-                                <div className={PlacingOrderStyles.field}>
-                                    <p className={PlacingOrderStyles.fieldTitle}>Имя *</p>
-                                    <input type="text" className={PlacingOrderStyles.fieldInput}
-                                        placeholder="Александр"
-                                        onChange={(e) => dispatch(setName(e.target.value))}
-                                        value={name} />
-                                </div>
-                                <div className={PlacingOrderStyles.field}>
-                                    <p className={PlacingOrderStyles.fieldTitle}>Телефон *</p>
-                                    <input type="text" className={PlacingOrderStyles.fieldInput}
-                                        placeholder="999 999 99 99"
-                                        onChange={(e) => dispatch(setPhone(e.target.value))}
-                                        value={phone} />
-                                </div>
-                                {/* <div className={PlacingOrderStyles.field}>
-                                <p className={PlacingOrderStyles.fieldTitle}>Почта</p>
-                                <div>
-                                    <input type="text" className={PlacingOrderStyles.fieldInput}
-                                        placeholder="user@gmail.com" />
-                                    <p className={PlacingOrderStyles.fieldHelpText}>
-                                        на этот адрес будут приходить уведомления об изменении статуса заказа
-                                    </p>
-                                </div>
-                            </div> */}
-                                <p className={PlacingOrderStyles.formText}>
-                                    Наш менеджер свяжется с Вами для подтверждения заказа</p>
-                                <OrderInfo nameButton='ОТПРАВИТЬ' name='Ваш заказ'
-                                    handler={buttonHandler} />
-                            </div>
-                            <p className={PlacingOrderStyles.mapHelpText}>
-                                Оплата производится при получении</p>
-                            <div className={PlacingOrderStyles.contacts}>
-                                <p className={PlacingOrderStyles.formTitle}>Пункт выдачи</p>
-                                <div className={PlacingOrderStyles.contactsInfo}>
-                                    <div className={PlacingOrderStyles.contactsMap}>
-                                        <div className={PlacingOrderStyles.map}
-                                            style={{ position: "relative", overflow: "hidden" }}>
-                                            <a href="https://yandex.ru/maps/10727/egorievsk/category/tire_service/184105260/?utm_medium=mapframe&utm_source=maps"
-                                                style={{ color: '#eee', fontSize: '12px', position: 'absolute', top: '0px' }}>Шиномонтаж в Егорьевске</a>
-                                            <a href="https://yandex.ru/maps/10727/egorievsk/category/engine_oils/53790807535/?utm_medium=mapframe&utm_source=maps"
-                                                style={{ color: '#eee', fontSize: '12px', position: 'absolute', top: '14px' }}>Моторные масла в Егорьевске</a>
-                                            <iframe src="https://yandex.ru/map-widget/v1/org/avto_opt/1015072993/?from=mapframe&ll=39.062357%2C55.382391&z=15" width="560" height="400" frameBorder="1" allowFullScreen={true} style={{ position: 'relative' }}></iframe></div>
-                                    </div>
-                                    <div className={PlacingOrderStyles.contactsText}>
-                                        <div className={PlacingOrderStyles.contactsTextTop}>
-                                            <p className={PlacingOrderStyles.address}>
-                                                г. Егорьевск, ул. Рязанская, ГСК ЦЕНА<br />
-                                                6 мкр-н, гаражи рядом с пожарным депо</p>
-                                            <p><a href="https://yandex.ru/maps/org/avto_stop/1015072993?si=4j1jcathucrm7pd2zk4jtjvukg"
-                                                target="_blank">Построить маршрут &#10148;</a></p>
-                                        </div>
-                                        <div className={PlacingOrderStyles.contactsTextBottom}>
-                                            <p className={PlacingOrderStyles.firstTime}>летом с 8.00 до 23.00</p>
-                                            <p className={PlacingOrderStyles.secondTime}>зимой с 9.00 до 19.00</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
+  return (
+    <>
+      <Helmet><title>Шинка88 - Оформление заказа</title></Helmet>
+      <div className={styles.mainWrapper}>
+        <main className={styles.contentWrapper}>
+          <nav className={styles.breadcrumbs} aria-label="Хлебные крошки">
+            <Link to="/">Главная</Link><Icon name="chevron" size={12} /><Link to="/cart">Корзина</Link><Icon name="chevron" size={12} /><span aria-current="page">Оформление заказа</span>
+          </nav>
+          <header className={styles.header}>
+            <h1 className="pageTitle">Оформление заказа</h1>
+            <p>Проверьте получателя, получение и состав заказа перед подтверждением</p>
+          </header>
+          <form id="checkout-form" className={styles.content} noValidate onSubmit={event => { event.preventDefault(); void handleSubmit() }}>
+            <div className={styles.leftBlock}>
+              <section className={styles.formSection} aria-labelledby="recipient-heading">
+                <h2 id="recipient-heading">Получатель</h2>
+                <div className={styles.fields}>
+                  <Input
+                    label="Имя"
+                    placeholder="Ваше имя"
+                    value={name}
+                    disabled={isSubmitting}
+                    onChange={event => { dispatch(setName(event.target.value)); if (touched.name) setErrors(previous => ({ ...previous, name: validateName(event.target.value) })) }}
+                    onBlur={() => { setTouched(previous => ({ ...previous, name: true })); setErrors(previous => ({ ...previous, name: validateName(name) })) }}
+                    error={touched.name ? errors.name : undefined}
+                    leftIcon={<Icon name="user" size={18} />}
+                    required
+                    autoComplete="name"
+                  />
+                  <Input
+                    label="Телефон"
+                    placeholder="+7 (999) 999-99-99"
+                    value={formatPhoneInput(phone)}
+                    disabled={isSubmitting}
+                    onChange={event => { const value = formatPhoneInput(event.target.value); dispatch(setPhone(value)); if (touched.phone) setErrors(previous => ({ ...previous, phone: validatePhone(value) })) }}
+                    onBlur={() => { if (cleanPhone) dispatch(setPhone(cleanPhone)); setTouched(previous => ({ ...previous, phone: true })); setErrors(previous => ({ ...previous, phone: validatePhone(phone) })) }}
+                    error={touched.phone ? errors.phone : undefined}
+                    leftIcon={<Icon name="phone" size={18} />}
+                    required
+                    type="tel"
+                    autoComplete="tel"
+                  />
                 </div>
-                <Footer />
+                {phoneConfirmed ? (
+                  <p className={styles.confirmed} role="status"><Icon name="check" size={16} />Телефон подтверждён. Теперь можно оформить заказ.</p>
+                ) : <p className={styles.helpText}>Сначала подтвердите телефон по SMS. После подтверждения нажмите «Оформить заказ».</p>}
+              </section>
+              <section className={styles.formSection} aria-labelledby="pickup-heading">
+                <h2 id="pickup-heading">Получение</h2>
+                <div className={styles.informationRow}>
+                  <Icon name="pin" size={22} />
+                  <div>
+                    <h3>Самовывоз из магазина</h3>
+                    <p>г. Егорьевск, ул. Рязанская, ГСК ЦЕНА<br />6 мкр-н, гаражи рядом с пожарным депо</p>
+                    <p>Летом с 8:00 до 23:00. Зимой с 9:00 до 19:00.</p>
+                    <a className={styles.routeLink} href="https://yandex.ru/maps/org/avto_stop/1015072993?si=4j1jcathucrm7pd2zk4jtjvukg" target="_blank" rel="noopener noreferrer">Построить маршрут <Icon name="arrow" size={14} /></a>
+                  </div>
+                </div>
+                <p className={styles.notice}><Icon name="info" size={16} />Менеджер уточнит наличие, детали и срок получения заказа.</p>
+              </section>
+              <section className={styles.formSection} aria-labelledby="payment-heading">
+                <h2 id="payment-heading">Оплата</h2>
+                <div className={styles.informationRow}>
+                  <Icon name="card" size={22} />
+                  <div><h3>При получении</h3><p>Наличными или картой в пункте выдачи.</p></div>
+                </div>
+              </section>
+              <p className={styles.legal}>Перед оформлением ознакомьтесь с <Link to="/oferta">офертой</Link> и <Link to="/police">политикой конфиденциальности</Link>.</p>
             </div>
-        </>
-    )
+            <aside className={styles.rightBlock}>
+              {orderError && <p className={styles.error} role="alert">{orderError}</p>}
+              {order.total_amount <= 0 && <p className={styles.empty}>Нет выбранных товаров. <Link to="/cart">Вернуться в корзину</Link></p>}
+              <OrderInfo
+                name="Ваш заказ"
+                nameButton={phoneConfirmed ? 'Оформить заказ' : 'Подтвердить телефон'}
+                handler={handleSubmit}
+                isLoading={isSubmitting}
+                disabled={!formReady}
+                formId="checkout-form"
+              />
+            </aside>
+          </form>
+        </main>
+        <Footer />
+      </div>
+    </>
+  )
 }

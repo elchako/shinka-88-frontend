@@ -1,345 +1,111 @@
-@import '../../../../common.scss';
-
-// Desktop
-
 .mainWrapper {
-    width: 240px;
-    flex: none;
-    margin-top: 40px;
+  min-width: 0;
+  padding: 18px;
+  background: var(--color-bg-secondary, #f7f8fd);
+  border: 1px solid var(--color-border, #dce0e8);
+  border-radius: 10px;
 }
 
-.title {
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 24px;
-    background-color: rgb(232, 237, 255);
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    padding: 21px 50px;
+.filterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  h2 { font-size: 16px; font-weight: 600; line-height: 1.4; margin: 0; }
 }
 
-.filters {
-    background-color: rgb(249, 250, 255);
+.filters, .modalFilters { display: grid; gap: 20px; }
+.group { min-width: 0; margin: 0; padding: 0; border: 0; }
+.group legend { margin-bottom: 10px; padding: 0; font-size: 13px; font-weight: 600; }
+.field { display: grid; gap: 7px; min-width: 0; font-size: 12px; font-weight: 500; }
+.field + .field { margin-top: 12px; }
+
+.field select, .field input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: var(--control-height, 36px);
+  min-height: var(--control-height, 36px);
+  margin: 0;
+  padding: 0 10px;
+  border: 1px solid var(--color-border, #dce0e8);
+  border-radius: 7px;
+  background: var(--color-bg-primary, #fff);
+  color: var(--color-text-primary, #192234);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  caret-color: var(--color-primary, #bd5300);
+}
+.field select { cursor: pointer; }
+.field input::placeholder { color: var(--color-text-secondary, #596174); opacity: 1; }
+.field select:focus-visible, .field input:focus-visible, .check input:focus-visible {
+  outline: 2px solid var(--color-border-focus, #896a50);
+  outline-offset: 3px;
 }
 
-.filterTitle {
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 22px;
-}
-
-.select {
-    margin-top: 12px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 7px;
-    width: 170px;
-    padding: 10px;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 17px;
-}
-
-
-.size,
-.season,
-.additionally,
-.price {
-    padding-top: 20px;
-    padding-left: 26px;
-}
-
-.manufacturer {
-    padding-top: 20px;
-    padding-left: 0px;
-}
-
-.manufacturer p {
-    padding-left: 26px;
-}
-
-
-.season p {
-    margin-bottom: 12px;
-}
-
-.additionally p {
-    margin-bottom: 12px;
-}
-
-.seasonBlock {
-    width: 170px;
-    height: min-content;
-    padding: 6px;
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 7px;
-    margin-bottom: 10px;
-    overflow: hidden;
-}
-
-.inputLabel {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 17px;
-}
-
-.manContent {
-    margin-top: 12px;
-    overflow-y: scroll;
-    height: 200px;
-    width: 225px;
-    padding: 10px;
-    padding-top: 0px;
-}
-
-.priceContent {
-    display: flex;
-    justify-content: center;
-    width: 170px;
-    margin-top: 12px;
-}
-
-.priceFrom input,
-.priceTo input {
-    width: 75px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 7px;
+@supports (appearance: base-select) {
+  .field select, .field select::picker(select) { appearance: base-select; }
+  .field select { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .field select::picker-icon { color: var(--color-text-secondary, #596174); font-size: 12px; }
+  .field select::picker(select) {
+    inset: auto;
+    top: anchor(bottom);
+    left: anchor(left);
+    position-try-fallbacks: flip-block;
+    min-width: anchor-size(width);
+    max-height: min(260px, 40dvh);
+    overflow: auto;
     padding: 5px;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 17px;
-    border: 1px solid rgb(217, 217, 217);
-    border-radius: 7px;
-}
-
-.priceLine {
-    width: 100%;
-    background-color: rgb(217, 217, 217);
-    height: 1px;
-    align-self: center;
-}
-
-.clearFilters {
-    margin: 0 auto;
-    margin-top: 25px;
-    width: 190px;
-}
-
-.clearButton {
-    padding: 10px;
-    margin-bottom: 25px;
-    border-radius: 7px;
-}
-
-
-// Мобильная версия
-
-.mainWrapperMobile {
+    margin-top: 6px;
+    border: 1px solid var(--color-border, #dce0e8);
+    border-radius: 8px;
+    background: var(--color-bg-primary, #fff);
+    color: var(--color-text-primary, #192234);
+    box-shadow: 0 8px 24px #19223416;
+  }
+  .field option {
     display: flex;
-    padding: 10px;
-    background: rgb(232, 237, 255);
-    border-radius: 5px;
-    height: 35px;
-    width: 100%;
-    cursor: pointer;
-    position: relative;
-}
-
-.mobileFilterImg {
-    width: 15px;
-    height: 15px;
-    align-self: center;
-}
-
-.mobileTitle {
-    margin-left: 5px;
-}
-
-.mobileFiltersCounter {
-    position: absolute;
-    right: 36%;
-    top: 7%;
-    color: $orangeTextColor;
-    font-weight: bold;
-}
-
-.mainWrapperMobileModal {
-    background-color: #fff;
-    width: 100%;
-    height: 100vh;
-}
-
-.mainWrapperMobileModal {
-    background-color: #fff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1999;
-    overflow-y: scroll;
-}
-
-.modalMobile {
-    width: 300px;
-    position: absolute;
-    top: 50px;
-    left: 50%;
-    transform: translate(-50%);
-    border-radius: 5px;
-    background: rgb(249, 250, 255);
-    padding: 15px;
-}
-
-.closeFilters {
-    background: url('../../../../imgs/closeHiddenMenu.svg');
-    background-size: contain;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 28px;
-    height: 28px;
-    cursor: pointer;
-}
-
-.modalMobileTop {
-    display: flex;
+    align-items: center;
     justify-content: space-between;
-}
-
-.modalMobileTop>p {
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 15px;
-    align-self: center;
-}
-
-.modalMobilesButtons {
-    display: flex;
-    gap: 20px;
-    align-self: center;
-}
-
-.modalMobilesButtons>p {
-    align-self: center;
-    color: rgb(239, 129, 0);
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 15px;
-    cursor: pointer;
-}
-
-.selectMobile {
-    margin-top: 20px;
-}
-
-.selectMobile p {
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 15px;
-    margin-bottom: 10px;
-}
-
-.selectMobile select {
-    border: 1px solid rgb(217, 217, 217);
-    border-radius: 7px;
-    width: 100%;
-    padding: 13px 18px;
-}
-
-.modalMobileFilterButtons {
-    margin-top: 40px;
-    display: flex;
-}
-
-.modalMobileFilterButtons button {
-    border: 1px solid rgb(217, 217, 217);
-    border-radius: 0px;
-    background-color: rgb(255, 255, 255);
-    padding: 10px;
-    color: rgb(0, 0, 0);
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 24px;
-    letter-spacing: 0%;
-}
-
-.modalMobileFilterButtons button:hover {
-    background-color: #FAC799;
-}
-
-.modalMobileFilterButtons button.modalMobileSelectedButton {
-    background-color: #FAC799;
-}
-
-.modalMobileFilterButtons button:first-child {
-    border-radius: 10px 0px 0px 10px;
-}
-
-.modalMobileFilterButtons button:last-child {
-    border-radius: 0px 10px 10px 0px;
-}
-
-.checkboxesMobile {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    margin-top: 30px;
-}
-
-.checkboxesMobile div {
-    display: flex;
-}
-
-.checkboxesMobile img {
-    width: 20px;
-    height: 20px;
-    margin-left: 3px;
-}
-
-.priceContentMobile {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-top: 12px;
-}
-
-.priceFromMobile input,
-.priceToMobile input {
-    width: 120px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 7px;
-    padding: 5px;
-    font-size: 16px;
+    gap: 12px;
+    min-height: 36px;
+    padding: 7px 10px;
+    border-radius: 4px;
+    background: var(--color-bg-primary, #fff);
+    color: var(--color-text-primary, #192234);
+    font-size: 14px;
     font-weight: 400;
-    line-height: 17px;
-    border-radius: 7px;
-    overflow: hidden;
+  }
+  .field option:checked { background: #fff3e9; }
+  .field option:hover, .field option:focus { background: #f0f2f6; outline: none; }
+  .field option::checkmark { order: 1; margin-left: auto; color: var(--color-primary, #bd5300); }
 }
 
-.priceLineMobile {
-    width: 100%;
-    background-color: rgb(217, 217, 217);
-    height: 1px;
-    align-self: center;
+.check { display: flex; align-items: center; gap: 9px; min-height: 36px; font-size: 12px; cursor: pointer; }
+.check + .check { margin-top: 2px; }
+.check input { flex: none; width: 19px; height: 19px; margin: 0; accent-color: var(--color-primary, #bd5300); }
+.priceFields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: 8px; }
+.priceFields .field { margin: 0; }
+.priceFields input { padding-inline: 8px; font-size: 13px; font-variant-numeric: tabular-nums; }
+.priceFields input::-webkit-inner-spin-button, .priceFields input::-webkit-outer-spin-button { appearance: none; margin: 0; }
+.priceFields input { appearance: textfield; -moz-appearance: textfield; }
+.modalActions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); width: 100%; gap: 10px; }
+.modalActions button { min-width: 0; padding-inline: 10px; }
+.feedback { margin: 0; font-size: 13px; line-height: 1.6; color: var(--color-text-secondary, #596174); }
+.feedback p { margin: 0 0 10px; }
+.mobileTrigger { display: none !important; }
+.counter { display: inline-grid; place-items: center; margin-left: 5px; min-width: 18px; height: 18px; padding-inline: 3px; border-radius: 9px; background: var(--color-secondary, #62517e); color: #fff; font-size: 11px; }
+
+@media (max-width: 850px) {
+  .mainWrapper { display: none; }
+  .mobileTrigger { display: inline-flex !important; flex: none; font-size: 12px; padding-inline: 12px; }
 }
-
-.modalMobileBottom {
-    margin-top: 30px;
-}
-
-
-
-
-
-
-
-
-@media screen and (max-width:430px) {
-    .mobileFiltersCounter {
-        right: 27%;
-    }
-}
-
-@media screen and (max-width:370px) {
-    .mobileFiltersCounter {
-        right: 15%;
-    }
+@media (max-width: 650px), (pointer: coarse) {
+  .field select, .field input { height: 46px; min-height: 46px; font-size: 16px; }
+  .field option { min-height: 46px; }
+  .check { min-height: 46px; font-size: 13px; }
 }

@@ -1,84 +1,50 @@
-@import url('https://fonts.googleapis.com/css2?family=Jost&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import './styles/design-system.scss';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap');
 
-* {
-    font-family: "Montserrat", sans-serif;
-}
-
-$maxWidth: 1072px;
+$maxWidth: 1160px;
 $maxWidth2: 1600px;
-$font1: Montserrat Alternates;
-$orangeTextColor: rgb(241, 116, 0);
+$font1: 'Montserrat', sans-serif;
+$orangeTextColor: var(--color-primary);
 
-.pageTitle {
-    color: rgb(0, 0, 0);
-    font-size: 26px;
-    font-weight: 650;
-    line-height: 39px;
-    text-transform: uppercase;
+* { box-sizing: border-box; }
+// Панорамирование и pinch-zoom разрешены, случайный double-tap zoom не нужен.
+html { touch-action: manipulation; -webkit-tap-highlight-color: color-mix(in srgb, var(--color-secondary) 12%, transparent); }
+body { margin: 0; font-family: var(--font-primary); font-size: 14px; color: var(--color-text-primary); background: var(--color-bg-primary); line-height: 1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+button, input, select, textarea { font-family: inherit; }
+button, a, input, select, textarea { touch-action: manipulation; }
+img { max-width: 100%; height: auto; }
+.pageTitle { color: var(--color-text-primary); font-family: var(--font-display); font-size: 28px; font-weight: 600; line-height: 1.25; letter-spacing: -.025em; text-transform: none; margin: 0; text-wrap: balance; }
+:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 3px; }
+// У полей только одна рамка; outline кнопок, ссылок и checkbox не меняется.
+:is(input:not([type='checkbox'], [type='radio'], [type='range'], [type='color'], [type='file'], [type='button'], [type='submit'], [type='reset'], [type='image'], [type='hidden']), select, textarea) {
+  border-width: 1px !important;
+  border-style: solid !important;
+  outline: none !important;
+  box-shadow: none !important;
+
+  &:focus { border-color: var(--color-border-focus) !important; }
 }
-
-
-// стилизация чекбоксов
-.checkboxesInput {
-    cursor: pointer;
-    width: 18px !important;
-    height: 18px !important;
-    border-radius: 3px !important;
+::selection { background: var(--color-secondary-light); color: var(--color-text-primary); }
+input, textarea { caret-color: var(--color-primary); }
+select { box-sizing: border-box; min-width: 0; height: var(--control-height); min-height: var(--control-height); padding: 0 12px; border: 1px solid var(--color-gray-300); border-radius: 7px; background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 14px; font-weight: 400; cursor: pointer; }
+select:focus { border-color: var(--color-border-focus); }
+@supports (appearance: base-select) {
+  select, select::picker(select) { appearance: base-select; }
+  select { display: flex; align-items: center; justify-content: space-between; gap: 9px; }
+  select::picker-icon { color: var(--color-text-secondary); font-size: 12px; }
+  select::picker(select) { border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-bg-primary); color: var(--color-text-primary); padding: 5px; margin-top: 5px; box-shadow: var(--shadow-md); max-height: 280px; overflow: auto; }
+  select option { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 34px; padding: 7px 10px; border-radius: 4px; background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 14px; font-weight: 400; }
+  select option:checked { background: var(--color-primary-light); }
+  select option:hover, select option:focus { background: var(--color-gray-100); outline: none; }
+  select option::checkmark { order: 1; margin-left: auto; color: var(--color-primary); }
 }
-
-.checkboxesImg {
-    width: 15px !important;
-    height: 16px !important;
-    margin-left: 0 !important;
-    cursor: pointer;
-}
-
-.checkboxesLabel {
-    color: rgb(0, 0, 0);
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    letter-spacing: 0%;
-}
-
-.checkboxesInputMobile {
-    width: 20px !important;
-    height: 20px !important;
-}
-
-.checkboxesLabelMobile {
-    font-size: 15px;
-}
-
-.infinite-scroll-component::-webkit-scrollbar {
-    display: none;
-}
-
-.infinite-scroll-component {
-    -ms-overflow-style: none;
-    /* IE и Edge */
-    scrollbar-width: none;
-    /* Firefox */
-
-    flex: none;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-
-@media screen and (max-width: 1070px) {
-    .checkboxesLabel {
-        font-size: 13px;
-    }
-}
-
-@media screen and (max-width: 515px) {
-    .pageTitle {
-        font-size: 21px;
-    }
-
-    .checkboxesInput {
-        width: 20px !important;
-        height: 20px !important;
-    }
-}
+.checkboxesInput { cursor: pointer; width: 20px !important; height: 20px !important; border-radius: 4px !important; border: 1px solid var(--color-gray-300) !important; accent-color: var(--color-primary); }
+.checkboxesImg { width: 14px !important; height: 14px !important; margin-left: 0 !important; }
+.checkboxesLabel { color: var(--color-text-primary); font-family: var(--font-primary); font-size: 13px; font-weight: 400; line-height: 1.5; }
+.checkboxesInputMobile { width: 21px !important; height: 21px !important; }
+.checkboxesLabelMobile { font-size: 13px; }
+.infinite-scroll-component { -ms-overflow-style: none; scrollbar-width: none; min-width: 0; }
+.infinite-scroll-component::-webkit-scrollbar { display: none; }
+@media (max-width: 650px) { .pageTitle { font-size: 23px; } }
+@media (max-width: 850px), (pointer: coarse) { select { font-size: 16px; } select option { min-height: 42px; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

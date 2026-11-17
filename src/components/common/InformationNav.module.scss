@@ -1,0 +1,5 @@
+.navigation { display: grid; align-content: start; gap: 4px; position: sticky; top: 20px; align-self: start; }
+.navigation a { display: flex; align-items: center; min-height: 42px; padding: 10px 12px; border-radius: 6px; font-size: 13px; line-height: 1.5; color: var(--color-text-secondary); }
+.navigation a:hover { background: var(--color-bg-secondary); }
+.navigation a.active { background: var(--color-secondary-light); color: var(--color-text-primary); font-weight: 500; }
+@media (max-width: 850px) { .navigation { position: static; display: flex; flex-wrap: wrap; gap: 6px; } .navigation a { min-height: 38px; padding: 8px 10px; border: 1px solid var(--color-border); font-size: 12px; } }

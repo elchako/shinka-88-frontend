@@ -1,39 +1,41 @@
-import type React from "react";
-import { NavLink } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { creatingOrderSelector, orderIsCreating, orderNumberSelector } from "../../app/slices/cartSlice";
-import Styles from './common.module.scss'
+import type React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { creatingOrderSelector, orderIsCreating, orderNumberSelector } from '../../app/slices/cartSlice'
+import { Modal } from './Modal'
+import { Button } from './Button'
+import { Icon } from './Icon'
+import { Loader } from './Loader'
+import styles from './CreateOrderModal.module.scss'
 
 export const CreateOrder: React.FC = () => {
-    const dispatch = useAppDispatch()
-    const creatingOrder = useAppSelector(creatingOrderSelector)
-    const orderNumber = useAppSelector(orderNumberSelector)
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const creatingOrder = useAppSelector(creatingOrderSelector)
+  const orderNumber = useAppSelector(orderNumberSelector)
+  const close = () => {
+    if (creatingOrder) return
+    dispatch(orderIsCreating())
+    navigate('/')
+  }
 
-    let openStyle
-    if (creatingOrder) {
-        openStyle = Styles.placingOrderWrapper
-    } else {
-        openStyle = Styles.placingOrderWrapper + ' ' + Styles.placingOrderWrapperHidden
-    }
-
-    return <div className={openStyle}>
-        <div className={Styles.placingOrder}>
-            {orderNumber !== 0
-                ? <div className={Styles.placingOrderContent}>
-                    <p>Номер Вашего заказа: {orderNumber}</p>
-                    <p>Ожидайте. Скоро с Вами свяжется наш менеджер.</p>
-                    <NavLink to='/'>
-                        <button className={Styles.placingOrderButton}
-                            onClick={() => dispatch(orderIsCreating())}>Закрыть</button>
-                    </NavLink>
-                </div>
-                : <div className={Styles.loader}>
-                    <div className={Styles.wheel}>
-                        <div className={Styles.tire}></div>
-                        <div className={Styles.rim}></div>
-                    </div>
-                </div>}
-
-        </div>
-    </div>
+  return (
+    <Modal
+      isOpen={creatingOrder || orderNumber > 0}
+      onClose={close}
+      title={creatingOrder ? 'Оформляем заказ' : 'Заказ оформлен'}
+      showCloseButton={!creatingOrder}
+      closeOnOverlayClick={!creatingOrder}
+      size="sm"
+      footer={!creatingOrder ? <Button type="button" fullWidth onClick={close}>На главную</Button> : undefined}
+    >
+      <div className={styles.content} role="status">
+        {creatingOrder ? (
+          <><Loader size="md" /><p>Отправляем заказ. Пожалуйста, дождитесь ответа.</p></>
+        ) : (
+          <><Icon name="check" size={28} /><p className={styles.number}>Номер вашего заказа: {orderNumber}</p><p>Скоро с вами свяжется менеджер для подтверждения деталей.</p></>
+        )}
+      </div>
+    </Modal>
+  )
 }

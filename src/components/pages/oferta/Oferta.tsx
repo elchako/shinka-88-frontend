@@ -1,3 +1,4 @@
+import { InformationNav } from '../../common/InformationNav'
 import type React from "react"
 import PoliceStyles from "../police/PoliceStyles.module.scss"
 import { Footer } from "../../footer/Footer"
@@ -15,10 +16,11 @@ export const Oferta: React.FC = () => {
           </Helmet>
           <div className={PoliceStyles.mainWrapper}>
               <div className={PoliceStyles.contentWrapper}>
-                  <p className="pageTitle">{links[13].title}</p>
+                  <h1 className="pageTitle">{links[13].title}</h1>
+                  <InformationNav />
                   <div className={PoliceStyles.content}>
                   <div className={PoliceStyles.sectionOffer}>
-                    <h2>1. ОБЩИЕ ПОЛОЖЕНИЯ</h2>
+                    <h2>1. Общие положения</h2>
                     1. Настоящая публичная оферта является официальным предложением Индивидуального предпринимателя Кудрева Ильи Владимировича (ИНН 501102759709), далее именуемого «Продавец», заключить договор купли-продажи товаров дистанционным способом на условиях, указанных ниже.
                     <br />
                     <br />
@@ -29,7 +31,7 @@ export const Oferta: React.FC = () => {
                   </div>
 
                   <div className={PoliceStyles.sectionOffer}>
-                    <h2>2. ПРЕДМЕТ ДОГОВОРА</h2>
+                    <h2>2. Предмет договора</h2>
                     1. Продавец обязуется передать в собственность Покупателя товары, представленные на сайте, а Покупатель обязуется принять и оплатить их.
                     <br />
                     <br />
@@ -37,7 +39,7 @@ export const Oferta: React.FC = () => {
                   </div>
 
                   <div className={PoliceStyles.sectionOffer}>
-                    <h2>3. ЦЕНА И ПОРЯДОК ОПЛАТЫ</h2>
+                    <h2>3. Цена и порядок оплаты</h2>
                     1. Все цены на товары указаны в рублях РФ и включают все установленные законодательством налоги.
                     <br />
                     <br />
@@ -48,15 +50,15 @@ export const Oferta: React.FC = () => {
                   </div>
 
                   <div className={PoliceStyles.sectionOffer}>
-                    <h2>4. ДОСТАВКА</h2>
+                    <h2>4. Доставка</h2>
                     1. Доставка товара осуществляется в пункт самовывоза по адресу г.Егорьевск, 6 мкр, ГСК ЦНА бокс 40.
                     <br />
                     <br />
-                    2. Поступление заказа производится в течение 2–3 рабочих дней после подтверждения заказа.
+                    2. Поступление заказа производится в течение 2-3 рабочих дней после подтверждения заказа.
                   </div>
 
                   <div className={PoliceStyles.sectionOffer}>
-                    <h2>5. ВОЗВРАТ И ОБМЕН</h2>
+                    <h2>5. Возврат и обмен</h2>
                     1. Покупатель вправе вернуть или обменять товар надлежащего качества в течение 7 календарных дней после получения при условии, что товар не был в употреблении, сохранены его товарный вид, упаковка, ярлыки и документ, подтверждающий покупку.
                     <br />
                     <br />
@@ -67,7 +69,7 @@ export const Oferta: React.FC = () => {
                   </div>
 
                   <div className={PoliceStyles.sectionOffer}>
-                    <h2>6. ПРАВА И ОБЯЗАННОСТИ СТОРОН</h2>
+                    <h2>6. Права и обязанности сторон</h2>
                     1. Продавец обязуется:
                     <br />
                     - своевременно укомплектовать и доставить заказ;
@@ -83,7 +85,7 @@ export const Oferta: React.FC = () => {
                   </div>
 
                   <div className={PoliceStyles.sectionOffer}>
-                    <h2>7. КОНФИДЕНЦИАЛЬНОСТЬ И ПЕРСОНАЛЬНЫЕ ДАННЫЕ</h2>
+                    <h2>7. Конфиденциальность и персональные данные</h2>
                     1. Оформляя заказ, Покупатель даёт согласие на обработку своих персональных данных в целях исполнения настоящего договора, доставки заказа и предоставления сервисной информации.
                     <br />
                     <br />
@@ -91,7 +93,7 @@ export const Oferta: React.FC = () => {
                   </div>
 
                   <div className={PoliceStyles.sectionOffer}>
-                    <h2>8. ОТВЕТСТВЕННОСТЬ</h2>
+                    <h2>8. Ответственность</h2>
                     1. Стороны несут ответственность за неисполнение или ненадлежащее исполнение обязательств в соответствии с действующим законодательством РФ.
                     <br />
                     <br />
@@ -99,7 +101,7 @@ export const Oferta: React.FC = () => {
                   </div>
 
                   <div className={PoliceStyles.sectionOffer}>
-                    <h2>9. РАЗРЕШЕНИЕ СПОРОВ</h2>
+                    <h2>9. Разрешение споров</h2>
                     1. Все споры и разногласия решаются путём переговоров.
                     <br />
                     <br />
@@ -107,7 +109,7 @@ export const Oferta: React.FC = () => {
                   </div>
 
                   <div className={PoliceStyles.sectionOffer}>
-                    <h2>10. ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ</h2>
+                    <h2>10. Заключительные положения</h2>
                     1. Настоящая оферта действует бессрочно до момента её отзыва Продавцом.
                     <br />
                     <br />
@@ -115,7 +117,7 @@ export const Oferta: React.FC = () => {
                   </div>
 
                   <div className={PoliceStyles.sectionOffer}>
-                    <h2>РЕКВИЗИТЫ ПРОДАВЦА</h2>
+                    <h2>Реквизиты продавца</h2>
                     - Индивидуальный предприниматель Кудрев Илья Владимирович
                     <br />
                     - ИНН: 501102759709
@@ -128,7 +130,7 @@ export const Oferta: React.FC = () => {
                   </div>
 
                   <div className={PoliceStyles.sectionOffer}>
-                    <h2>БАНКОВСКИЕ РЕКВИЗИТЫ</h2>
+                    <h2>Банковские реквизиты</h2>
                     - Расчётный счёт: 40802810303100000131
                     <br />
                     - Банк: АО Генбанк

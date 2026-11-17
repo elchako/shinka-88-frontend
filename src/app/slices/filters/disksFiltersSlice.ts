@@ -1,5 +1,5 @@
 import { type PayloadAction } from "@reduxjs/toolkit"
-import { selectsNames2, sorts } from "../../../consts"
+import { catalogOrderBy, selectsNames2, sorts } from "../../../consts"
 import { createAppSlice } from "../../createAppSlice"
 import { filtersApi } from "../../../api/catalog"
 import { type RootState } from "../../store"
@@ -13,7 +13,7 @@ import {
 
 // изначальные значения стейта
 const selects = selectsNames2.map(selectName => {
-    let initValue: Array<string> = []
+    const initValue: Array<string> = []
     return { selectName, value: initValue }
 })
 
@@ -50,10 +50,16 @@ const initialState: IinitialState = {
     // фильтры
     selects: selects,
     sortType: sorts[0],
+    onlyCompleteSets: false,
     priceStart: 0,
     priceEnd: 0,
     priceMin: 0,
     priceMax: 0,
+    filtersStatus: 'idle',
+    cardsStatus: 'idle',
+    cardsError: null,
+    cardsRequestId: null,
+    cardsRefresh: true,
 }
 
 export const filterBlock2Slice = createAppSlice({
@@ -63,8 +69,8 @@ export const filterBlock2Slice = createAppSlice({
         // селекты 
         selectsSelect: create.reducer((state,
             action: PayloadAction<{ selectName: string, value: string, isOneChoice: boolean }>) => {
-            let payload = action.payload
-            let newSelects = state.selects.map(item => {
+            const payload = action.payload
+            const newSelects = state.selects.map(item => {
                 if (item.selectName.apiName === payload.selectName) {
                     // для постоянных селектов где только 1 значение
                     if (typeof item.value === 'string') {
@@ -74,7 +80,7 @@ export const filterBlock2Slice = createAppSlice({
                         // где массив значений
                         if (payload.isOneChoice) {
                             // если селект
-                            item.value = [payload.value]
+                            item.value = payload.value ? [payload.value] : []
                         } else {
                             // если чекбоксы
                             if (item.value.includes(payload.value)) {
@@ -89,6 +95,9 @@ export const filterBlock2Slice = createAppSlice({
             })
             state.selects = newSelects
         }),
+        setOnlyCompleteSets: create.reducer((state, action: PayloadAction<boolean>) => {
+            state.onlyCompleteSets = action.payload
+        }),
         // сортировка
         sortDisksTypeSelect: create.reducer((state, action: PayloadAction<string>) => {
             state.sortType = action.payload
@@ -97,25 +106,21 @@ export const filterBlock2Slice = createAppSlice({
         amountHandler: create.reducer((state, action: PayloadAction<{ id: number, isPlus: boolean }>) => {
             for (let i = 0; i < state.disksCardsArr.results.length; i++) {
                 if (state.disksCardsArr.results[i].id === action.payload.id) {
-                    if (action.payload.isPlus
-                        && state.disksCardsArr.results[i].amount < state.disksCardsArr.results[i].balance) {
-                        state.disksCardsArr.results[i].amount++
-                    } else if (!action.payload.isPlus &&
-                        state.disksCardsArr.results[i].amount > 1) {
-                        state.disksCardsArr.results[i].amount--
-                    }
+                    const item = state.disksCardsArr.results[i]
+                    if (item.balance < 1) break
+                    item.amount = Math.min(item.balance,
+                        Math.max(1, item.amount + (action.payload.isPlus ? 1 : -1)))
                     break
                 }
             }
         }),
         // установить цену
         setPrice: create.reducer((state, action: PayloadAction<{ number: number, isStartOrEnd: boolean }>) => {
-            if (Number.isNaN(action.payload.number)) return
-            let number = action.payload.number
-            if (action.payload.number > state.priceMax) number = state.priceMax
-            action.payload.isStartOrEnd
-                ? state.priceStart = number
-                : state.priceEnd = number
+            if (!Number.isFinite(action.payload.number)) return
+            let number = Math.max(0, action.payload.number)
+            if (state.priceMax > 0 && number > state.priceMax) number = state.priceMax
+            if (action.payload.isStartOrEnd) state.priceStart = number
+            else state.priceEnd = number
         }),
         // сбросить фильтры
         resetFilters: create.reducer(state => {
@@ -123,33 +128,38 @@ export const filterBlock2Slice = createAppSlice({
             // console.log(selects)
             state.priceStart = 0
             state.priceEnd = 0
+            state.onlyCompleteSets = false
         }),
 
         // Thunks
         // получить данные для фильтров
         getDisksParametrs: create.asyncThunk(
-            async () => {
+            async (): Promise<disksAPI> => {
                 const response = await filtersApi.getDisks()
                 // The value we return becomes the `fulfilled` action payload
                 return response
             },
             {
-                pending: () => {
-                    console.log('pending')
+                pending: state => {
+                    state.filtersStatus = 'loading'
                 },
                 fulfilled: (state, action: PayloadAction<disksAPI>) => {
-                    state.disksAPI = { ...state.disksAPI, ...action.payload }
+                    state.filtersStatus = 'succeeded'
+                    state.disksAPI = action.payload
                     state.priceMin = action.payload.min_price
                     state.priceMax = action.payload.max_price
                 },
-                rejected: () => {
-                    console.log('error')
+                rejected: state => {
+                    state.filtersStatus = 'failed'
+                },
+                options: {
+                    condition: (_, api): boolean => (api.getState() as RootState).disksFilters.filtersStatus !== 'loading',
                 },
             },
         ),
         // Получение карточек товаров по установленным фильтрам
         getDisksCards: create.asyncThunk(
-            async (refresh, thunkAPI) => {
+            async (refresh: boolean, thunkAPI): Promise<{ response: disksCards, refresh: boolean }> => {
                 const store = thunkAPI.getState() as RootState
                 const state = store.disksFilters
 
@@ -165,43 +175,54 @@ export const filterBlock2Slice = createAppSlice({
                 }
 
                 if (state.priceStart !== 0 || state.priceEnd !== 0) {
-                    const price = []
-                    state.priceStart !== 0
-                        ? price[0] = state.priceStart
-                        : price[0] = 0
-                    state.priceEnd !== 0
-                        ? price[1] = state.priceEnd
-                        : price[1] = 20000
-                    fields.price = price
+                    fields.price = [state.priceStart !== 0 ? state.priceStart : 0,
+                        state.priceEnd !== 0 ? state.priceEnd : 20000]
                 }
 
-                let orderBy = 'price_sale'
-                if (state.sortType === sorts[1]) orderBy = '-' + orderBy
-                const response = await filtersApi.getFilteredDisks(fields, orderBy, url)
-
-                return { response, refresh }
+                if (state.onlyCompleteSets) fields.min_balance = 4
+                const orderBy = catalogOrderBy(state.sortType)
+                const response: disksCards = await filtersApi.getFilteredDisks(fields, orderBy, url)
+                const cart = (thunkAPI.getState() as RootState).cart.disks
+                const results = response.results.map(item => ({
+                    ...item,
+                    amount: item.balance < 1 ? 0 : Math.min(item.balance,
+                        cart.find(product => product.id === item.id)?.amount || 1),
+                }))
+                return { response: { ...response, results }, refresh }
             },
             {
-                pending: () => {
-                    console.log('pending')
+                pending: (state, action) => {
+                    state.cardsStatus = 'loading'
+                    state.cardsError = null
+                    state.cardsRequestId = action.meta.requestId
+                    state.cardsRefresh = action.meta.arg
                 },
-                fulfilled: (state, action: PayloadAction<{ response: disksCards, refresh: boolean }>) => {
-                    let res = action.payload.response
+                fulfilled: (state, action) => {
+                    if (state.cardsRequestId !== action.meta.requestId) return
+                    const res = action.payload.response
+                    state.cardsStatus = 'succeeded'
+                    state.cardsRequestId = null
                     state.disksCardsArr.count = res.count
                     state.disksCardsArr.next = res.next
                     state.disksCardsArr.previous = res.previous
-                    let results = res.results.map(item => {
-                        item.amount = 1
-                        return item
-                    })
                     if (action.payload.refresh) {
                         state.disksCardsArr.results = res.results
                     } else {
-                        state.disksCardsArr.results = [...state.disksCardsArr.results, ...results]
+                        const ids = new Set(state.disksCardsArr.results.map(item => item.id))
+                        state.disksCardsArr.results.push(...res.results.filter(item => !ids.has(item.id)))
                     }
                 },
-                rejected: () => {
-                    console.log('error')
+                rejected: (state, action) => {
+                    if (state.cardsRequestId !== action.meta.requestId) return
+                    state.cardsStatus = 'failed'
+                    state.cardsRequestId = null
+                    state.cardsError = 'Не удалось загрузить диски. Попробуйте ещё раз.'
+                },
+                options: {
+                    condition: (refresh, api): boolean => {
+                        const state = (api.getState() as RootState).disksFilters
+                        return refresh || (state.cardsStatus !== 'loading' && state.disksCardsArr.next !== null)
+                    },
                 },
             },
         ),
@@ -221,7 +242,7 @@ export const filterBlock2Slice = createAppSlice({
 
 // actions
 export const { selectsSelect, getDisksParametrs, sortDisksTypeSelect,
-    getDisksCards, amountHandler, setPrice, resetFilters } = filterBlock2Slice.actions
+    getDisksCards, amountHandler, setPrice, resetFilters, setOnlyCompleteSets } = filterBlock2Slice.actions
 
 
 // selectors

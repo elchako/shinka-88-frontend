@@ -5,6 +5,7 @@ import { App } from "./App"
 import { store } from "./app/store"
 import "./null.css"
 import "./index.css"
+import "./common.scss" // Design system styles
 
 const container = document.getElementById("root")
 

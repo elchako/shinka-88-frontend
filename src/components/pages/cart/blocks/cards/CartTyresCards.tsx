@@ -1,87 +1,78 @@
-import type React from "react"
-import CartCardsStyles from "./CartCardsStyles.module.scss"
-import CartStyles from '../../CartStyles.module.scss'
-import delElement from '../../../../../imgs/cart/trash-bin.svg'
-import Checkbox from "react-custom-checkbox";
-import { useAppDispatch, useTyresCardData } from "../../../../../app/hooks"
-import {
-    changeAmount,
-    delOneTypeProduct,
-    selectProductHandler,
-} from "../../../../../app/slices/cartSlice";
-import { type resultsTyresType } from "../../../../../types/tires";
-import { type selectedType } from "../../../../../types/cart";
+import type React from 'react'
+import styles from './CartCardsStyles.module.scss'
+import { useAppDispatch } from '../../../../../app/hooks'
+import { changeAmount, delOneTypeProduct, selectProductHandler } from '../../../../../app/slices/cartSlice'
+import type { commonArrDataType, selectedType } from '../../../../../types/cart'
+import type { resultsTyresType } from '../../../../../types/tires'
+import { Icon } from '../../../../common/Icon'
+import { Price } from '../../../../common/Price'
+import { QuantityStepper } from '../../../../common/QuantityStepper'
+import { hasProductFeature } from '../../../../../utils/other'
 
-interface IProps {
-    data: selectedType & resultsTyresType
+type CartProduct = commonArrDataType[number]
+
+export const cartProductSize = (product: CartProduct): string => {
+  if ('holesquant' in product) {
+    return [
+      `${product.width}×${product.diameter}`,
+      product.pcd ? (/[x×]/i.test(product.pcd) || !product.holesquant ? product.pcd : `${product.holesquant}×${product.pcd}`) : '',
+      product.wheeloffset ? `ET${product.wheeloffset}` : '',
+      product.dia ? `DIA ${product.dia}` : '',
+    ].filter(Boolean).join(' · ')
+  }
+  const diameter = /^r/i.test(product.diameter) ? product.diameter : `R${product.diameter}`
+  return `${product.width}/${product.height} ${diameter} ${product.load || ''}${product.speed || ''}`.trim()
 }
 
-export const CartTyresCards: React.FC<IProps> = ({ data }) => {
-    const cardData = useTyresCardData(data)
-    const dispatch = useAppDispatch()
-    return (
-        <div className={CartCardsStyles.mainWrapper}>
-            <div className={CartCardsStyles.icons}>
-                {<Checkbox
-                    icon={<div className={CartStyles.icon}></div>}
-                    className={CartStyles.checkboxCN}
-                    labelClassName={CartStyles.checkboxLCN}
-                    borderRadius={10}
-                    borderColor={'#000'}
-                    checked={!data.canceled}
-                    onChange={() =>
-                        dispatch(selectProductHandler({ productType: data.product_type, id: data.id }))}
-                />}
-                <div className={CartCardsStyles.iconsContent}>
-                    <div className={CartCardsStyles.iconsTop}>
-                        {cardData.seasonIcon !== '' && <img src={cardData.seasonIcon} alt="" />}
-                        {cardData.runflatIcon !== '' && <img src={cardData.runflatIcon} alt="" />}
-                        {cardData.strongIcon && <img src={cardData.strongIcon} alt="" />}
-                    </div>
-                    <div className={CartCardsStyles.iconsBottom}>
-                    </div>
-                </div>
-            </div>
-            <div className={CartCardsStyles.productImg}>
-                <img src={data.image_url} alt="" />
-            </div>
-            <div className={CartCardsStyles.productInfo}>
-                <p className={CartCardsStyles.productName}>{data.name}</p>
-                <div className={CartCardsStyles.productInfoContent}>
-                    <div>
-                        <p>Размер: {`${data.width}/${data.height}`}</p>
-                        <p>Сезон: {data.seazon}</p>
-                        <p>Марка: {data.marka}</p>
-                    </div>
-                    <div>
-                        <p>{cardData.runflatText}</p>
-                        <p>{cardData.strongText}</p>
-                    </div>
-                </div>
-                <div className={CartCardsStyles.productButtons}>
-                    <div className={CartCardsStyles.productInfoAmountItem}>
-                        <button onClick={() => dispatch(changeAmount({
-                            type: data.product_type,
-                            id: data.id,
-                            isPlus: false
-                        }))}>-</button>
-                        <p>{data.amount}</p>
-                        <button onClick={() => dispatch(changeAmount({
-                            type: data.product_type,
-                            id: data.id,
-                            isPlus: true
-                        }))}>+</button>
-                    </div>
-                    <div className={CartCardsStyles.productPrice}>
-                        {data.price_sale}
-                    </div>
-                </div>
-            </div>
-            <div className={CartCardsStyles.delElement}>
-                <img onClick={() =>
-                    dispatch(delOneTypeProduct({ productType: data.product_type, id: data.id }))}
-                    src={delElement} alt="" width={28} height={28} />
-            </div>
+export const CartProductCard: React.FC<{ data: CartProduct }> = ({ data }) => {
+  const dispatch = useAppDispatch()
+  const isTyre = 'seazon' in data
+
+  return (
+    <article className={`${styles.card} ${data.canceled ? styles.excluded : ''}`} role="listitem">
+      <label className={styles.select}>
+        <input
+          type="checkbox"
+          checked={!data.canceled}
+          aria-label={`Выбрать ${data.name}`}
+          onChange={() => dispatch(selectProductHandler({ productType: data.product_type, id: data.id }))}
+        />
+      </label>
+      <div className={styles.imageWrapper}>
+        <img src={data.image_url} alt="" loading="lazy" className={styles.image} />
+      </div>
+      <div className={styles.info}>
+        <h2 className={styles.name}>{data.name}</h2>
+        <p className={styles.size}>{cartProductSize(data)}</p>
+        <p className={styles.details}>
+          {isTyre ? `${data.seazon}, шины${hasProductFeature(data.runflat) ? ' · RunFlat' : ''}` : data.type_disk}
+        </p>
+        <div className={styles.unitPrice}><Price value={data.price_sale} size="sm" /> / шт.</div>
+        {data.canceled && <p className={styles.excludedNote}>Не включён в заказ</p>}
+      </div>
+      <button
+        type="button"
+        className={styles.deleteButton}
+        aria-label={`Удалить ${data.name} из корзины`}
+        onClick={() => dispatch(delOneTypeProduct({ productType: data.product_type, id: data.id }))}
+      >
+        <Icon name="trash" size={18} />
+      </button>
+      <div className={styles.bottom}>
+        <QuantityStepper
+          value={data.amount}
+          max={data.balance}
+          label={data.name}
+          onDecrease={() => dispatch(changeAmount({ type: data.product_type, id: data.id, isPlus: false }))}
+          onIncrease={() => dispatch(changeAmount({ type: data.product_type, id: data.id, isPlus: true }))}
+        />
+        <div className={styles.linePrice} aria-label={`Сумма за ${data.name}`}>
+          <Price value={data.price_sale * data.amount} size="lg" />
         </div>
-    )
+      </div>
+    </article>
+  )
 }
+
+export const CartTyresCards: React.FC<{ data: selectedType & resultsTyresType }> = ({ data }) =>
+  <CartProductCard data={data} />

@@ -1,27 +1,31 @@
-# vite-template-redux
+# Шинка88 · frontend
 
-Uses [Vite](https://vitejs.dev/), [Vitest](https://vitest.dev/), and [React Testing Library](https://github.com/testing-library/react-testing-library) to create a modern [React](https://react.dev/) app compatible with [Create React App](https://create-react-app.dev/)
+React/TypeScript-интерфейс магазина шин и дисков. Сборка — Vite, состояние — Redux Toolkit, тесты — Vitest и Testing Library.
 
-```sh
-npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
+## Локальная работа
+
+Версия Node указана в `.nvmrc`.
+
+```bash
+nvm use
+npm ci --include=dev --ignore-scripts
+npm run lint
+npm run type-check
+npm test
 ```
 
-## Goals
+Перед `npm run dev` создайте `.env.local` по `.env.example`, не перезаписывая существующий файл, и укажите изолированный `VITE_API_ORIGIN`. Не проверяйте SMS и оформление на настоящем API без разрешения. Значения `VITE_*` доступны посетителям сайта: секретов в них быть не должно.
 
-- Easy migration from Create React App or Vite
-- As beginner friendly as Create React App
-- Optimized performance compared to Create React App
-- Customizable without ejecting
+## Сборка
 
-## Scripts
+```bash
+VITE_API_ORIGIN=https://example.test npm run build
+```
 
-- `dev`/`start` - start dev server and open browser
-- `build` - build for production
-- `preview` - locally preview production build
-- `test` - launch test runner
+Укажите адрес своего backend. Результат — статические файлы в `dist`; сама сборка ничего не публикует. `npm run preview -- --host 127.0.0.1` запускает только временный локальный просмотр.
 
-## Inspiration
+## Безопасность и документация
 
-- [Create React App](https://github.com/facebook/create-react-app/tree/main/packages/cra-template)
-- [Vite](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react)
-- [Vitest](https://github.com/vitest-dev/vitest/tree/main/examples/react-testing-lib)
+Локальные инструкции, дизайн-заметки, резервные копии, реальные доступы и история инструментов не входят в публичный репозиторий. Эксплуатационная документация хранится отдельно от публичных исходников.
+
+Полный аудит dev/build-зависимостей на 18.11.2026 не чистый: advisory picomatch GHSA-fc5q-39xc-vjpf пока не имеет опубликованного исправленного релиза. Не скрывайте результат аудита и не используйте `--force` для обхода несовместимостей зависимостей.

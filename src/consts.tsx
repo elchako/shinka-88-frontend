@@ -85,4 +85,6 @@ export const checkboxesNames: Array<string> = ['RunFlat', 'Усиленные', 
 export const catalogsTitles: Array<string> = ['Каталог шин', 'Каталог дисков',]
 
 // каталог шин
-export const sorts: Array<string> = ['Дешевле', 'Дороже'] // сортировка
+export const sorts: Array<string> = ['Сначала комплект', 'Дешевле', 'Дороже']
+export const catalogOrderBy = (sort: string): string =>
+    sort === 'Дешевле' ? 'price_sale' : sort === 'Дороже' ? '-price_sale' : 'complete_set'

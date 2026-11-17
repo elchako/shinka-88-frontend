@@ -3,7 +3,7 @@
 // usage of typed hooks throughout the application.
 // We disable the ESLint rule here because this is the designated place
 // for importing and re-exporting the typed versions of hooks.
-/* eslint-disable @typescript-eslint/no-restricted-imports */
+/* eslint-disable no-restricted-imports */
 import type React from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "./store"
@@ -46,13 +46,13 @@ export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
 export const useAppSelector = useSelector.withTypes<RootState>()
 
 export interface IFilterBlockProps {
-    parentRef: React.RefObject<HTMLDivElement>
+    parentRef: React.RefObject<HTMLDivElement | null>
 }
 
 export const useCatalogDataHook = (page: string) => {
     let title: string = 'Каталог шин'
     let filtersBlocks: React.FC<IFilterBlockProps> = TyresFilterBlocks
-    let filtersBlocksMobile: React.FC<{}> = TyresFilterBlocksMobileModal
+    let filtersBlocksMobile: React.FC = TyresFilterBlocksMobileModal
     let priceStart: any = priceStart1
     let priceEnd: any = priceEnd1
     let priceMin: any = priceMin1
@@ -87,7 +87,7 @@ export const useCatalogDataHook = (page: string) => {
     const priceMinNumber: number = useAppSelector(priceMin)
     const priceMaxNumber: number = useAppSelector(priceMax)
 
-    let commonFilters = {
+    const commonFilters = {
         resetFiltersAction,
         priceStartNumber,
         priceEndNumber,

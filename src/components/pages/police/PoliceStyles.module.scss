@@ -1,63 +1,16 @@
-@import '../../../common.scss';
-
-.mainWrapper {
-    margin: 0 auto;
-    margin-top: 70px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.contentWrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    padding: 0 20px;
-}
-
-.content {
-    margin-top: 30px;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 150%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 0px 10px;
-    flex: 1 1 auto;
-}
-
-.orangeText {
-    color: $orangeTextColor;
-    font-weight: bold;
-}
-
-.sectionOffer {
-    line-height: 24px;
-    background: rgb(255 229 178 / 51%);
-    padding: 20px;
-    border-radius: 12px;
-    color: #000000;
-}
-
-.sectionOffer h2 {
-    font-size: 19px;
-    margin-bottom: 1.5rem;
-    border-bottom: 1.8px solid;
-    padding-bottom: .5rem;
-    font-weight: 600;
-}
-
-@media screen and (max-width: 550px) {
-    .content {
-        font-size: 14px;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    .content {
-        font-size: 14px;
-    }
-}
+.mainWrapper { display: flex; flex-direction: column; min-width: 0; min-height: calc(100dvh - 135px); }
+.contentWrapper { display: grid; grid-template-columns: 210px minmax(0, 1fr); align-items: start; gap: 28px 40px; width: 100%; max-width: var(--page-max-width); margin: 32px auto 0; padding: 0 20px 22px; flex: 1 0 auto; }
+.contentWrapper>h1 { grid-column: 1/-1; }
+.content { grid-column: 2; min-width: 0; max-width: 74ch; font-size: 14px; font-weight: 400; line-height: 1.85; overflow-wrap: anywhere; }
+.sectionOffer { margin: 0 0 25px; line-height: 1.85; }
+.sectionOffer h2, .sectionHeading { margin: 28px 0 12px; font-family: var(--font-display); font-size: 20px; font-weight: 600; line-height: 1.4; letter-spacing: -.02em; text-wrap: balance; }
+.sectionOffer:first-child h2 { margin-top: 0; }
+.content p { margin: 0 0 17px; }
+.content ul, .content ol { padding-left: 22px; margin: 13px 0 18px; }
+.content ul { list-style: disc; }
+.content ol { list-style: decimal; }
+.content li { list-style: inherit; margin-bottom: 8px; }
+.content strong, .content b { font-weight: 600; }
+.orangeText { color: var(--color-primary); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
+@media (max-width: 850px) { .mainWrapper { min-height: calc(100dvh - 149px); } .contentWrapper { grid-template-columns: 1fr; gap: 22px; margin-top: 24px; } .content { grid-column: 1; max-width: 74ch; } }
+@media (max-width: 650px) { .contentWrapper { margin-top: 22px; padding: 0 16px 12px; } .content { font-size: 13px; line-height: 1.85; } .sectionOffer h2, .sectionHeading { font-size: 18px; margin-top: 25px; } }

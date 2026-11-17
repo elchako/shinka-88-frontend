@@ -77,6 +77,7 @@ export type fieldsTyresType = {
     runflat?: Array<string | null>
     powerload?: Array<string | null>
     price?: Array<number>
+    min_balance?: number
 }
 
 
@@ -96,4 +97,10 @@ export interface IinitialState {
     priceMin: number
     priceMax: number
     sortType: string
+    onlyCompleteSets: boolean
+    filtersStatus: 'idle' | 'loading' | 'succeeded' | 'failed'
+    cardsStatus: 'idle' | 'loading' | 'succeeded' | 'failed'
+    cardsError: string | null
+    cardsRequestId: string | null
+    cardsRefresh: boolean
 }

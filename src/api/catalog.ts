@@ -22,8 +22,7 @@ class FiltersAPI {
     }
 
     async getFilteredTyres(fields: fieldsTyresType, order_by: string, url: string | null) {
-        let path
-        url ? path = `${URLs.filters.filteredTyres}?${url}` : path = URLs.filters.filteredTyres
+        const path = url ? `${URLs.filters.filteredTyres}?${url}` : URLs.filters.filteredTyres
         const response = await this.instance.post(path, JSON.stringify({ fields, order_by }), {
             headers: { 'Content-Type': 'application/json' }
         });
@@ -31,8 +30,7 @@ class FiltersAPI {
     }
 
     async getFilteredDisks(fields: fieldsDiskType, order_by: string, url: string | null) {
-        let path
-        url ? path = `${URLs.filters.filteredDisks}?${url}` : path = URLs.filters.filteredDisks
+        const path = url ? `${URLs.filters.filteredDisks}?${url}` : URLs.filters.filteredDisks
         const response = await this.instance.post(path, JSON.stringify({ fields, order_by }), {
             headers: { 'Content-Type': 'application/json' }
         });

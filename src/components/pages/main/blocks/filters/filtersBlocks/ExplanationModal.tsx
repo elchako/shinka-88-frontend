@@ -5,11 +5,6 @@ import tires from '../../../../../../imgs/modalTires.png';
 
 export const ExplanationModal: React.FC = () => {
 
-    let openModalStyles = null
-    // isModalOpen
-    //     ? openModalStyles = FilterBlocksStyles.explanationModalWrapper
-    //     : openModalStyles = FilterBlocksStyles.explanationModalWrapper +
-    //     ' ' + FilterBlocksStyles.explanationModalHidden
     return (
         <div className={'openModalStyles'}>
             <div className={FilterBlocksStyles.explanationModal}>

@@ -1,0 +1,76 @@
+@import '../../styles/design-system.scss';
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-medium);
+  white-space: nowrap;
+}
+
+.icon {
+  @include flex-center;
+  font-size: 0.9em;
+}
+
+.text {
+  line-height: 1;
+}
+
+// Sizes
+.sm {
+  padding: 4px 10px;
+  font-size: var(--text-xs);
+}
+
+.md {
+  padding: 6px 12px;
+  font-size: var(--text-sm);
+}
+
+// Variants
+.summer {
+  background: var(--color-warning-light);
+  color: #92400E;
+}
+
+.winter {
+  background: var(--color-info-light);
+  color: #1E40AF;
+}
+
+.runflat {
+  background: #F3E8FF;
+  color: #7C3AED;
+}
+
+.strong {
+  background: var(--color-success-light);
+  color: #065F46;
+}
+
+.default {
+  background: var(--color-gray-100);
+  color: var(--color-text-secondary);
+}
+
+.primary {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.success {
+  background: var(--color-success-light);
+  color: #065F46;
+}
+
+.warning {
+  background: var(--color-warning-light);
+  color: #92400E;
+}
+
+.error {
+  background: var(--color-error-light);
+  color: #991B1B;
+}

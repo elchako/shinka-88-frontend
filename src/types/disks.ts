@@ -72,6 +72,7 @@ export type fieldsDiskType = {
     pcd?: string | Array<string>
     type_disk?: string | Array<string>
     price?: Array<number>
+    min_balance?: number
 }
 
 
@@ -85,8 +86,14 @@ export interface IinitialState {
         value: string | Array<string>,
     }>
     sortType: string
+    onlyCompleteSets: boolean
     priceStart: number
     priceEnd: number
     priceMin: number
     priceMax: number
+    filtersStatus: 'idle' | 'loading' | 'succeeded' | 'failed'
+    cardsStatus: 'idle' | 'loading' | 'succeeded' | 'failed'
+    cardsError: string | null
+    cardsRequestId: string | null
+    cardsRefresh: boolean
 }

@@ -1,42 +1,9 @@
-import type React from "react"
-import SortHeaderStyles from "./SortHeaderStyles.module.scss"
-import { useState } from "react"
-import { sorts } from "../../../../consts"
-import SortIcon from '../../../../imgs/tiresCard/sortMobile.svg';
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import {
-    sortDisksTypeSelect,
-    sortDisksTypeSelector
-} from "../../../../app/slices/filters/disksFiltersSlice"
-
+import type React from 'react'
+import { useAppSelector } from '../../../../app/hooks'
+import { getDisksCards, sortDisksTypeSelect, sortDisksTypeSelector } from '../../../../app/slices/filters/disksFiltersSlice'
+import { SortHeader } from './SortHeader'
 
 export const DisksSortHeaderMobile: React.FC = () => {
-    const dispatch = useAppDispatch()
-    const sortType = useAppSelector(sortDisksTypeSelector)
-    let newSorts = [...sorts]
-    newSorts.splice(sorts.indexOf(sortType), 1)
-    newSorts.unshift(sortType)
-
-    const [isOpen, setIsOpen] = useState<boolean>(false)
-    const handleClick = (type: string) => {
-        dispatch(sortDisksTypeSelect(type))
-        setIsOpen(!isOpen)
-    }
-    const styles = isOpen
-        ? SortHeaderStyles.mainWrapperMobile + ' ' + SortHeaderStyles.sortsOpen
-        : SortHeaderStyles.mainWrapperMobile
-
-    return (
-        <div className={styles}>
-            <div className={SortHeaderStyles.sortImg}>
-                <img src={SortIcon} alt="" className={SortHeaderStyles.sortImg} />
-            </div>
-            <div className={SortHeaderStyles.sorts}>
-                {newSorts.map((item, index) => {
-                    return <p className={SortHeaderStyles.sortsItem} key={`${index} ${item}`}
-                        onClick={() => handleClick(item)}>{item}</p>
-                })}
-            </div>
-        </div>
-    )
+  const sortType = useAppSelector(sortDisksTypeSelector)
+  return <SortHeader sortData={{ sortType, sortTypeAction: sortDisksTypeSelect, newDataReq: getDisksCards }} />
 }

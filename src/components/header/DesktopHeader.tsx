@@ -1,35 +1,30 @@
-import type React from "react";
-import HeaderStyles from "./HeaderStyles.module.scss";
-import { NavLink } from "react-router-dom";
-import cart from '../../imgs/cart/basket.svg'
-import { Logo } from "../common/Logo";
-import { links } from "../../consts";
-import { useAppSelector } from "../../app/hooks";
-import { priceAmountSelector } from "../../app/slices/cartSlice";
-import { CartCounter } from "../common/CartCounter";
-
+import type React from 'react'
+import { NavLink } from 'react-router-dom'
+import styles from './HeaderStyles.module.scss'
+import { Logo } from '../common/Logo'
+import { Icon } from '../common/Icon'
+import { CartCounter } from '../common/CartCounter'
+import { Price } from '../common/Price'
+import { useAppSelector } from '../../app/hooks'
+import { priceAmountSelector } from '../../app/slices/cartSlice'
+import { links } from '../../consts'
 
 export const DesktopHeader: React.FC = () => {
-    const priceAmount = useAppSelector(priceAmountSelector)
-
-    const logoStyles = {
-        logoImg: HeaderStyles.logoImg,
-        title: HeaderStyles.title,
-        logo: HeaderStyles.logo
-    }
-
-    return <div className={HeaderStyles.mainWrapper}>
-        <Logo {...logoStyles} />
-        <div className={HeaderStyles.data}>
-            <p className={HeaderStyles.phone}><a href={links[2].link}>{links[2].title}</a></p>
-            <NavLink to={links[1].link} className={HeaderStyles.cart}>
-                <div className={HeaderStyles.cartImg}>
-                    <CartCounter />
-                    <img src={cart} alt="cart" />
-                </div>
-                <p className={HeaderStyles.priceAmount}>{`${priceAmount} р.`}</p>
-            </NavLink>
+  const total = useAppSelector(priceAmountSelector)
+  return (
+    <header className={styles.header}>
+      <div className={styles.mainWrapper}>
+        <Logo logoImg={styles.logoImg} title={styles.title} logo={styles.logo} />
+        <div className={styles.data}>
+          <a href={links[2].link} className={styles.phone} aria-label={`Позвонить: ${links[2].title}`}>
+            <Icon name="phone" size={20} /><span>{links[2].title}</span>
+          </a>
+          <NavLink to={`/${links[1].link}`} className={styles.cart} aria-label={`Корзина, сумма ${total} рублей`}>
+            <span className={styles.cartImg}><Icon name="cart" size={25} /><CartCounter /></span>
+            <span className={styles.cartInfo}><span className={styles.cartLabel}>Корзина</span><Price value={total} size="sm" /></span>
+          </NavLink>
         </div>
-
-    </div>
+      </div>
+    </header>
+  )
 }

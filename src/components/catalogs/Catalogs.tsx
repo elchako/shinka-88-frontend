@@ -1,7 +1,6 @@
 import type React from 'react'
 import { useEffect, useRef } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { Helmet } from 'react-helmet-async'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector, useCatalogDataHook } from '../../app/hooks'
 import { addDisksToCart, addTyresToCart } from '../../app/slices/cartSlice'
@@ -18,6 +17,7 @@ import { DesktopFilters } from './blocks/filters/DesktopFilters'
 import { MobileDisksFilters } from './blocks/filters/MobileDisksFilters'
 import { MobileTyresFilters } from './blocks/filters/MobileTyresFilters'
 import { SortHeader } from './blocks/sortHeader/SortHeader'
+import { CatalogGuide } from './CatalogGuide'
 import styles from './CatalogStyles.module.scss'
 
 export const Catalogs: React.FC = () => {
@@ -78,17 +78,18 @@ export const Catalogs: React.FC = () => {
   }
 
   return (
-    <div className={styles.mainWrapper}>
-      <Helmet><title>Шинка88 - {catalog.title}</title></Helmet>
+    <main className={styles.mainWrapper}>
       <nav className={styles.breadcrumbs} aria-label="Хлебные крошки">
         <Link to="/">Главная</Link><Icon name="chevron" size={13} /><span>{catalog.title}</span>
       </nav>
       <div className={styles.heading}>
-        <div><h1>{catalog.title}</h1><p>Подбор по размеру и характеристикам</p></div>
+        <div><h1>{catalog.title}</h1><p>{isDisks
+          ? 'Подберите колёсные диски по диаметру, креплению и типу. Цены и наличие — в каталоге магазина «Шинка88» в Егорьевске.'
+          : 'Подберите летние, зимние или всесезонные шины по размеру. Цены и наличие — в каталоге магазина «Шинка88» в Егорьевске.'}</p></div>
         {cardsData.count != null && filters.cardsStatus === 'succeeded'
           && <span className={styles.count}>Найдено: {cardsData.count}</span>}
       </div>
-      <div className={styles.content}>
+      <div className={styles.content} data-js-catalog>
         <div className={styles.sidebar}>
           <DesktopFilters filterBlocks={<catalog.filtersBlocks parentRef={parentRef} />} commonFilters={commonFilters} />
           {filters.filtersStatus === 'loading' && <p className={styles.filterFeedback} role="status">Загружаем параметры…</p>}
@@ -140,6 +141,7 @@ export const Catalogs: React.FC = () => {
           </div>}
         </section>
       </div>
-    </div>
+      <CatalogGuide isDisks={isDisks} />
+    </main>
   )
 }

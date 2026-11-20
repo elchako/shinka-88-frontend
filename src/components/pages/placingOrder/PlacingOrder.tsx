@@ -1,7 +1,6 @@
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Helmet } from 'react-helmet-async'
 import Cookies from 'js-cookie'
 import styles from './PlacingOrderStyles.module.scss'
 import { Footer } from '../../footer/Footer'
@@ -91,7 +90,6 @@ export const PlacingOrder: React.FC = () => {
 
   return (
     <>
-      <Helmet><title>Шинка88 - Оформление заказа</title></Helmet>
       <div className={styles.mainWrapper}>
         <main className={styles.contentWrapper}>
           <nav className={styles.breadcrumbs} aria-label="Хлебные крошки">

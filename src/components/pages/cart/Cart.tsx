@@ -1,7 +1,6 @@
 import type React from 'react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Helmet } from 'react-helmet-async'
 import styles from './CartStyles.module.scss'
 import { Footer } from '../../footer/Footer'
 import { CartProductCard } from './blocks/cards/CartTyresCards'
@@ -24,7 +23,6 @@ export const Cart: React.FC = () => {
 
   return (
     <>
-      <Helmet><title>Шинка88 - Корзина</title></Helmet>
       <div className={styles.mainWrapper}>
         <main className={styles.contentWrapper}>
           <nav className={styles.breadcrumbs} aria-label="Хлебные крошки">

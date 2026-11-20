@@ -21,7 +21,7 @@ export const TiresFilterBlock1: React.FC = () => {
   const sorter = new Intl.Collator('ru', { numeric: true })
   return (
     <form className={styles.mainWrapper} onSubmit={event => { event.preventDefault(); navigate(`/${links[3].link}`) }}>
-      <div className={styles.intro}><h1 className={styles.title}>Подбор шин по параметрам</h1><p className={styles.hint}>Размер указан на боковине шины</p></div>
+      <div className={styles.intro}><h2 className={styles.title}>Подбор шин по параметрам</h2><p className={styles.hint}>Размер указан на боковине шины</p></div>
       <div className={styles.selects}>
         {selects.map(item => {
           const key = item.selectName.apiName as keyof tiresResponseData

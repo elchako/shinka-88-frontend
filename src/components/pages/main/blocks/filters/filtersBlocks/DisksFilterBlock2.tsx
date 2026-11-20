@@ -19,7 +19,7 @@ export const DisksFilterBlock2: React.FC = () => {
   const sorter = new Intl.Collator('ru', { numeric: true })
   return (
     <form className={styles.mainWrapper} onSubmit={event => { event.preventDefault(); navigate(`/${links[4].link}`) }}>
-      <div className={styles.intro}><h1 className={styles.title}>Подбор дисков по параметрам</h1><p className={styles.hint}>Проверьте параметры крепления диска</p></div>
+      <div className={styles.intro}><h2 className={styles.title}>Подбор дисков по параметрам</h2><p className={styles.hint}>Проверьте параметры крепления диска</p></div>
       <div className={styles.selects}>{selects.map(item => {
         const key = item.selectName.apiName as keyof diskResponseData
         const sourceValues: Array<string | null> = api[key] || []

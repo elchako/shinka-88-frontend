@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import type React from 'react'
 import { Icon } from '../../../../common/Icon'
 import { links } from '../../../../../consts'
@@ -5,6 +6,42 @@ import styles from './ContactsStyles.module.scss'
 
 export const STORE_MAP_URL = 'https://yandex.ru/maps/org/avto_stop/1015072993?si=4j1jcathucrm7pd2zk4jtjvukg'
 export const STORE_MAP_WIDGET = 'https://yandex.ru/map-widget/v1/org/avto_opt/1015072993/?from=mapframe&ll=39.062357%2C55.382391&z=15'
+
+function StoreMap() {
+  const container = useRef<HTMLDivElement>(null)
+  const [requested, setRequested] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    if (!container.current || typeof IntersectionObserver !== 'function') return
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry?.isIntersecting) return
+      observer.disconnect()
+      setRequested(true)
+    })
+    observer.observe(container.current)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div ref={container} className={styles.map}>
+      {!loaded && <p className={styles.mapPlaceholder}>Карта магазина</p>}
+      {requested && (
+        <iframe
+          title="Шинка88 на Яндекс Картах"
+          src={STORE_MAP_WIDGET}
+          width="560"
+          height="320"
+          loading="lazy"
+          className={loaded ? undefined : styles.mapPending}
+          onLoad={() => setLoaded(true)}
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+        />
+      )}
+    </div>
+  )
+}
 
 export const Contacts: React.FC = () => (
   <section className={styles.mainWrapper} id="store-location" aria-labelledby="store-location-title">
@@ -19,7 +56,7 @@ export const Contacts: React.FC = () => (
           <a className={styles.phone} href={links[2].link}><Icon name="phone" size={18} />{links[2].title}</a>
         </div>
       </div>
-      <div className={styles.map}><iframe title="Шинка88 на Яндекс Картах" src={STORE_MAP_WIDGET} width="560" height="320" loading="eager" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" /></div>
+      <StoreMap />
     </div>
   </section>
 )

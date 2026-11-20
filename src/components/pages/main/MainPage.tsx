@@ -1,5 +1,4 @@
 import type React from 'react'
-import { Helmet } from 'react-helmet-async'
 import { MainFilters } from './blocks/filters/MainFilters'
 import { Contacts } from './blocks/contacts/Contacts'
 import { PromoBanner } from './PromoBanner'
@@ -8,13 +7,16 @@ import styles from './MainPageStyles.module.scss'
 
 export const MainPage: React.FC = () => (
   <>
-    <Helmet><title>Шинка88 | Шины, диски и шиномонтаж в Егорьевске</title></Helmet>
     <div className={styles.mainWrapper}>
-      <div className={styles.content}>
+      <main className={styles.content}>
+        <header className={styles.intro}>
+          <h1>Шины и диски в Егорьевске</h1>
+          <p>«Шинка88» — магазин шин и колёсных дисков с шиномонтажом. Подберите комплект по параметрам и проверьте цены и наличие в каталоге.</p>
+        </header>
         <PromoBanner />
         <div className={styles.picker}><MainFilters /></div>
         <Contacts />
-      </div>
+      </main>
       <Footer compact />
     </div>
   </>

@@ -2,15 +2,11 @@ import { InformationNav } from '../../common/InformationNav'
 import type React from "react"
 import PoliceStyles from "./PoliceStyles.module.scss"
 import { Footer } from "../../footer/Footer"
-import { Helmet } from "react-helmet-async"
 
 
 export const Police: React.FC = () => {
   return (
     <>
-      <Helmet>
-        <title>Шинка88 - Политика конфиденциальности</title>
-      </Helmet>
       <div className={PoliceStyles.mainWrapper}>
         <div className={PoliceStyles.contentWrapper}>
           <h1 className="pageTitle">Политика конфиденциальности</h1>

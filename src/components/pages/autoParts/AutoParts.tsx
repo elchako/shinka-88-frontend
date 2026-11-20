@@ -1,5 +1,4 @@
 import type React from 'react'
-import { Helmet } from 'react-helmet-async'
 import { Footer } from '../../footer/Footer'
 import { Icon } from '../../common/Icon'
 import { links } from '../../../consts'
@@ -7,7 +6,6 @@ import styles from './AutoPartsStyles.module.scss'
 
 export const AutoParts: React.FC = () => (
   <>
-    <Helmet><title>Шинка88 | Автозапчасти</title></Helmet>
     <div className={styles.mainWrapper}>
       <div className={styles.content}>
         <h1 className="pageTitle">Автозапчасти</h1>

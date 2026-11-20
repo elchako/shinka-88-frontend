@@ -3,16 +3,12 @@ import type React from "react"
 import PoliceStyles from "../police/PoliceStyles.module.scss"
 import { Footer } from "../../footer/Footer"
 import '../../../common.scss'
-import { Helmet } from "react-helmet-async"
 
 
 export const Purchaser: React.FC = () => {
 
   return (
       <>
-          <Helmet>
-              <title>Шинка88 - Покупателю</title>
-          </Helmet>
           <div className={PoliceStyles.mainWrapper}>
               <div className={PoliceStyles.contentWrapper}>
                   <h1 className="pageTitle">Покупателю</h1>

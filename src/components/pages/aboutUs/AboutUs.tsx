@@ -2,14 +2,10 @@ import { InformationNav } from '../../common/InformationNav'
 import React from "react";
 import AboutUsStyles from "./AboutUsStyles.module.scss";
 import { Footer } from "../../footer/Footer";
-import { Helmet } from "react-helmet-async";
 
 export const AboutUs: React.FC = () => {
   return (
     <>
-      <Helmet>
-        <title>Шинка88 - О нас</title>
-      </Helmet>
       <div className={AboutUsStyles.mainWrapper}>
         <div className={AboutUsStyles.content}>
           <h1 className="pageTitle">О нас</h1>

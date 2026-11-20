@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 import { beforeEach, afterEach, expect, test, vi } from 'vitest'
 import { App } from './App'
 import { renderWithProviders } from './utils/test-utils'
@@ -16,18 +16,49 @@ beforeEach(() => {
   vi.mocked(filtersApi.getFilteredTyres).mockResolvedValue({ count: 0, next: null, previous: null, results: [] })
   vi.mocked(filtersApi.getFilteredDisks).mockResolvedValue({ count: 0, next: null, previous: null, results: [] })
 })
-afterEach(() => { vi.restoreAllMocks() })
+afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals() })
 
-test('главная сохраняет карту, Яндекс-маршрут и настоящие tel-ссылки', async () => {
+test('главная сразу показывает маршрут и настоящие tel-ссылки без запроса карты', async () => {
   const { container } = renderWithProviders(<App />)
   await screen.findByRole('option', { name: '205' })
   expect(screen.getByRole('heading', { name: 'Подбор шин по параметрам' })).toBeInTheDocument()
-  expect(screen.getByTitle('Шинка88 на Яндекс Картах')).toHaveAttribute('src', STORE_MAP_WIDGET)
+  expect(screen.getByText('Карта магазина')).toBeInTheDocument()
+  expect(screen.queryByTitle('Шинка88 на Яндекс Картах')).not.toBeInTheDocument()
   expect(screen.getByRole('link', { name: 'Построить маршрут' })).toHaveAttribute('href', STORE_MAP_URL)
   const phones = Array.from(container.querySelectorAll<HTMLAnchorElement>('a[href^="tel:"]'))
   expect(phones.length).toBeGreaterThanOrEqual(2)
   expect(phones.every(phone => phone.getAttribute('href') === 'tel:+79197728888')).toBe(true)
   expect(screen.queryByRole('textbox', { name: 'Поиск товаров' })).not.toBeInTheDocument()
+})
+
+test('iframe запрашивается только при появлении блока карты в окне', async () => {
+  const callbacks: IntersectionObserverCallback[] = []
+  const observe = vi.fn()
+  const disconnect = vi.fn()
+  vi.stubGlobal('IntersectionObserver', class {
+    observe = observe
+    disconnect = disconnect
+    constructor(callback: IntersectionObserverCallback) { callbacks.push(callback) }
+  })
+
+  renderWithProviders(<App />)
+  await screen.findByRole('option', { name: '205' })
+  const placeholder = screen.getByText('Карта магазина')
+  expect(observe).toHaveBeenCalledWith(placeholder.parentElement)
+  const reportVisibility = (isIntersecting: boolean) => act(() => {
+    callbacks.at(-1)?.([{ isIntersecting } as IntersectionObserverEntry], {} as IntersectionObserver)
+  })
+
+  reportVisibility(false)
+  expect(screen.queryByTitle('Шинка88 на Яндекс Картах')).not.toBeInTheDocument()
+  reportVisibility(true)
+  const map = screen.getByTitle('Шинка88 на Яндекс Картах')
+  expect(map).toHaveAttribute('src', STORE_MAP_WIDGET)
+  expect(map).toHaveAttribute('loading', 'lazy')
+  expect(disconnect).toHaveBeenCalled()
+  expect(placeholder).toBeInTheDocument()
+  fireEvent.load(map)
+  expect(placeholder).not.toBeInTheDocument()
 })
 
 test('главные вкладки имеют одну активную форму с подключёнными параметрами', async () => {

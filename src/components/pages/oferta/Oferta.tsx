@@ -4,16 +4,12 @@ import PoliceStyles from "../police/PoliceStyles.module.scss"
 import { Footer } from "../../footer/Footer"
 import '../../../common.scss'
 import { links } from "../../../consts"
-import { Helmet } from "react-helmet-async"
 
 
 export const Oferta: React.FC = () => {
 
   return (
       <>
-          <Helmet>
-              <title>Шинка88 - Оферта</title>
-          </Helmet>
           <div className={PoliceStyles.mainWrapper}>
               <div className={PoliceStyles.contentWrapper}>
                   <h1 className="pageTitle">{links[13].title}</h1>

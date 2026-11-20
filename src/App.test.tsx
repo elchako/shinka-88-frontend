@@ -1,4 +1,4 @@
-import { act, fireEvent, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import { beforeEach, afterEach, expect, test, vi } from 'vitest'
 import { App } from './App'
 import { renderWithProviders } from './utils/test-utils'
@@ -67,9 +67,9 @@ test('главные вкладки имеют одну активную фор�
   await user.click(screen.getByRole('tab', { name: 'Диски' }))
   await screen.findByRole('option', { name: '5×112' })
   expect(screen.getByRole('heading', { name: 'Подбор дисков по параметрам' })).toBeInTheDocument()
-  expect(screen.getByLabelText('Крепление, PCD')).toBeInTheDocument()
+  expect(screen.getByLabelText('Расстояние (PCD), мм')).toBeInTheDocument()
   expect(screen.queryByLabelText('Ширина, мм')).not.toBeInTheDocument()
-  expect(screen.queryByRole('tab', { name: 'Масла' })).not.toBeInTheDocument()
+  expect(screen.getByRole('tab', { name: 'Масла' })).toBeInTheDocument()
 })
 
 test('кнопка подбора открывает настоящий каталог, API в тесте замокан', async () => {
@@ -84,10 +84,12 @@ test('кнопка подбора открывает настоящий ката
 test('выбор Все сбрасывает только сезон, без составного фиктивного значения', async () => {
   const { user, store } = renderWithProviders(<App />)
   await screen.findByRole('option', { name: '205' })
-  await user.click(screen.getByRole('button', { name: 'Зима, шипы' }))
-  expect(store.getState().tiresFilters.season).toHaveLength(1)
-  await user.click(screen.getByRole('button', { name: 'Все' }))
-  expect(store.getState().tiresFilters.season).toEqual([])
+  await user.click(screen.getByRole('button', { name: 'Зима' }))
+  await user.click(screen.getByRole('button', { name: 'С шипами' }))
+  expect(store.getState().tiresFilters.season).toBe('winter')
+  await user.click(within(screen.getByRole('group', { name: 'Сезон шин' })).getByRole('button', { name: 'Все' }))
+  expect(store.getState().tiresFilters.season).toBe('all')
+  expect(store.getState().tiresFilters.studding).toBe('studded')
 })
 
 test('автозапчасти не показывают фиктивные товары или работающий VIN-поиск', () => {

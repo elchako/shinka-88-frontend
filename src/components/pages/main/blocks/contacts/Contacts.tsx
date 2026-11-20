@@ -48,7 +48,7 @@ export const Contacts: React.FC = () => (
     <h2 className={styles.heading} id="store-location-title">Как нас найти</h2>
     <div className={styles.layout}>
       <div className={styles.contacts}>
-        <div className={styles.contactsBlock}><span className={styles.label}><Icon name="pin" size={20} />Адрес магазина</span><p className={styles.address}>МО, г. Егорьевск, ул. Рязанская, ГСК ЦЕНА</p></div>
+        <div className={styles.contactsBlock}><span className={styles.label}><Icon name="pin" size={20} />Адрес магазина</span><p className={styles.address}>«Шинка», МО, г. Егорьевск, ул. Рязанская</p></div>
         <div className={styles.contactsBlock}><span className={styles.label}>Ориентир</span><p className={styles.text}>6 мкр-н, гаражи рядом с пожарным депо</p></div>
         <div className={styles.contactsBlock}><span className={styles.label}><Icon name="clock" size={20} />Часы работы</span><p className={styles.hours}>с 8:00 до 20:00</p></div>
         <div className={styles.actions}>

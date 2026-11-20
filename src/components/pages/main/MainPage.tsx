@@ -3,6 +3,7 @@ import { MainFilters } from './blocks/filters/MainFilters'
 import { Contacts } from './blocks/contacts/Contacts'
 import { PromoBanner } from './PromoBanner'
 import { Footer } from '../../footer/Footer'
+import { ProductHelp } from '../../common/ProductHelp'
 import styles from './MainPageStyles.module.scss'
 
 export const MainPage: React.FC = () => (
@@ -14,7 +15,7 @@ export const MainPage: React.FC = () => (
           <p>«Шинка88» — магазин шин и колёсных дисков с шиномонтажом. Подберите комплект по параметрам и проверьте цены и наличие в каталоге.</p>
         </header>
         <PromoBanner />
-        <div className={styles.picker}><MainFilters /></div>
+        <div className={styles.picker}><MainFilters /><ProductHelp /></div>
         <Contacts />
       </main>
       <Footer compact />

@@ -12,7 +12,7 @@ export const HiddenMobileMenu: React.FC = () => {
   const closed = useAppSelector(mobileMenuSelector)
   const dispatch = useAppDispatch()
   const close = useCallback(() => { if (!closed) dispatch(mobileMenuReducer()) }, [closed, dispatch])
-  const items = [links[0], links[3], links[4], links[1], links[12], links[14], links[13], links[11]]
+  const items = [links[0], links[3], links[4], links[1], links[5], links[6], links[7], links[8], links[12], links[14], links[13], links[11]]
   return (
     <Modal isOpen={!closed} onClose={close} title="Меню магазина" size="md">
       <nav className={styles.hiddenMenuContent} aria-label="Разделы магазина">
@@ -23,7 +23,7 @@ export const HiddenMobileMenu: React.FC = () => {
           </NavLink>
         ))}
       </nav>
-      <div className={styles.menuContacts}><a href={links[2].link}>{links[2].title}</a><p>Егорьевск, ул. Рязанская, ГСК ЦЕНА</p></div>
+      <div className={styles.menuContacts}><a href={links[2].link}>{links[2].title}</a><p>«Шинка», Егорьевск, ул. Рязанская</p></div>
     </Modal>
   )
 }

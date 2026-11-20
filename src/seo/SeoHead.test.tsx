@@ -40,7 +40,7 @@ test('navigation updates canonical and indexing rules without duplicating server
 
 test('sitemap source contains only unique useful pages with distinct metadata', () => {
   const indexed = SEO_PAGES.filter(page => page.index)
-  expect(indexed.map(page => page.path)).toEqual(['/', '/tires', '/disks', '/aboutUs', '/purchaser'])
+  expect(indexed.map(page => page.path)).toEqual(['/', '/tires', '/disks', '/aboutUs', '/purchaser', '/services'])
   for (const key of ['path', 'title', 'description'] as const) {
     expect(new Set(SEO_PAGES.map(page => page[key])).size).toBe(SEO_PAGES.length)
   }

@@ -1,5 +1,6 @@
 import { InformationNav } from '../../common/InformationNav'
 import React from "react";
+import { Link } from 'react-router-dom'
 import AboutUsStyles from "./AboutUsStyles.module.scss";
 import { Footer } from "../../footer/Footer";
 
@@ -46,9 +47,11 @@ export const AboutUs: React.FC = () => {
               - шиномонтаж,<br />
               - балансировка,<br />
               - замена резины,<br />
+              - сезонное хранение шин,<br />
               - мелкий ремонт и техобслуживание.
             </p>
             <p className={AboutUsStyles.text}>
+              <Link to="/services">Услуги и актуальные цены</Link><br />
               Все работы выполняют <strong>опытные мастера</strong>, быстро и аккуратно, с гарантией.<br />
               Вы можете быть уверены: ваш автомобиль - в надёжных руках.
             </p>

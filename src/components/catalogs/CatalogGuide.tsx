@@ -25,7 +25,7 @@ export function CatalogGuide({ isDisks }: { isDisks: boolean }) {
         </div>
       </dl>
       <p>
-        Магазин «Шинка88» находится в Егорьевске, ул. Рязанская, ГСК ЦЕНА.{' '}
+        Магазин «Шинка88» находится в Егорьевске, ул. Рязанская.{' '}
         <Link to="/#store-location">Адрес и маршрут</Link> ·{' '}
         <Link to={isDisks ? '/tires' : '/disks'}>{isDisks ? 'Каталог шин' : 'Каталог колёсных дисков'}</Link> ·{' '}
         <Link to="/purchaser">Информация покупателю</Link>

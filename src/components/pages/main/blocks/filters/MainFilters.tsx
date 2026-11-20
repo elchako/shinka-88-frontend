@@ -2,6 +2,7 @@ import type React from 'react'
 import { useRef, useState } from 'react'
 import { tabs } from '../../../../../consts'
 import { Icon } from '../../../../common/Icon'
+import { AssistedSelection } from '../../../../common/AssistedSelection'
 import { TiresFilterBlock1 } from './filtersBlocks/TiresFilterBlock1'
 import { DisksFilterBlock2 } from './filtersBlocks/DisksFilterBlock2'
 import styles from './MainFilters.module.scss'
@@ -15,7 +16,7 @@ export const MainFilters: React.FC = () => {
   const [selected, setSelected] = useState(0)
   const refs = useRef<Array<HTMLButtonElement | null>>([])
   return (
-    <section className={styles.mainWrapper} id="product-picker" aria-label="Подбор шин и дисков">
+    <section className={styles.mainWrapper} id="product-picker" aria-label="Подбор товаров">
       <div className={styles.header} role="tablist" aria-label="Категория товара">
         {tabs.map((tab, index) => (
           <button
@@ -31,11 +32,12 @@ export const MainFilters: React.FC = () => {
               setSelected(next)
               refs.current[next]?.focus()
             }}
-          ><Icon name={index === 0 ? 'tire' : 'wheel'} size={20} />{tab}</button>
+          >{index < 2 && <Icon name={index === 0 ? 'tire' : 'wheel'} size={20} />}{tab}</button>
         ))}
       </div>
       <div className={styles.content} id="home-filter-panel" role="tabpanel" aria-labelledby={`home-tab-${selected}`}>
-        {selected === 0 ? <TiresFilterBlock1 /> : <DisksFilterBlock2 />}
+        {selected === 0 ? <TiresFilterBlock1 /> : selected === 1 ? <DisksFilterBlock2 />
+          : <AssistedSelection category={(['oils', 'akb', 'autoParts'] as const)[selected - 2] || 'oils'} showPageLink />}
       </div>
     </section>
   )

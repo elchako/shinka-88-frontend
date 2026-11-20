@@ -11,6 +11,7 @@ import { useAppDispatch } from './app/hooks'
 import { Cart } from './components/pages/cart/Cart'
 import { PlacingOrder } from './components/pages/placingOrder/PlacingOrder'
 import { AutoParts } from './components/pages/autoParts/AutoParts'
+import { Services } from './components/pages/services/Services'
 import { Police } from './components/pages/police/Police'
 import { AboutUs } from './components/pages/aboutUs/AboutUs'
 import { Oferta } from './components/pages/oferta/Oferta'
@@ -59,7 +60,10 @@ export const App = ({ prerenderPath }: { prerenderPath?: string }) => {
           <Route caseSensitive path={links[0].link} element={<MainPage />} />
           <Route caseSensitive path={links[3].link} element={<Catalogs />} />
           <Route caseSensitive path={links[4].link} element={<Catalogs />} />
+          <Route caseSensitive path={links[5].link} element={<AutoParts category="oils" />} />
+          <Route caseSensitive path={links[6].link} element={<AutoParts category="akb" />} />
           <Route caseSensitive path={links[7].link} element={<AutoParts />} />
+          <Route caseSensitive path={links[8].link} element={<Services />} />
           <Route caseSensitive path={links[1].link} element={<Cart />} />
           <Route caseSensitive path={links[10].link} element={<PlacingOrder />} />
           <Route caseSensitive path={links[11].link} element={<Police />} />

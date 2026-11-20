@@ -21,7 +21,7 @@ function structuredData(page: SeoPage) {
       name: 'Шинка88', url: home, logo: image, image,
       telephone: links[2].link.slice(4),
       address: {
-        '@type': 'PostalAddress', streetAddress: 'ул. Рязанская, ГСК ЦЕНА',
+        '@type': 'PostalAddress', streetAddress: 'ул. Рязанская',
         addressLocality: 'Егорьевск', addressRegion: 'Московская область', addressCountry: 'RU',
       },
     },

@@ -1,0 +1,10 @@
+.options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px; }
+.compact { grid-template-columns: minmax(0, 1fr); }
+.group { min-width: 0; padding: 0; margin: 0; border: 0; }
+.group legend { margin-bottom: 8px; padding: 0; font-size: 13px; font-weight: 600; }
+.buttons { display: flex; flex-wrap: wrap; gap: 6px; }
+.buttons button { min-height: 36px; padding: 7px 11px; border: 1px solid var(--color-border); border-radius: 7px; background: var(--color-bg-primary); color: var(--color-text-primary); font: 500 12px/1.4 var(--font-primary); cursor: pointer; }
+.buttons button[aria-pressed=true] { color: var(--color-primary); border-color: var(--color-primary); background: var(--color-primary-light); }
+.buttons button:disabled { opacity: .55; cursor: default; }
+@media (max-width: 850px), (pointer: coarse) { .buttons button { min-height: 44px; } }
+@media (max-width: 650px) { .options { grid-template-columns: minmax(0, 1fr); gap: 16px; } .buttons { display: grid; grid-template-columns: auto 1fr 1fr; } .buttons button { padding-inline: 8px; } }

@@ -9,7 +9,8 @@ export const MobileTyresFilters: React.FC = () => {
   const dispatch = useAppDispatch()
   const filters = useAppSelector(state => state.tiresFilters)
   const count = filters.selects.filter(item => item.value.length > 0).length
-    + (filters.season.length > 0 ? 1 : 0)
+    + (filters.season !== 'all' ? 1 : 0)
+    + (filters.studding !== 'all' ? 1 : 0)
     + filters.checkboxes.slice(0, 2).filter(item => item.checked).length
     + (filters.priceStart !== 0 || filters.priceEnd !== 0 ? 1 : 0)
   return (

@@ -68,6 +68,10 @@ export type disksCards = {
 
 // данные для отправки выбранных фильтров на сервер
 export type fieldsDiskType = {
+    width?: string | Array<string>
+    holesquant?: string | Array<string>
+    wheeloffset?: string | Array<string>
+    dia?: string | Array<string>
     diameter?: string | Array<string>
     pcd?: string | Array<string>
     type_disk?: string | Array<string>

@@ -5,7 +5,7 @@ import styles from './InformationNav.module.scss'
 
 export const InformationNav: React.FC = () => (
   <nav className={styles.navigation} aria-label="Информация магазина">
-    {[links[12], links[14], links[13], links[11]].map(item => (
+    {[links[8], links[12], links[14], links[13], links[11]].map(item => (
       <NavLink key={item.link} to={`/${item.link}`} className={({ isActive }) => isActive ? styles.active : undefined}>
         {item.title}
       </NavLink>

@@ -1,33 +1,35 @@
-import type React from 'react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks'
-import { links, tabsButtons } from '../../../../../../consts'
-import { disksAPISelector, getDisksParametrs, resetFilters, selectSelector, selectsSelect } from '../../../../../../app/slices/filters/disksFiltersSlice'
+import { getDisksParametrs, selectsSelect, prepareHomeSearch } from '../../../../../../app/slices/filters/disksFiltersSlice'
 import type { diskResponseData } from '../../../../../../types/disks'
+import { filterOptions } from '../../../../../../utils/catalogFilters'
 import { Button } from '../../../../../common/Button'
 import { Icon } from '../../../../../common/Icon'
+import { DiskTypeFilter } from '../../../../../common/DiskTypeFilter'
 import styles from './HomePicker.module.scss'
 
-export const DisksFilterBlock2: React.FC = () => {
+export const DisksFilterBlock2 = () => {
   const dispatch = useAppDispatch()
-  const api = useAppSelector(disksAPISelector)
-  const selects = useAppSelector(selectSelector)
+  const { disksAPI, selects } = useAppSelector(state => state.disksFilters)
   const navigate = useNavigate()
-  useEffect(() => { dispatch(getDisksParametrs()); dispatch(resetFilters()) }, [dispatch])
-  const labels: Record<string, string> = { diameter: 'Диаметр, дюймы', pcd: 'Крепление, PCD', type_disk: 'Тип диска' }
-  const sorter = new Intl.Collator('ru', { numeric: true })
+  useEffect(() => { dispatch(getDisksParametrs()) }, [dispatch])
   return (
-    <form className={styles.mainWrapper} onSubmit={event => { event.preventDefault(); navigate(`/${links[4].link}`) }}>
-      <div className={styles.intro}><h2 className={styles.title}>Подбор дисков по параметрам</h2><p className={styles.hint}>Проверьте параметры крепления диска</p></div>
-      <div className={styles.selects}>{selects.map(item => {
+    <form className={styles.mainWrapper} onSubmit={event => { event.preventDefault(); dispatch(prepareHomeSearch()); navigate('/disks') }}>
+      <div className={styles.intro}><h2 className={styles.title}>Подбор дисков по параметрам</h2><p className={styles.hint}>Ступица: диаметр центрального отверстия (DIA)</p></div>
+      <div className={`${styles.selects} ${styles.diskSelects}`}>{selects.filter(item => item.selectName.apiName !== 'type_disk').map(item => {
         const key = item.selectName.apiName as keyof diskResponseData
-        const sourceValues: Array<string | null> = api[key] || []
-        const values = sourceValues.filter((value): value is string => typeof value === 'string').sort(sorter.compare)
+        const values = filterOptions(disksAPI.response_data[key])
         const value = Array.isArray(item.value) ? item.value[0] || '' : item.value
-        return <div className={styles.select} key={key}><label htmlFor={`home-disk-${key}`}>{labels[key] || item.selectName.displayName}</label><select id={`home-disk-${key}`} value={value} onChange={event => dispatch(selectsSelect({ selectName: key, value: event.currentTarget.value, isOneChoice: true }))}><option value="">{key === 'pcd' ? 'Любое' : 'Любой'}</option>{values.map(v => <option value={v} key={v}>{v}</option>)}</select></div>
+        if (value && !values.includes(value)) values.unshift(value)
+        return <div className={styles.select} key={key}>
+          <label htmlFor={`home-disk-${key}`}>{item.selectName.displayName}</label>
+          <select id={`home-disk-${key}`} value={value} onChange={event => dispatch(selectsSelect({ selectName: key, value: event.currentTarget.value, isOneChoice: true }))}>
+            <option value="">Любой</option>{values.map(option => <option value={option} key={option}>{option}</option>)}
+          </select>
+        </div>
       })}</div>
-      <div className={`${styles.bottomBlock} ${styles.bottomBlockJustButton}`}><Button type="submit" rightIcon={<Icon name="arrow" size={18} />}>{tabsButtons[1]}</Button></div>
+      <div className={styles.bottomBlock}><DiskTypeFilter /><Button type="submit" rightIcon={<Icon name="arrow" size={18} />}>Подобрать диски</Button></div>
     </form>
   )
 }

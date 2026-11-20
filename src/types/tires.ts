@@ -1,3 +1,5 @@
+import type { TyreSeason, TyreStudding } from '../utils/catalogFilters'
+
 // данные для фильтров
 export type tiresResponseData = {
     diameter: Array<string>
@@ -72,6 +74,7 @@ export type fieldsTyresType = {
     width?: Array<string> | string
     height?: Array<string> | string
     diameter?: Array<string> | string
+    marka?: Array<string> | string
     seazon?: Array<string>
     thorning?: Array<string>
     runflat?: Array<string | null>
@@ -90,7 +93,8 @@ export interface IinitialState {
         selectName: { apiName: string, displayName: string },
         value: string | Array<string>,
     }>
-    season: Array<{ name: string, value1: string, value2: string }>
+    season: TyreSeason
+    studding: TyreStudding
     checkboxes: Array<{ checkboxName: string, checked: boolean, value: Array<null | string> }>
     priceStart: number
     priceEnd: number

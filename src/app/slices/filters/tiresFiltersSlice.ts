@@ -3,6 +3,8 @@ import { catalogOrderBy, checkboxesNames, selectsNames1, sorts } from "../../../
 import { createAppSlice } from "../../createAppSlice"
 import { filtersApi } from "../../../api/catalog"
 import { type RootState } from "../../store"
+import { hasProductFeature } from '../../../utils/other'
+import { seasonValues, studdingValues, type TyreSeason, type TyreStudding } from '../../../utils/catalogFilters'
 import {
     type tyresCards,
     type tiresAPI,
@@ -11,11 +13,7 @@ import {
 } from "../../../types/tires"
 
 // изначальные значения стейта
-const selects = selectsNames1.map((selectName, index) => {
-    let initValue: string | Array<string> = ''
-    if (index !== 3) initValue = []
-    return { selectName, value: initValue }
-})
+const selects = selectsNames1.map(selectName => ({ selectName, value: [] as string[] }))
 const checkboxes = checkboxesNames.map(checkboxName => ({ checkboxName, checked: false, value: [] }))
 
 
@@ -50,7 +48,8 @@ export const initialState: IinitialState = {
     },
     // фильтры
     selects: selects,
-    season: [],
+    season: 'all',
+    studding: 'all',
     checkboxes: checkboxes,
     priceStart: 0,
     priceEnd: 0,
@@ -98,21 +97,11 @@ export const filterBlock1Slice = createAppSlice({
             })
             state.selects = newSelects
         }),
-        // сезоны
-        seasonsSelectOne: create.reducer((state,
-            action: PayloadAction<{ name: string, value1: string, value2: string }>) => {
-            state.season[0] = action.payload
+        setSeason: create.reducer((state, action: PayloadAction<TyreSeason>) => {
+            state.season = action.payload
         }),
-        seasonsSelectMany: create.reducer((state,
-            action: PayloadAction<{ name: string, value1: string, value2: string }>) => {
-            let isThere: number | null = null
-            state.season.forEach((item, index) => item.name !== action.payload.name ? null : isThere = index)
-
-            if (isThere === null) {
-                state.season.push(action.payload)
-            } else {
-                state.season.splice(isThere, 1)
-            }
+        setStudding: create.reducer((state, action: PayloadAction<TyreStudding>) => {
+            state.studding = action.payload
         }),
         // чекбоксы внизу
         checkboxesSelect: create.reducer((state, action: PayloadAction<string>) => {
@@ -125,9 +114,16 @@ export const filterBlock1Slice = createAppSlice({
             })
             state.checkboxes = newCheckboxes
         }),
+        prepareHomeSearch: create.reducer(state => {
+            state.priceStart = 0
+            state.priceEnd = 0
+            state.onlyCompleteSets = false
+            state.sortType = sorts[0]
+        }),
         // сбросить фильтры
         resetFilters: create.reducer(state => {
-            state.season = []
+            state.season = 'all'
+            state.studding = 'all'
             state.selects = selects
             state.checkboxes = state.checkboxes.map(item => {
                 item.checked = false
@@ -183,8 +179,8 @@ export const filterBlock1Slice = createAppSlice({
                 fulfilled: (state, action: PayloadAction<tiresAPI>) => {
                     state.filtersStatus = 'succeeded'
                     state.tiresAPI = action.payload
-                    state.checkboxes[0].value = action.payload.response_data.runflat.filter(value => value != null)
-                    state.checkboxes[1].value = action.payload.response_data.powerload.filter(value => value != null)
+                    state.checkboxes[0].value = action.payload.response_data.runflat.filter(hasProductFeature)
+                    state.checkboxes[1].value = action.payload.response_data.powerload.filter(hasProductFeature)
                     state.priceMin = action.payload.min_price
                     state.priceMax = action.payload.max_price
                 },
@@ -203,19 +199,12 @@ export const filterBlock1Slice = createAppSlice({
                 const state = store.tiresFilters
                 const fields: fieldsTyresType = {}
 
-                if (state.selects[0].value.length !== 0) fields.width = state.selects[0].value
-                if (state.selects[1].value.length !== 0) fields.height = state.selects[1].value
-                if (state.selects[2].value.length !== 0) fields.diameter = state.selects[2].value
-                if (state.season.length !== 0) {
-                    const seasons: Array<string> = []
-                    const thorning: Array<string> = []
-                    state.season.forEach(item => {
-                        seasons.push(item.value2)
-                        thorning.push(item.value1)
-                    })
-                    fields.seazon = seasons
-                    fields.thorning = thorning
+                for (const item of state.selects) {
+                    const key = item.selectName.apiName as 'diameter' | 'width' | 'height' | 'marka'
+                    if (item.value.length) fields[key] = item.value
                 }
+                if (state.season !== 'all') fields.seazon = seasonValues(state.tiresAPI.response_data.seazon, state.season)
+                if (state.studding !== 'all') fields.thorning = studdingValues(state.tiresAPI.response_data.thorning, state.studding)
                 if (state.checkboxes[0].checked) fields.runflat = state.checkboxes[0].value
                 if (state.checkboxes[1].checked) fields.powerload = state.checkboxes[1].value
 
@@ -293,9 +282,9 @@ export const filterBlock1Slice = createAppSlice({
 
 
 // actions
-export const { seasonsSelectOne, selectsSelect, checkboxesSelect,
-    seasonsSelectMany, getTyresParametrs, sortTyresTypeSelect,
-    getTyresCards, resetFilters, setPrice, amountHandler, setOnlyCompleteSets,
+export const { setSeason, setStudding, selectsSelect, checkboxesSelect,
+    getTyresParametrs, sortTyresTypeSelect,
+    getTyresCards, resetFilters, setPrice, amountHandler, setOnlyCompleteSets, prepareHomeSearch,
 } =
     filterBlock1Slice.actions
 

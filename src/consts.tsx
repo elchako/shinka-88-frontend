@@ -19,17 +19,17 @@ export const links: Array<{ title: string, link: string }> = [
         title: 'Диски',
         link: 'disks'
     }, {
-        title: 'масла',
+        title: 'Масла',
         link: 'oils'
     }, {
-        title: 'АКБ',
+        title: 'Аккумуляторы',
         link: 'akb'
     }, {
         title: 'Автозапчасти',
         link: 'autoParts'
     }, {
-        title: 'Шиномонтаж',
-        link: 'tireFitting'
+        title: 'Услуги и цены',
+        link: 'services'
     }, {
         title: 'Автосервис',
         link: 'carService'
@@ -53,13 +53,13 @@ export const links: Array<{ title: string, link: string }> = [
 ]
 
 // фильтры на главной странице
-export const tabs: Array<string> = ['Шины', 'Диски'] // ['Масла', 'АКБ', 'Автозапчасти']
-export const tabsButtons: Array<string> = ['Подобрать шины', 'Подобрать диски'] //['Подобрать масла', 'Подобрать АКБ', 'Подобрать автозапчасти']
+export const tabs: Array<string> = ['Шины', 'Диски', 'Масла', 'Аккумуляторы', 'Автозапчасти']
+export const tabsButtons: Array<string> = ['Подобрать шины', 'Подобрать диски']
 export const selectsNames1: Array<{ apiName: string, displayName: string }> = [
-    { apiName: 'width', displayName: 'Ширина' },
-    { apiName: 'height', displayName: 'Высота' },
     { apiName: 'diameter', displayName: 'Диаметр' },
-    // { apiName: 'goodland', displayName: 'Производитель' }]
+    { apiName: 'width', displayName: 'Ширина, мм' },
+    { apiName: 'height', displayName: 'Высота профиля, %' },
+    { apiName: 'marka', displayName: 'Производитель' },
 ]
 export const selectsNames1_2: Array<{ apiName: string, displayName: string }> = [
     { apiName: 'marka', displayName: 'Марка' },
@@ -67,9 +67,14 @@ export const selectsNames1_2: Array<{ apiName: string, displayName: string }> = 
     { apiName: 'year', displayName: 'Год выпуска' },
     { apiName: 'modification', displayName: 'Модификация' }]
 export const selectsNames2: Array<{ apiName: string, displayName: string }> = [
+    { apiName: 'width', displayName: 'Ширина, дюймы' },
     { apiName: 'diameter', displayName: 'Диаметр' },
-    { apiName: 'pcd', displayName: 'Крепление' },
-    { apiName: 'type_disk', displayName: 'Тип' }]
+    { apiName: 'holesquant', displayName: 'Количество отверстий' },
+    { apiName: 'pcd', displayName: 'Расстояние (PCD), мм' },
+    { apiName: 'wheeloffset', displayName: 'Вылет (ET), мм' },
+    { apiName: 'dia', displayName: 'Ступица, мм' },
+    { apiName: 'type_disk', displayName: 'Тип диска' },
+]
 export const selectsNames3: Array<string> = ['Объём', 'Вязкость', 'Состав', 'Бренд']
 export const selectsNames4: Array<string> = ['Размер ДхШхВ', 'Полярность', 'Емкость', 'Производитель']
 export const typeSelectsValues: Array<string> = ['parametrs-select', 'auto-select']

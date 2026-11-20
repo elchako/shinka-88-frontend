@@ -18,6 +18,8 @@ import { MobileDisksFilters } from './blocks/filters/MobileDisksFilters'
 import { MobileTyresFilters } from './blocks/filters/MobileTyresFilters'
 import { SortHeader } from './blocks/sortHeader/SortHeader'
 import { CatalogGuide } from './CatalogGuide'
+import { ProductHelp } from '../common/ProductHelp'
+import { seasonValues, studdingValues } from '../../utils/catalogFilters'
 import styles from './CatalogStyles.module.scss'
 
 export const Catalogs: React.FC = () => {
@@ -31,10 +33,15 @@ export const Catalogs: React.FC = () => {
   const filtersClosed = useAppSelector(mobileFiltersSelector)
   const parentRef = useRef<HTMLDivElement>(null)
   const requestedKey = useRef('')
+  const needsTyreMetadata = !isDisks && (tyreExtras.season !== 'all' || tyreExtras.studding !== 'all')
+  const waitingForMetadata = needsTyreMetadata && filters.filtersStatus !== 'succeeded'
+  const metadataFailed = waitingForMetadata && filters.filtersStatus === 'failed'
   const filterKey = JSON.stringify([
     filters.selects, filters.priceStart, filters.priceEnd, filters.onlyCompleteSets,
-    ...(!isDisks ? [tyreExtras.season, tyreExtras.checkboxes.slice(0, 2)
-      .map(item => [item.checked, item.checked ? item.value : []])] : []),
+    ...(!isDisks ? [tyreExtras.season, tyreExtras.studding,
+      seasonValues(tyreExtras.tiresAPI.response_data.seazon, tyreExtras.season),
+      studdingValues(tyreExtras.tiresAPI.response_data.thorning, tyreExtras.studding),
+      tyreExtras.checkboxes.slice(0, 2).map(item => [item.checked, item.checked ? item.value : []])] : []),
   ])
   const requestKey = `${pathname}:${filters.sortType}:${filterKey}`
   const { cardsData } = catalog
@@ -43,8 +50,8 @@ export const Catalogs: React.FC = () => {
     priceMinNumber: filters.filtersStatus === 'succeeded' ? catalog.commonFilters.priceMinNumber : null,
     priceMaxNumber: filters.filtersStatus === 'succeeded' ? catalog.commonFilters.priceMaxNumber : null,
   }
-  const isLoading = filters.cardsStatus === 'loading' || filters.cardsStatus === 'idle'
-  const showResults = !(filters.cardsRefresh && (isLoading || filters.cardsStatus === 'failed'))
+  const isLoading = waitingForMetadata ? !metadataFailed : filters.cardsStatus === 'loading' || filters.cardsStatus === 'idle'
+  const showResults = !waitingForMetadata && !(filters.cardsRefresh && (isLoading || filters.cardsStatus === 'failed'))
 
   useEffect(() => {
     if (filters.filtersStatus !== 'idle') return
@@ -54,11 +61,11 @@ export const Catalogs: React.FC = () => {
 
   // Один источник запросов для обеих ширин. В диалоге изменения применяются при закрытии.
   useEffect(() => {
-    if (!filtersClosed || requestedKey.current === requestKey) return
+    if (waitingForMetadata || !filtersClosed || requestedKey.current === requestKey) return
     requestedKey.current = requestKey
     if (isDisks) dispatch(getDisksCards(true))
     else dispatch(getTyresCards(true))
-  }, [dispatch, filtersClosed, isDisks, requestKey])
+  }, [dispatch, filtersClosed, isDisks, requestKey, waitingForMetadata])
 
   const requestCards = (refresh: boolean) => {
     if (isDisks) dispatch(getDisksCards(refresh))
@@ -84,9 +91,9 @@ export const Catalogs: React.FC = () => {
       </nav>
       <div className={styles.heading}>
         <div><h1>{catalog.title}</h1><p>{isDisks
-          ? 'Подберите колёсные диски по диаметру, креплению и типу. Цены и наличие — в каталоге магазина «Шинка88» в Егорьевске.'
+          ? 'Подберите колёсные диски по ширине, диаметру, креплению, вылету, ступице и типу. Цены и наличие — в каталоге магазина «Шинка88» в Егорьевске.'
           : 'Подберите летние, зимние или всесезонные шины по размеру. Цены и наличие — в каталоге магазина «Шинка88» в Егорьевске.'}</p></div>
-        {cardsData.count != null && filters.cardsStatus === 'succeeded'
+        {cardsData.count != null && filters.cardsStatus === 'succeeded' && !waitingForMetadata
           && <span className={styles.count}>Найдено: {cardsData.count}</span>}
       </div>
       <div className={styles.content} data-js-catalog>
@@ -112,11 +119,16 @@ export const Catalogs: React.FC = () => {
             </label>
             <span className={styles.priceNote}>Цена за штуку</span>
           </div>
-          {isLoading && filters.cardsRefresh && <div role="status" className={styles.loading}>
+          {isLoading && (filters.cardsRefresh || waitingForMetadata) && <div role="status" className={styles.loading}>
             <p>Загружаем товары…</p>
             {[0, 1, 2].map(index => <div key={index} className={styles.skeleton} aria-hidden="true"><span /><div><span /><span /><span /></div></div>)}
           </div>}
-          {filters.cardsStatus === 'failed' && <div className={styles.feedback} role="alert">
+          {metadataFailed && <div className={styles.feedback} role="alert">
+            <h2>Не удалось загрузить параметры поиска</h2>
+            <p>Для выбранного сезона и шипов нужен актуальный справочник. Повторите загрузку параметров.</p>
+            <Button onClick={() => dispatch(getTyresParametrs())}>Загрузить параметры поиска</Button>
+          </div>}
+          {!waitingForMetadata && filters.cardsStatus === 'failed' && <div className={styles.feedback} role="alert">
             <Icon name="alert" size={32} /><h2>Не удалось загрузить товары</h2>
             <p>{filters.cardsError}</p>
             <Button onClick={() => requestCards(filters.cardsRefresh)}>Попробовать ещё раз</Button>
@@ -131,12 +143,13 @@ export const Catalogs: React.FC = () => {
                 : <TyresCardDesktop key={item.id} data={item as resultsTyresType} handler={addTyres} />)}
             </div>
           </InfiniteScroll>}
-          {filters.cardsStatus === 'succeeded' && cardsData.results.length === 0 && <div className={styles.feedback} role="status">
+          {!waitingForMetadata && filters.cardsStatus === 'succeeded' && cardsData.results.length === 0 && <div className={styles.feedback} role="status">
             <Icon name={isDisks ? 'wheel' : 'tire'} size={40} /><h2>Товары не найдены</h2>
             <p>Попробуйте изменить параметры подбора или сбросить фильтры.</p>
             <Button variant="outline" onClick={reset}>Сбросить параметры</Button>
+            <ProductHelp />
           </div>}
-          {showResults && cardsData.next !== null && filters.cardsStatus !== 'failed' && <div className={styles.pagination}>
+          {showResults && !waitingForMetadata && cardsData.next !== null && filters.cardsStatus !== 'failed' && <div className={styles.pagination}>
             <Button variant="outline" isLoading={isLoading} onClick={() => requestCards(false)}>Показать ещё</Button>
           </div>}
         </section>

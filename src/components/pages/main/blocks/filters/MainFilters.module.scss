@@ -1,8 +1,9 @@
 .mainWrapper { width: 100%; border: 1px solid var(--color-border); border-radius: 10px; overflow: hidden; background: var(--color-bg-secondary); scroll-margin-top: 20px; }
-.header { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--color-border); background: var(--color-bg-tertiary); }
+.header { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-bottom: 1px solid var(--color-border); background: var(--color-bg-tertiary); }
 .tab { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 52px; padding: 12px; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--color-text-secondary); font-size: 16px; font-weight: 600; }
 .selectedTab { color: var(--color-text-primary); border-bottom-color: var(--color-primary); background: var(--color-bg-secondary); }
 .content { padding: 24px 28px; }
 .sendButton { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 20px; border-radius: 7px; background: var(--color-primary); color: var(--color-text-inverse); font-size: 14px; font-weight: 600; }
 .below { margin-top: 16px; }
-@media (max-width: 650px) { .tab { min-height: 50px; font-size: 15px; } .content { padding: 20px 17px; } }
+@media (max-width: 1050px) { .tab { gap: 5px; padding-inline: 7px; font-size: 14px; } }
+@media (max-width: 650px) { .header { grid-template-columns: repeat(6, minmax(0, 1fr)); } .tab { grid-column: span 2; min-height: 46px; padding: 10px 5px; font-size: 13px; } .tab:nth-child(n+4) { grid-column: span 3; } .tab svg { width: 16px; height: 16px; } .content { padding: 20px 17px; } }

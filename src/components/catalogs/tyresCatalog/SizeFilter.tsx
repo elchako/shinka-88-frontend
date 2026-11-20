@@ -8,7 +8,7 @@ export const SizeFilter: React.FC = () => {
   const dispatch = useAppDispatch()
   const selects = useAppSelector(selectSelector)
   const options = useAppSelector(tiresAPISelector)
-  const labels: Record<string, string> = { width: 'Ширина, мм', height: 'Профиль, %', diameter: 'Диаметр' }
+  const labels: Record<string, string> = { width: 'Ширина, мм', height: 'Высота профиля, %', diameter: 'Диаметр', marka: 'Производитель' }
 
   return (
     <fieldset className={styles.group}>

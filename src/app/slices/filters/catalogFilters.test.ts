@@ -3,7 +3,6 @@ import { filtersApi } from '../../../api/catalog'
 import { makeStore } from '../../store'
 import * as tires from './tiresFiltersSlice'
 import * as disks from './disksFiltersSlice'
-import { filterButtons } from '../../../consts'
 import type { resultsTyresType, tyresCards } from '../../../types/tires'
 import type { disksCards, resultsDisksType } from '../../../types/disks'
 
@@ -94,7 +93,8 @@ describe('Настоящий контракт payload и количества', 
     for (const [selectName, value] of [['width', '205'], ['height', '55'], ['diameter', '16']]) {
       store.dispatch(tires.selectsSelect({ selectName, value, isOneChoice: true }))
     }
-    store.dispatch(tires.seasonsSelectMany(filterButtons[1]))
+    store.dispatch(tires.setSeason('winter'))
+    store.dispatch(tires.setStudding('studded'))
     store.dispatch(tires.checkboxesSelect('RunFlat'))
     store.dispatch(tires.checkboxesSelect('Усиленные'))
     store.dispatch(tires.setPrice({ number: 100, isStartOrEnd: true }))

@@ -140,7 +140,7 @@ export const PlacingOrder: React.FC = () => {
                   <Icon name="pin" size={22} />
                   <div>
                     <h3>Самовывоз из магазина</h3>
-                    <p>г. Егорьевск, ул. Рязанская, ГСК ЦЕНА<br />6 мкр-н, гаражи рядом с пожарным депо</p>
+                    <p>«Шинка», г. Егорьевск, ул. Рязанская<br />6 мкр-н, гаражи рядом с пожарным депо</p>
                     <p>Летом с 8:00 до 23:00. Зимой с 9:00 до 19:00.</p>
                     <a className={styles.routeLink} href="https://yandex.ru/maps/org/avto_stop/1015072993?si=4j1jcathucrm7pd2zk4jtjvukg" target="_blank" rel="noopener noreferrer">Построить маршрут <Icon name="arrow" size={14} /></a>
                   </div>

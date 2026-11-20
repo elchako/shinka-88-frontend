@@ -95,6 +95,10 @@ export const filterBlock2Slice = createAppSlice({
             })
             state.selects = newSelects
         }),
+        setDiskType: create.reducer((state, action: PayloadAction<string[]>) => {
+            const item = state.selects.find(select => select.selectName.apiName === 'type_disk')
+            if (item) item.value = action.payload
+        }),
         setOnlyCompleteSets: create.reducer((state, action: PayloadAction<boolean>) => {
             state.onlyCompleteSets = action.payload
         }),
@@ -121,6 +125,12 @@ export const filterBlock2Slice = createAppSlice({
             if (state.priceMax > 0 && number > state.priceMax) number = state.priceMax
             if (action.payload.isStartOrEnd) state.priceStart = number
             else state.priceEnd = number
+        }),
+        prepareHomeSearch: create.reducer(state => {
+            state.priceStart = 0
+            state.priceEnd = 0
+            state.onlyCompleteSets = false
+            state.sortType = sorts[0]
         }),
         // сбросить фильтры
         resetFilters: create.reducer(state => {
@@ -165,9 +175,10 @@ export const filterBlock2Slice = createAppSlice({
 
                 const fields: fieldsDiskType = {}
 
-                if (state.selects[0].value.length !== 0) fields.diameter = state.selects[0].value
-                if (state.selects[1].value.length !== 0) fields.pcd = state.selects[1].value
-                if (state.selects[2].value.length !== 0) fields.type_disk = state.selects[2].value
+                for (const item of state.selects) {
+                    const key = item.selectName.apiName as 'width' | 'diameter' | 'holesquant' | 'pcd' | 'wheeloffset' | 'dia' | 'type_disk'
+                    if (item.value.length) fields[key] = item.value
+                }
 
                 let url = null
                 if (!refresh && state.disksCardsArr.next) {
@@ -242,7 +253,7 @@ export const filterBlock2Slice = createAppSlice({
 
 // actions
 export const { selectsSelect, getDisksParametrs, sortDisksTypeSelect,
-    getDisksCards, amountHandler, setPrice, resetFilters, setOnlyCompleteSets } = filterBlock2Slice.actions
+    getDisksCards, amountHandler, setPrice, resetFilters, setOnlyCompleteSets, setDiskType, prepareHomeSearch } = filterBlock2Slice.actions
 
 
 // selectors

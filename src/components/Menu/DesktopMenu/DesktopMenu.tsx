@@ -6,7 +6,7 @@ import { links } from '../../../consts'
 export const DesktopMenu: React.FC = () => (
   <div className={styles.mainWrapper}>
     <nav className={styles.mainMenu} aria-label="Основная навигация">
-      {[links[3], links[4], links[12], links[14]].map(item => (
+      {[links[3], links[4], links[5], links[6], links[7], links[8]].map(item => (
         <NavLink key={item.link} to={`/${item.link}`} className={({ isActive }) => isActive ? styles.active : undefined}>
           {item.title}
         </NavLink>

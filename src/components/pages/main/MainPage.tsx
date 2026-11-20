@@ -11,8 +11,8 @@ export const MainPage: React.FC = () => (
     <div className={styles.mainWrapper}>
       <main className={styles.content}>
         <header className={styles.intro}>
-          <h1>Шины и диски в Егорьевске</h1>
-          <p>«Шинка88» — магазин шин и колёсных дисков с шиномонтажом. Подберите комплект по параметрам и проверьте цены и наличие в каталоге.</p>
+          <h1>Шины, диски и автозапчасти в Егорьевске</h1>
+          <p>«Шинка88»: магазин шин, колёсных дисков и автозапчастей с шиномонтажем. Подберите товар по параметрам и проверьте цены и наличие в каталоге.</p>
         </header>
         <PromoBanner />
         <div className={styles.picker}><MainFilters /><ProductHelp /></div>

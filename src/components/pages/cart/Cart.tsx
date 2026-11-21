@@ -6,10 +6,16 @@ import { Footer } from '../../footer/Footer'
 import { CartProductCard } from './blocks/cards/CartTyresCards'
 import { OrderInfo } from '../blocks/orderInfo/OrderInfo'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import { disksDataSelector, resetCart, selectAllHandler, selectAllSelector, tyresDataSelector } from '../../../app/slices/cartSlice'
+import { delOneTypeProduct, disksDataSelector, resetCart, selectAllHandler, selectAllSelector, tyresDataSelector } from '../../../app/slices/cartSlice'
+import type { commonArrDataType } from '../../../types/cart'
 import { Button } from '../../common/Button'
-import { Modal } from '../../common/Modal'
+import { ConfirmModal } from '../../common/Modal'
 import { Icon } from '../../common/Icon'
+
+type CartConfirmation = { type: 'clear' } | {
+  type: 'remove'
+  product: Pick<commonArrDataType[number], 'id' | 'product_type' | 'name'>
+}
 
 export const Cart: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -17,9 +23,17 @@ export const Cart: React.FC = () => {
   const selectAll = useAppSelector(selectAllSelector)
   const tyres = useAppSelector(tyresDataSelector)
   const disks = useAppSelector(disksDataSelector)
-  const [showClearModal, setShowClearModal] = useState(false)
+  const [confirmation, setConfirmation] = useState<CartConfirmation | null>(null)
   const products = [...tyres, ...disks].sort((a, b) => a.queue - b.queue)
   const isEmpty = products.length === 0
+  const closeConfirmation = () => setConfirmation(null)
+  const confirmRemoval = () => {
+    if (confirmation?.type === 'clear') dispatch(resetCart())
+    else if (confirmation?.type === 'remove') {
+      dispatch(delOneTypeProduct({ productType: confirmation.product.product_type, id: confirmation.product.id }))
+    }
+    closeConfirmation()
+  }
 
   return (
     <>
@@ -46,12 +60,12 @@ export const Cart: React.FC = () => {
                   <input type="checkbox" checked={selectAll} onChange={() => dispatch(selectAllHandler())} />
                   <span>Выбрать все</span>
                 </label>
-                <button className={styles.clearButton} type="button" onClick={() => setShowClearModal(true)}>Очистить корзину</button>
+                <button className={styles.clearButton} type="button" onClick={() => setConfirmation({ type: 'clear' })}>Очистить корзину</button>
               </div>
               <div className={styles.content}>
                 <div className={styles.leftBlock}>
                   <div className={styles.cards} role="list" aria-label="Товары в корзине">
-                    {products.map(product => <CartProductCard data={product} key={`${product.product_type}-${product.id}`} />)}
+                    {products.map(product => <CartProductCard data={product} onRemove={() => setConfirmation({ type: 'remove', product })} key={`${product.product_type}-${product.id}`} />)}
                   </div>
                   <p className={styles.note}>Снятая галочка исключает позицию из суммы и состава заказа. Товар остаётся в корзине.</p>
                 </div>
@@ -64,19 +78,18 @@ export const Cart: React.FC = () => {
         </main>
         <Footer />
       </div>
-      <Modal
-        isOpen={showClearModal}
-        onClose={() => setShowClearModal(false)}
-        title="Очистить корзину?"
-        description="Все товары будут удалены, включая позиции без галочки."
+      <ConfirmModal
+        isOpen={confirmation !== null}
+        onClose={closeConfirmation}
+        onConfirm={confirmRemoval}
+        title={confirmation?.type === 'clear' ? 'Очистить корзину?' : 'Удалить товар из корзины?'}
+        description={confirmation?.type === 'remove'
+          ? `Удалить «${confirmation.product.name}» из корзины?`
+          : 'Все товары будут удалены, включая позиции без галочки. Это действие нельзя отменить.'}
+        confirmText={confirmation?.type === 'clear' ? 'Очистить' : 'Удалить'}
+        variant="danger"
         size="sm"
-        footer={<>
-          <Button type="button" variant="ghost" onClick={() => setShowClearModal(false)}>Отмена</Button>
-          <Button type="button" variant="danger" leftIcon={<Icon name="trash" size={18} />} onClick={() => { dispatch(resetCart()); setShowClearModal(false) }}>Очистить</Button>
-        </>}
-      >
-        <p className={styles.confirmText}>Это действие нельзя отменить.</p>
-      </Modal>
+      />
     </>
   )
 }

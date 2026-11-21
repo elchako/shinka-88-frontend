@@ -8,17 +8,19 @@ import { Modal } from '../../common/Modal'
 import { Icon } from '../../common/Icon'
 import styles from './MobileMenu.module.scss'
 
+const itemIcons: Record<string, string> = { '/': 'home', services: 'price', tires: 'tire', disks: 'wheel', cart: 'cart' }
+
 export const HiddenMobileMenu: React.FC = () => {
   const closed = useAppSelector(mobileMenuSelector)
   const dispatch = useAppDispatch()
   const close = useCallback(() => { if (!closed) dispatch(mobileMenuReducer()) }, [closed, dispatch])
-  const items = [links[0], links[3], links[4], links[1], links[5], links[6], links[7], links[8], links[12], links[14], links[13], links[11]]
+  const items = [links[0], links[8], links[3], links[4], links[1], links[5], links[6], links[7], links[12], links[14], links[13], links[11]]
   return (
     <Modal isOpen={!closed} onClose={close} title="Меню магазина" size="md">
       <nav className={styles.hiddenMenuContent} aria-label="Разделы магазина">
-        {items.map((item, index) => (
+        {items.map(item => (
           <NavLink key={item.link} to={item.link.startsWith('/') ? item.link : `/${item.link}`} className={styles.hiddenMenuItem} onClick={close}>
-            {index < 4 && <Icon name={['home', 'tire', 'wheel', 'cart'][index]} size={20} />}
+            {itemIcons[item.link] && <Icon name={itemIcons[item.link]} size={20} />}
             <span>{item.title}</span><Icon name="chevron" size={16} />
           </NavLink>
         ))}

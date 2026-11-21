@@ -23,7 +23,7 @@ test('вводный блок главной включает автозапча
   await screen.findByRole('option', { name: '205' })
   expect(screen.getByRole('heading', { level: 1, name: 'Шины, диски и автозапчасти в Егорьевске' })).toBeInTheDocument()
   expect(screen.getByText('«Шинка88»: магазин шин, колёсных дисков и автозапчастей с шиномонтажем. Подберите товар по параметрам и проверьте цены и наличие в каталоге.')).toBeInTheDocument()
-  expect(document.title).toBe('Шины, диски и автозапчасти в Егорьевске — «Шинка88»')
+  expect(document.title).toBe('Шины и диски в Егорьевске | Шинка88')
   expect(screen.queryByRole('heading', { level: 1, name: 'Шины и диски в Егорьевске' })).not.toBeInTheDocument()
 })
 

@@ -1,7 +1,7 @@
 import type React from 'react'
 import styles from './CartCardsStyles.module.scss'
 import { useAppDispatch } from '../../../../../app/hooks'
-import { changeAmount, delOneTypeProduct, selectProductHandler } from '../../../../../app/slices/cartSlice'
+import { changeAmount, selectProductHandler } from '../../../../../app/slices/cartSlice'
 import type { commonArrDataType, selectedType } from '../../../../../types/cart'
 import type { resultsTyresType } from '../../../../../types/tires'
 import { Icon } from '../../../../common/Icon'
@@ -24,7 +24,7 @@ export const cartProductSize = (product: CartProduct): string => {
   return `${product.width}/${product.height} ${diameter} ${product.load || ''}${product.speed || ''}`.trim()
 }
 
-export const CartProductCard: React.FC<{ data: CartProduct }> = ({ data }) => {
+export const CartProductCard: React.FC<{ data: CartProduct; onRemove: () => void }> = ({ data, onRemove }) => {
   const dispatch = useAppDispatch()
   const isTyre = 'seazon' in data
 
@@ -54,7 +54,7 @@ export const CartProductCard: React.FC<{ data: CartProduct }> = ({ data }) => {
         type="button"
         className={styles.deleteButton}
         aria-label={`Удалить ${data.name} из корзины`}
-        onClick={() => dispatch(delOneTypeProduct({ productType: data.product_type, id: data.id }))}
+        onClick={onRemove}
       >
         <Icon name="trash" size={18} />
       </button>
@@ -74,5 +74,5 @@ export const CartProductCard: React.FC<{ data: CartProduct }> = ({ data }) => {
   )
 }
 
-export const CartTyresCards: React.FC<{ data: selectedType & resultsTyresType }> = ({ data }) =>
-  <CartProductCard data={data} />
+export const CartTyresCards: React.FC<{ data: selectedType & resultsTyresType; onRemove: () => void }> = ({ data, onRemove }) =>
+  <CartProductCard data={data} onRemove={onRemove} />

@@ -14,6 +14,7 @@ export const MobileMenu: React.FC = () => {
   return (
     <nav className={styles.mainWrapper} aria-label="Мобильная навигация">
       <NavLink end to="/" className={({ isActive }) => `${styles.bottomMenuItem} ${isActive ? styles.active : ''}`}><Icon name="home" size={21} /><span>Главная</span></NavLink>
+      <NavLink to="/services" className={({ isActive }) => `${styles.bottomMenuItem} ${isActive ? styles.active : ''}`}><Icon name="price" size={21} /><span>Цены</span></NavLink>
       <Link to="/tires" className={`${styles.bottomMenuItem} ${inCatalog ? styles.active : ''}`} aria-current={inCatalog ? 'page' : undefined}><Icon name="grid" size={21} /><span>Каталог</span></Link>
       <NavLink to="/cart" className={({ isActive }) => `${styles.bottomMenuItem} ${isActive ? styles.active : ''}`}><span className={styles.iconWrap}><Icon name="cart" size={21} /><CartCounter /></span><span>Корзина</span></NavLink>
       <button type="button" className={styles.bottomMenuItem} onClick={() => dispatch(mobileMenuReducer())} aria-haspopup="dialog" aria-expanded={!closed}><Icon name="menu" size={21} /><span>Меню</span></button>

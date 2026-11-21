@@ -10,6 +10,7 @@ const paths: Record<string, React.ReactNode> = {
   cart: <><path d="M2 3h3l2.5 12h11L21 6H6" /><circle cx="9" cy="20" r="1" /><circle cx="18" cy="20" r="1" /></>,
   grid: <><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></>,
   menu: <path d="M4 6h16M4 12h16M4 18h16" />,
+  price: <><path d="m20 12-8 8-9-9V3h8z" /><circle cx="7.5" cy="7.5" r="1" /></>,
   filter: <><path d="M4 6h16M4 12h16M4 18h16" /><circle cx="9" cy="6" r="2" fill="var(--color-bg-primary)" /><circle cx="15" cy="12" r="2" fill="var(--color-bg-primary)" /><circle cx="9" cy="18" r="2" fill="var(--color-bg-primary)" /></>,
   sort: <><path d="M8 3v18m-4-4 4 4 4-4M16 21V3m-4 4 4-4 4 4" /></>,
   plus: <path d="M12 5v14M5 12h14" />,

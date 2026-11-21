@@ -144,10 +144,12 @@
   }
 
   .model {
+    --mobile-model-width: min(70cqw, 252px);
+
     top: auto;
-    right: 2px;
+    right: min(0px, calc(58cqw - var(--mobile-model-width)));
     bottom: 0;
-    width: min(43cqw, 230px);
+    width: var(--mobile-model-width);
   }
 
   .copy {
@@ -174,6 +176,7 @@
   }
 
   .condition {
+    max-width: 47cqw;
     font-size: clamp(11.25px, 3.68cqw, 14px);
   }
 
@@ -187,5 +190,11 @@
 
   .trust {
     font-size: 10px;
+  }
+}
+
+@container (max-width: 330px) {
+  .detail {
+    max-width: 39cqw;
   }
 }

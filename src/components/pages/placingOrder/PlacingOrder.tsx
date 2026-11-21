@@ -21,6 +21,7 @@ import { Button } from '../../common/Button'
 import { formatPhoneInput, normalizePhoneNumber } from '../../../utils/other'
 import { Input } from '../../common/Input'
 import { Icon } from '../../common/Icon'
+import { FittingPromo } from '../../common/FittingPromo'
 
 interface FormErrors { name?: string, phone?: string }
 
@@ -204,6 +205,7 @@ export const PlacingOrder: React.FC = () => {
                   <div><h3>При получении</h3><p>Наличными или картой в пункте выдачи.</p></div>
                 </div>
               </section>
+              <FittingPromo />
               <p className={styles.legal}>Перед оформлением ознакомьтесь с <Link to="/oferta">офертой</Link> и <Link to="/police">политикой конфиденциальности</Link>.</p>
             </div>
             <aside className={styles.rightBlock}>

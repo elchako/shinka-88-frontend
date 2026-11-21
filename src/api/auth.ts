@@ -11,10 +11,13 @@ class AuthAPI {
 
     // отправка смс кода клиенту
     async getSmsCode(name: string, phone_number: string) {
-        await this.instance.post(URLs.auth.register,
+        const response = await this.instance.post(URLs.auth.register,
             JSON.stringify({ name, phone_number }), {
             headers: { 'Content-Type': 'application/json' }
         });
+        if (![200, 201].includes(response.status) || response.data?.message_sent !== true) {
+            throw new Error('unexpected_auth_response')
+        }
     }
 
     // отправка смс кода на сервер для подтверждения
@@ -23,6 +26,9 @@ class AuthAPI {
             JSON.stringify({ phone_number, confirmation_code }), {
             headers: { 'Content-Type': 'application/json' }
         });
+        if (response.status !== 200 || typeof response.data?.token !== 'string' || !response.data.token.trim()) {
+            throw new Error('unexpected_auth_response')
+        }
         return response.data
     }
 }

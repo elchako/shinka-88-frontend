@@ -9,6 +9,7 @@ import { Button } from '../../../common/Button'
 import { Icon } from '../../../common/Icon'
 import { Price } from '../../../common/Price'
 import { QuantityStepper } from '../../../common/QuantityStepper'
+import { ProductDetails } from '../../../common/ProductDetails'
 import { hasProductFeature } from '../../../../utils/other'
 import styles from './CardDesktopStyles.module.scss'
 
@@ -23,6 +24,7 @@ export const ProductCard: React.FC<Props> = ({ data, category, onAdd }) => {
   const dispatch = useAppDispatch()
   const cart = useAppSelector(state => category === 'tires' ? state.cart.tyres : state.cart.disks)
   const [failedImage, setFailedImage] = useState<string | null>(null)
+  const [detailsOpen, setDetailsOpen] = useState(false)
   const quantity = Math.min(Math.max(0, data.balance), Math.max(1, data.amount || 1))
   const inCart = cart.some(item => item.id === data.id && item.amount === quantity && !item.canceled)
   const tyre = 'seazon' in data ? data : null
@@ -33,15 +35,15 @@ export const ProductCard: React.FC<Props> = ({ data, category, onAdd }) => {
 
   return (
     <article className={styles.mainWrapper} aria-label={data.name}>
-      <div className={styles.productPicture}>
+      <button type="button" className={styles.productPicture} onClick={() => setDetailsOpen(true)} aria-label={`Подробнее о товаре ${data.name}`}>
         {imageAvailable
           ? <img src={data.image_url} alt={data.name} loading="lazy" onError={() => setFailedImage(data.image_url)} />
           : <div className={styles.noImage} role="img" aria-label={`Нет изображения: ${data.name}`}>
             <Icon name={tyre ? 'tire' : 'wheel'} size={40} /><span>Нет фото</span>
           </div>}
-      </div>
+      </button>
       <div className={styles.productBody}>
-        <h2 className={styles.productTitle}>{data.name}</h2>
+        <h2 className={styles.productTitle}><button type="button" className={styles.detailsTrigger} onClick={() => setDetailsOpen(true)}>{data.name}</button></h2>
         {tyre && <p className={styles.productSize}>{tyre.width}/{tyre.height} {diameter} {tyre.load}{tyre.speed}</p>}
         {disk && <p className={styles.productSize}>{disk.width ? `${disk.width}×` : ''}{disk.diameter}</p>}
         <div className={styles.productSpecs}>
@@ -73,6 +75,7 @@ export const ProductCard: React.FC<Props> = ({ data, category, onAdd }) => {
           onClick={() => onAdd(quantity, inCart)}>{inCart ? 'В корзине' : 'В корзину'}</Button>
         <p className={styles.rowTotal}>{quantity} шт. × <Price value={data.price_sale} size="sm" /> = <Price value={data.price_sale * quantity} size="sm" /></p>
       </div>
+      <ProductDetails product={data} isOpen={detailsOpen} onClose={() => setDetailsOpen(false)} />
     </article>
   )
 }

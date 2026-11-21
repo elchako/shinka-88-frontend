@@ -2,6 +2,8 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import type { IinitialState } from "../../types/auth"
 import { createAppSlice } from "../createAppSlice"
 import { authApi } from "../../api/auth"
+import { normalizeAuthError, type AuthFailure } from '../../utils/authError'
+import { normalizePhoneNumber } from '../../utils/other'
 
 const initialState: IinitialState = {
     name: '',
@@ -51,43 +53,36 @@ export const authSlice = createAppSlice({
             state.isLogin = false
         }),
         // получить код
-        getSmsCode: create.asyncThunk(
-            async (args: { name: string, phone: string }) => {
-                await authApi.getSmsCode(args.name, args.phone)
+        getSmsCode: create.asyncThunk<void, { name: string, phone: string }, { rejectValue: AuthFailure }>(
+            async (args, api) => {
+                try { await authApi.getSmsCode(args.name, args.phone) }
+                catch (error) { throw api.rejectWithValue(normalizeAuthError(error)) }
             },
             {
-                pending: () => {
-                    console.log('pending')
-                },
-                fulfilled: state => {
-                    state.oftensmsCodeReq = false
-                    console.log('succes')
-                },
-                rejected: state => {
-                    state.oftensmsCodeReq = true
-                    console.log('error')
-                },
+                fulfilled: state => { state.oftensmsCodeReq = false },
+                rejected: state => { state.oftensmsCodeReq = true },
             },
         ),
-        login: create.asyncThunk(
-            async (args: { phone: string, code: string }) => {
-                const response = await authApi.login(args.phone, args.code)
-                return response.token
+        login: create.asyncThunk<string, { phone: string, code: string }, { rejectValue: AuthFailure }>(
+            async (args, api) => {
+                try {
+                    const response = await authApi.login(args.phone, args.code)
+                    const current = (api.getState() as { auth: IinitialState }).auth.phone
+                    if (normalizePhoneNumber(current) !== normalizePhoneNumber(args.phone)) throw new Error('stale_auth_response')
+                    return response.token
+                } catch (error) { throw api.rejectWithValue(normalizeAuthError(error, true)) }
             },
             {
-                pending: state => {
-                    state.checkProcess = !state.checkProcess
-                    // console.log('запрос на авторизацию')
-                },
-                fulfilled: (state, action: PayloadAction<string>) => {
-                    // console.log('авторизация прошла успешно')
+                pending: state => { state.checkProcess = true },
+                fulfilled: (state, action) => {
+                    state.checkProcess = false
+                    if (normalizePhoneNumber(state.phone) !== normalizePhoneNumber(action.meta.arg.phone)) return
                     state.token = action.payload
-                    state.checkProcess = !state.checkProcess
                     state.isLogin = true
                 },
                 rejected: state => {
-                    // console.log('авторизация неудачна')
-                    state.checkProcess = !state.checkProcess
+                    // Подтверждение завершилось отказом, без переключения stale-флага.
+                    state.checkProcess = false
                 },
             },
         ),

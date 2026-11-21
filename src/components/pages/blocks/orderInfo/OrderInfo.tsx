@@ -1,4 +1,7 @@
 import type React from 'react'
+import { useState } from 'react'
+import { ProductDetails } from '../../../common/ProductDetails'
+import type { commonArrDataType } from '../../../../types/cart'
 import styles from './OrderInfoStyles.module.scss'
 import { Button } from '../../../common/Button'
 import { Price } from '../../../common/Price'
@@ -18,6 +21,7 @@ interface IProps {
 
 export const OrderInfo: React.FC<IProps> = ({ name, nameButton, handler, isLoading = false, disabled = false, formId }) => {
   const products = useAppSelector(selectedProductsSelector)
+  const [detail, setDetail] = useState<commonArrDataType[number] | null>(null)
   const order = useAppSelector(orderPayloadSelector)
   const selectedCount = products.reduce((sum, product) => sum + product.amount, 0)
 
@@ -28,9 +32,9 @@ export const OrderInfo: React.FC<IProps> = ({ name, nameButton, handler, isLoadi
         <ul className={styles.products} aria-label="Выбранные товары">
           {products.map(product => (
             <li className={styles.product} key={`${product.product_type}-${product.id}`}>
-              <img src={product.image_url} alt="" loading="lazy" />
+              <button type="button" className={styles.detailTrigger} onClick={() => setDetail(product)} aria-label={`Подробнее о товаре ${product.name}`}><img src={product.image_url} alt="" loading="lazy" /></button>
               <div>
-                <p className={styles.productName}>{product.name}</p>
+                <p className={styles.productName}><button type="button" className={styles.detailTrigger} onClick={() => setDetail(product)}>{product.name}</button></p>
                 <p className={styles.productDetails}>{cartProductSize(product)}</p>
                 <div className={styles.calculation}>
                   {product.amount} шт. × <Price value={product.price_sale} size="sm" />
@@ -62,6 +66,7 @@ export const OrderInfo: React.FC<IProps> = ({ name, nameButton, handler, isLoadi
         {nameButton}
       </Button>
       <p className={styles.note}>Наличие и срок получения подтвердит менеджер. Оплата при получении.</p>
+      {detail && <ProductDetails product={detail} isOpen onClose={() => setDetail(null)} />}
     </section>
   )
 }

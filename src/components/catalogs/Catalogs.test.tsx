@@ -79,6 +79,55 @@ describe('Выдача настоящего каталога со stub API', () 
     expect(filtersApi.getTyres).toHaveBeenCalledTimes(1)
   })
 
+  it.each(['/tires', '/disks'])('справка в %s доступна кнопкой и не видна внизу выдачи', async path => {
+    const { user } = renderCatalog(path)
+    const isDisks = path === '/disks'
+    const heading = isDisks ? 'Как подобрать колёсные диски' : 'Как подобрать шины'
+    const trigger = screen.getByRole('button', { name: isDisks ? 'Как подобрать диски' : 'Как подобрать шины' })
+    expect(document.getElementById('catalog-guide')).not.toBeVisible()
+    await user.click(trigger)
+    const dialog = screen.getByRole('dialog', { name: isDisks ? 'Помощь с подбором дисков' : 'Помощь с подбором шин' })
+    expect(within(dialog).getByRole('heading', { name: heading })).toBeVisible()
+    expect(dialog).toHaveTextContent('Цена на сайте за штуку или за комплект?')
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(trigger).toHaveFocus()
+    expect(document.getElementById('catalog-guide')).not.toBeVisible()
+  })
+
+  it.each(['/tires', '/disks'])('обновление фильтра %s сохраняет высоту предыдущих карточек, но запрещает старую покупку', async path => {
+    let resolve!: (value: { count: number, next: null, previous: null, results: never[] }) => void
+    const pending = new Promise<{ count: number, next: null, previous: null, results: never[] }>(done => { resolve = done })
+    if (path === '/disks') vi.mocked(filtersApi.getFilteredDisks).mockResolvedValueOnce({ count: 1, next: null, previous: null, results: [disk] }).mockReturnValueOnce(pending)
+    else vi.mocked(filtersApi.getFilteredTyres).mockResolvedValueOnce(page()).mockReturnValueOnce(pending)
+    const { store } = renderCatalog(path)
+    await screen.findByRole('article')
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Есть 4 шт. и больше' }))
+    expect(screen.getByRole('article', { name: path === '/disks' ? disk.name : tyre.name })).toBeInTheDocument()
+    expect(screen.getByText(/Обновляем товары/)).toBeInTheDocument()
+    expect(screen.queryByText('Загружаем товары…')).not.toBeInTheDocument()
+    const buy = within(screen.getByRole('article')).getByRole('button', { name: 'В корзину' })
+    expect(buy).toBeDisabled()
+    fireEvent.click(buy)
+    expect(store.getState().cart.tyres).toHaveLength(0)
+    expect(store.getState().cart.disks).toHaveLength(0)
+    await act(async () => { resolve({ count: 0, next: null, previous: null, results: [] }) })
+    expect(await screen.findByText('Товары не найдены')).toBeInTheDocument()
+    expect(screen.queryByRole('article')).not.toBeInTheDocument()
+  })
+
+  it('догрузка следующей страницы не блокирует уже актуальные товары', async () => {
+    let resolve!: (value: tyresCards) => void
+    vi.mocked(filtersApi.getFilteredTyres).mockResolvedValueOnce({ ...page(), count: 2, next: 'http://stub.invalid/tyre/?page=2' })
+      .mockReturnValueOnce(new Promise<tyresCards>(done => { resolve = done }))
+    renderCatalog()
+    const card = await screen.findByRole('article')
+    fireEvent.click(screen.getByRole('button', { name: 'Показать ещё' }))
+    expect(within(card).getByRole('button', { name: 'В корзину' })).toBeEnabled()
+    await act(async () => { resolve({ count: 2, next: null, previous: null, results: [{ ...tyre, id: 2 }] }) })
+    expect(screen.getAllByRole('article')).toHaveLength(2)
+  })
+
   it('показывает ошибку и повторяет существующий запрос по кнопке', async () => {
     vi.mocked(filtersApi.getFilteredTyres).mockRejectedValueOnce(new Error('stub'))
     renderCatalog()

@@ -6,6 +6,7 @@ import { Modal } from './Modal'
 import { Button } from './Button'
 import { Icon } from './Icon'
 import { Loader } from './Loader'
+import { FittingPromo } from './FittingPromo'
 import styles from './CreateOrderModal.module.scss'
 
 export const CreateOrder: React.FC = () => {
@@ -35,6 +36,7 @@ export const CreateOrder: React.FC = () => {
           <><Loader size="md" /><p>Отправляем заказ. Пожалуйста, дождитесь ответа.</p></>
         ) : (
           <><Icon name="check" size={28} /><p className={styles.number}>Номер вашего заказа: {orderNumber}</p><p>Скоро с вами свяжется менеджер для подтверждения деталей.</p>
+            <FittingPromo />
             {cartChanged && <p>В корзине остались снятые с выбора или изменённые во время отправки позиции. Они не удалены. Сверьте их с этим заказом перед следующим оформлением.</p>}
           </>
         )}

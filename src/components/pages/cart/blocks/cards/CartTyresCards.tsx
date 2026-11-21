@@ -1,4 +1,6 @@
 import type React from 'react'
+import { useState } from 'react'
+import { ProductDetails } from '../../../../common/ProductDetails'
 import styles from './CartCardsStyles.module.scss'
 import { useAppDispatch } from '../../../../../app/hooks'
 import { changeAmount, selectProductHandler } from '../../../../../app/slices/cartSlice'
@@ -27,6 +29,7 @@ export const cartProductSize = (product: CartProduct): string => {
 export const CartProductCard: React.FC<{ data: CartProduct; onRemove: () => void }> = ({ data, onRemove }) => {
   const dispatch = useAppDispatch()
   const isTyre = 'seazon' in data
+  const [detailsOpen, setDetailsOpen] = useState(false)
 
   return (
     <article className={`${styles.card} ${data.canceled ? styles.excluded : ''}`} role="listitem">
@@ -38,11 +41,11 @@ export const CartProductCard: React.FC<{ data: CartProduct; onRemove: () => void
           onChange={() => dispatch(selectProductHandler({ productType: data.product_type, id: data.id }))}
         />
       </label>
-      <div className={styles.imageWrapper}>
+      <button type="button" className={`${styles.imageWrapper} ${styles.detailsTrigger}`} onClick={() => setDetailsOpen(true)} aria-label={`Подробнее о товаре ${data.name}`}>
         <img src={data.image_url} alt="" loading="lazy" className={styles.image} />
-      </div>
+      </button>
       <div className={styles.info}>
-        <h2 className={styles.name}>{data.name}</h2>
+        <h2 className={styles.name}><button type="button" className={styles.detailsTrigger} onClick={() => setDetailsOpen(true)}>{data.name}</button></h2>
         <p className={styles.size}>{cartProductSize(data)}</p>
         <p className={styles.details}>
           {isTyre ? `${data.seazon}, шины${hasProductFeature(data.runflat) ? ' · RunFlat' : ''}` : data.type_disk}
@@ -70,6 +73,7 @@ export const CartProductCard: React.FC<{ data: CartProduct; onRemove: () => void
           <Price value={data.price_sale * data.amount} size="lg" />
         </div>
       </div>
+      <ProductDetails product={data} isOpen={detailsOpen} onClose={() => setDetailsOpen(false)} />
     </article>
   )
 }

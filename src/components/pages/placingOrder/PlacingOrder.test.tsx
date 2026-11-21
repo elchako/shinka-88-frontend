@@ -37,6 +37,12 @@ beforeEach(() => { vi.clearAllMocks(); localStorage.clear(); Cookies.remove('tok
 afterEach(() => { cleanup(); Cookies.remove('token') })
 
 describe('Оформление с изолированными API', () => {
+  it('показывает условие акции без изменения суммы', () => {
+    const { store } = renderCheckout()
+    expect(screen.getByText(/При покупке 4 шин или 4 литых дисков/)).toBeInTheDocument()
+    expect(store.getState().cart.tyres[0].price_sale).toBe(100.25)
+  })
+
   it('не подсвечивает подтверждение до валидных данных и подставляет +7', () => {
     renderCheckout()
     const button = screen.getByRole('button', { name: 'Подтвердить телефон' })

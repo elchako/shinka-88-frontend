@@ -14,6 +14,8 @@ interface ModalProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
   closeOnOverlayClick?: boolean
   showCloseButton?: boolean
+  mobileFullscreen?: boolean
+  keepMounted?: boolean
 }
 
 const openModals: string[] = []
@@ -26,7 +28,7 @@ const focusableIn = (root: HTMLElement) => Array.from(root.querySelectorAll<HTML
 
 export const Modal: React.FC<ModalProps> = ({
   isOpen, onClose, title, description, children, footer, size = 'md',
-  closeOnOverlayClick = true, showCloseButton = true,
+  closeOnOverlayClick = true, showCloseButton = true, mobileFullscreen = false, keepMounted = false,
 }) => {
   const id = useId()
   const contentRef = useRef<HTMLDivElement>(null)
@@ -80,21 +82,22 @@ export const Modal: React.FC<ModalProps> = ({
     }
   }, [isOpen, id])
 
-  if (!isOpen) return null
+  if (!isOpen && !keepMounted) return null
 
   return (
     <div
       className={styles.overlay}
-      style={{ zIndex: `calc(var(--z-modal, 300) + ${layer})` }}
+      style={{ zIndex: `calc(var(--z-modal, 300) + ${layer})`, display: isOpen ? undefined : 'none' }}
+      aria-hidden={isOpen ? undefined : true}
       onClick={event => {
         if (closeOnOverlayClick && event.target === event.currentTarget) onCloseRef.current()
       }}
     >
       <div
         ref={contentRef}
-        className={`${styles.content} ${styles[size]}`}
-        role="dialog"
-        aria-modal="true"
+        className={`${styles.content} ${styles[size]} ${mobileFullscreen ? styles.mobileFullscreen : ''}`}
+        role={isOpen ? 'dialog' : undefined}
+        aria-modal={isOpen ? true : undefined}
         aria-labelledby={title ? `${id}-title` : undefined}
         aria-describedby={description ? `${id}-description` : undefined}
         tabIndex={-1}
@@ -112,7 +115,7 @@ export const Modal: React.FC<ModalProps> = ({
             )}
           </div>
         )}
-        <div className={styles.body}>{children}</div>
+        <div className={styles.body} tabIndex={mobileFullscreen ? 0 : undefined}>{children}</div>
         {footer && <div className={styles.footer}>{footer}</div>}
       </div>
     </div>

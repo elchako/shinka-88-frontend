@@ -1,5 +1,6 @@
 import type React from 'react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector, useCatalogDataHook } from '../../app/hooks'
@@ -11,6 +12,7 @@ import type { resultsDisksType } from '../../types/disks'
 import type { resultsTyresType } from '../../types/tires'
 import { Button } from '../common/Button'
 import { Icon } from '../common/Icon'
+import { Modal } from '../common/Modal'
 import { DisksCardDesktop } from './blocks/card/disks/DisksCardDesktop'
 import { TyresCardDesktop } from './blocks/card/tyres/TyresCardDesktop'
 import { DesktopFilters } from './blocks/filters/DesktopFilters'
@@ -33,6 +35,8 @@ export const Catalogs: React.FC = () => {
   const filtersClosed = useAppSelector(mobileFiltersSelector)
   const parentRef = useRef<HTMLDivElement>(null)
   const requestedKey = useRef('')
+  const [guideOpen, setGuideOpen] = useState(false)
+  useEffect(() => setGuideOpen(false), [pathname])
   const needsTyreMetadata = !isDisks && (tyreExtras.season !== 'all' || tyreExtras.studding !== 'all')
   const waitingForMetadata = needsTyreMetadata && filters.filtersStatus !== 'succeeded'
   const metadataFailed = waitingForMetadata && filters.filtersStatus === 'failed'
@@ -50,8 +54,14 @@ export const Catalogs: React.FC = () => {
     priceMinNumber: filters.filtersStatus === 'succeeded' ? catalog.commonFilters.priceMinNumber : null,
     priceMaxNumber: filters.filtersStatus === 'succeeded' ? catalog.commonFilters.priceMaxNumber : null,
   }
-  const isLoading = waitingForMetadata ? !metadataFailed : filters.cardsStatus === 'loading' || filters.cardsStatus === 'idle'
-  const showResults = !waitingForMetadata && !(filters.cardsRefresh && (isLoading || filters.cardsStatus === 'failed'))
+  const changedFilters = requestedKey.current !== requestKey
+  const hasCards = cardsData.results.length > 0
+  const isLoading = waitingForMetadata ? !metadataFailed
+    : filters.cardsStatus === 'loading' || filters.cardsStatus === 'idle' || (filtersClosed && changedFilters)
+  const replacingResults = waitingForMetadata || changedFilters
+    || (filters.cardsRefresh && (filters.cardsStatus === 'loading' || filters.cardsStatus === 'idle' || filters.cardsStatus === 'failed'))
+  const staleResults = hasCards && replacingResults
+  const showResults = hasCards || (!replacingResults && filters.cardsStatus === 'succeeded')
 
   useEffect(() => {
     if (filters.filtersStatus !== 'idle') return
@@ -68,6 +78,7 @@ export const Catalogs: React.FC = () => {
   }, [dispatch, filtersClosed, isDisks, requestKey, waitingForMetadata])
 
   const requestCards = (refresh: boolean) => {
+    if (!refresh && replacingResults) return
     if (isDisks) dispatch(getDisksCards(refresh))
     else dispatch(getTyresCards(refresh))
   }
@@ -76,13 +87,20 @@ export const Catalogs: React.FC = () => {
     else dispatch(resetTyres())
   }
   const addTyres = (data: resultsTyresType, inCart: boolean) => {
+    if (staleResults) return
     if (inCart) navigate('/cart')
     else dispatch(addTyresToCart(data))
   }
   const addDisks = (data: resultsDisksType, inCart: boolean) => {
+    if (staleResults) return
     if (inCart) navigate('/cart')
     else dispatch(addDisksToCart(data))
   }
+
+  const guide = <Modal isOpen={guideOpen} onClose={() => setGuideOpen(false)} keepMounted mobileFullscreen
+    title={isDisks ? 'Помощь с подбором дисков' : 'Помощь с подбором шин'} size="lg">
+    <div className={styles.guideDialog}><CatalogGuide isDisks={isDisks} /></div>
+  </Modal>
 
   return (
     <main className={styles.mainWrapper}>
@@ -109,6 +127,11 @@ export const Catalogs: React.FC = () => {
           </div>}
         </div>
         <section className={styles.results} aria-label="Товары каталога" aria-busy={isLoading}>
+          <div className={styles.guideAccess}>
+            <Button type="button" variant="outline" size="sm" onClick={() => setGuideOpen(true)} leftIcon={<Icon name="info" size={17} />}>
+              {isDisks ? 'Как подобрать диски' : 'Как подобрать шины'}
+            </Button>
+          </div>
           <div className={styles.catalogTop}>
             {isDisks ? <MobileDisksFilters /> : <MobileTyresFilters />}
             <SortHeader sortData={catalog.sortData} />
@@ -119,7 +142,8 @@ export const Catalogs: React.FC = () => {
             </label>
             <span className={styles.priceNote}>Цена за штуку</span>
           </div>
-          {isLoading && (filters.cardsRefresh || waitingForMetadata) && <div role="status" className={styles.loading}>
+          {staleResults && isLoading && <p role="status" className={styles.paginationStatus}>Обновляем товары… Предыдущая выдача временно недоступна для покупки.</p>}
+          {!hasCards && isLoading && (filters.cardsRefresh || waitingForMetadata || changedFilters) && <div role="status" className={styles.loading}>
             <p>Загружаем товары…</p>
             {[0, 1, 2].map(index => <div key={index} className={styles.skeleton} aria-hidden="true"><span /><div><span /><span /><span /></div></div>)}
           </div>}
@@ -133,8 +157,9 @@ export const Catalogs: React.FC = () => {
             <p>{filters.cardsError}</p>
             <Button onClick={() => requestCards(filters.cardsRefresh)}>Попробовать ещё раз</Button>
           </div>}
-          {showResults && <InfiniteScroll dataLength={cardsData.results.length} hasChildren={cardsData.results.length > 0}
-            next={() => requestCards(false)} hasMore={cardsData.next !== null && filters.cardsStatus !== 'failed'}
+          {showResults && <fieldset disabled={staleResults} className={styles.resultSet} aria-label={staleResults ? 'Предыдущая выдача, ожидается обновление' : 'Результаты подбора'}>
+            <InfiniteScroll key={requestKey} dataLength={cardsData.results.length} hasChildren={cardsData.results.length > 0}
+            next={() => requestCards(false)} hasMore={!replacingResults && cardsData.next !== null && filters.cardsStatus !== 'failed'}
             loader={<p className={styles.paginationStatus} role="status">Загружаем ещё…</p>}
             style={{ overflow: 'visible' }}>
             <div className={styles.cards}>
@@ -142,19 +167,19 @@ export const Catalogs: React.FC = () => {
                 ? <DisksCardDesktop key={item.id} data={item as resultsDisksType} handler={addDisks} />
                 : <TyresCardDesktop key={item.id} data={item as resultsTyresType} handler={addTyres} />)}
             </div>
-          </InfiniteScroll>}
+          </InfiniteScroll></fieldset>}
           {!waitingForMetadata && filters.cardsStatus === 'succeeded' && cardsData.results.length === 0 && <div className={styles.feedback} role="status">
             <Icon name={isDisks ? 'wheel' : 'tire'} size={40} /><h2>Товары не найдены</h2>
             <p>Попробуйте изменить параметры подбора или сбросить фильтры.</p>
             <Button variant="outline" onClick={reset}>Сбросить параметры</Button>
             <ProductHelp />
           </div>}
-          {showResults && !waitingForMetadata && cardsData.next !== null && filters.cardsStatus !== 'failed' && <div className={styles.pagination}>
+          {showResults && !replacingResults && cardsData.next !== null && filters.cardsStatus !== 'failed' && <div className={styles.pagination}>
             <Button variant="outline" isLoading={isLoading} onClick={() => requestCards(false)}>Показать ещё</Button>
           </div>}
         </section>
       </div>
-      <CatalogGuide isDisks={isDisks} />
+      {guideOpen && typeof document !== 'undefined' ? createPortal(guide, document.body) : guide}
     </main>
   )
 }

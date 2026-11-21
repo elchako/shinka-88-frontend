@@ -16,6 +16,8 @@
 
   img { width: 42px; height: 52px; object-fit: contain; }
 }
+.detailTrigger { border: 0; padding: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.detailTrigger:hover { text-decoration: underline; }
 .productName { margin: 0 0 3px; font-size: 12px; font-weight: 500; line-height: 1.5; overflow-wrap: anywhere; }
 .productDetails, .calculation { margin: 0; color: var(--color-text-secondary); font-size: 11px; line-height: 1.6; font-variant-numeric: tabular-nums; }
 .calculation { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 4px; }

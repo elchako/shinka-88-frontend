@@ -28,6 +28,19 @@ afterEach(() => {
 })
 
 describe('Управление настоящей корзиной', () => {
+  it('открывает детали из корзины без изменения её состава', async () => {
+    const { store, user } = renderCart()
+    const before = store.getState().cart
+    const trigger = screen.getAllByRole('button', { name: 'Подробнее о товаре Тестовая шина' })[0]
+    await user.click(trigger)
+    expect(screen.getByRole('dialog')).toHaveTextContent('Шины')
+    await user.keyboard('{Tab}')
+    expect(screen.getByRole('dialog').contains(document.activeElement)).toBe(true)
+    await user.click(screen.getByRole('button', { name: 'Закрыть модальное окно' }))
+    expect(trigger).toHaveFocus()
+    expect(store.getState().cart).toEqual(before)
+  })
+
   it('располагает общие действия перед обеими колонками и сохраняет нижний блок карточек', () => {
     renderCart()
     const toolbar = screen.getByRole('group', { name: 'Действия с корзиной' })

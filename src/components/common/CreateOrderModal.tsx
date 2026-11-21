@@ -1,7 +1,7 @@
 import type React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { creatingOrderSelector, orderIsCreating, orderNumberSelector } from '../../app/slices/cartSlice'
+import { creatingOrderSelector, orderCartChangedSelector, orderIsCreating, orderNumberSelector } from '../../app/slices/cartSlice'
 import { Modal } from './Modal'
 import { Button } from './Button'
 import { Icon } from './Icon'
@@ -13,6 +13,7 @@ export const CreateOrder: React.FC = () => {
   const navigate = useNavigate()
   const creatingOrder = useAppSelector(creatingOrderSelector)
   const orderNumber = useAppSelector(orderNumberSelector)
+  const cartChanged = useAppSelector(orderCartChangedSelector)
   const close = () => {
     if (creatingOrder) return
     dispatch(orderIsCreating())
@@ -33,7 +34,9 @@ export const CreateOrder: React.FC = () => {
         {creatingOrder ? (
           <><Loader size="md" /><p>Отправляем заказ. Пожалуйста, дождитесь ответа.</p></>
         ) : (
-          <><Icon name="check" size={28} /><p className={styles.number}>Номер вашего заказа: {orderNumber}</p><p>Скоро с вами свяжется менеджер для подтверждения деталей.</p></>
+          <><Icon name="check" size={28} /><p className={styles.number}>Номер вашего заказа: {orderNumber}</p><p>Скоро с вами свяжется менеджер для подтверждения деталей.</p>
+            {cartChanged && <p>В корзине остались снятые с выбора или изменённые во время отправки позиции. Они не удалены. Сверьте их с этим заказом перед следующим оформлением.</p>}
+          </>
         )}
       </div>
     </Modal>

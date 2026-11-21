@@ -5,6 +5,7 @@ import { type resultsTyresType } from "./tires"
 export type selectedType = {
     canceled: boolean
     queue: number
+    cartLineToken?: string // Версия строки: не API id и не ключ заказа.
 }
 
 type orderViewType = {

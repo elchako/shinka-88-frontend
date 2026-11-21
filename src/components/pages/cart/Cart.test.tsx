@@ -146,7 +146,7 @@ describe('Управление настоящей корзиной', () => {
     expect(cart.priceAmount).toBe(total)
     expect(cart.queueCounter).toBe(1)
     expect(cart.selectAll).toBe(true)
-    expect(JSON.parse(localStorage.getItem('cartData')!)).toEqual(cart)
+    expect(JSON.parse(localStorage.getItem('cartData')!)).toEqual({ tyres: cart.tyres, disks: cart.disks })
     const summary = screen.getByRole('region', { name: 'Ваш заказ' })
     expect(within(summary).queryByText(name)).not.toBeInTheDocument()
     expect(within(summary).getByText(otherName)).toBeInTheDocument()
@@ -167,7 +167,7 @@ describe('Управление настоящей корзиной', () => {
     }
     expect(screen.getByRole('heading', { name: 'Корзина пуста' })).toBeInTheDocument()
     expect(store.getState().cart).toMatchObject({ tyres: [], disks: [], priceAmount: 0, queueCounter: 0, selectAll: true })
-    expect(JSON.parse(localStorage.getItem('cartData')!)).toEqual(store.getState().cart)
+    expect(JSON.parse(localStorage.getItem('cartData')!)).toEqual({ tyres: store.getState().cart.tyres, disks: store.getState().cart.disks })
   })
 
   it('подтверждает удаление снятой позиции, не меняя сумму оставшихся товаров', async () => {
@@ -183,7 +183,7 @@ describe('Управление настоящей корзиной', () => {
     expect(store.getState().cart.priceAmount).toBe(400)
     expect(store.getState().cart.selectAll).toBe(true)
     expect(screen.getByRole('checkbox', { name: 'Выбрать все' })).toBeChecked()
-    expect(JSON.parse(localStorage.getItem('cartData')!)).toEqual(store.getState().cart)
+    expect(JSON.parse(localStorage.getItem('cartData')!)).toEqual({ tyres: store.getState().cart.tyres, disks: store.getState().cart.disks })
   })
 
   it('сохраняет открытие с клавиатуры, ловушку Tab и возврат фокуса штатного Modal', async () => {
